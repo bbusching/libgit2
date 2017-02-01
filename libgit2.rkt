@@ -73,7 +73,7 @@
 (define _transport (_pointer 'git_transport))
 (define _tag (_pointer 'git_tag))
 (define _tree (_pointer 'git_tree))
-(define _tree_builder (_pointer 'git_tree_builder))
+(define _treebuilder (_pointer 'git_treebuilder))
 (define _tree_entry (_pointer 'git_tree_entry))
 (define _writestream (_pointer 'git_writestream))
 
@@ -2505,7 +2505,7 @@
 (define-libgit2 git_tag_create_lightweight
   (_fun _oid _repository _string _object _int -> _int))
 (define-libgit2 git_tag_delete
-  (_fun _repository _string))
+  (_fun _repository _string -> _int))
 (define-libgit2 git_tag_list
   (_fun _strarray _repository -> _int))
 (define-libgit2 git_tag_list_match
@@ -2541,7 +2541,7 @@
 
 (define-libgit2 git_transaction_new
   (_fun (_pointer _transaction) _repository -> _int))
-(define-libgti2 git_transaction_lock_ref
+(define-libgit2 git_transaction_lock_ref
   (_fun _transaction _string -> _int))
 (define-libgit2 git_transaction_set_target
   (_fun _transaction _string _oid _signature _string -> _int))
@@ -2571,7 +2571,7 @@
 (define-libgit2 git_tree_entrycount
   (_fun _tree -> _size))
 (define-libgit2 git_tree_entry_byname
-  (_fun _tree _strign -> _tree_entry))
+  (_fun _tree _string -> _tree_entry))
 (define-libgit2 git_tree_entry_byindex
   (_fun _tree _size -> _tree_entry))
 (define-libgit2 git_tree_entry_byid
@@ -2599,7 +2599,7 @@
 (define-libgit2 git_treebuilder_clear
   (_fun _treebuilder -> _void))
 (define-libgit2 git_treebuilder_entrycount
-  (_fun _treebuilder -> uint))
+  (_fun _treebuilder -> _uint))
 (define-libgit2 git_treebuilder_free
   (_fun _treebuilder -> _void))
 (define-libgit2 git_treebuilder_get
@@ -2616,7 +2616,7 @@
 (define-libgit2 git_treebuidler_write
   (_fun _oid _treebuilder -> _int))
 (define-libgit2 git_treebuilder_write_with_buffer
-  (_fun _treebuilder _buf))
+  (_fun _treebuilder _buf -> _int))
 
 (define _git_treewalk_cb
   (_fun _string _tree_entry (_pointer _void) -> _int))
@@ -2626,7 +2626,7 @@
            GIT_TREEWALK_POST)))
 
 (define-libgit2 git_tree_walk
-  (_fun _tree _git_treewalk_mode _git_treewalk_cb (_pointer _void)))
+  (_fun _tree _git_treewalk_mode _git_treewalk_cb (_pointer _void) -> _int))
 (define-libgit2 _git_tree_dup
   (_fun (_pointer _tree) _tree -> _int))
 
