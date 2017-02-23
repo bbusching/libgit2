@@ -1,15 +1,11 @@
 #lang racket
 
-(require ffi/unsafe)
-(require ffi/unsafe/define)
+(require ffi/unsafe
+         ffi/unsafe/define)
+(provide (all-defined-out))
 
 (define libgit2 (ffi-lib "libgit2" '(#f)))
 (define-ffi-definer define-libgit2 libgit2)
-
-; global.h
-
-(define-libgit2 git-libgit2-init (_fun -> _int))
-(define-libgit2 git-libgit2-shutdown (_fun -> _int))
 
 ; types.h
 
@@ -33,49 +29,49 @@
            GIT_BRANCH_REMOTE
            GIT_BRANCH_ALL)))
 
-(define _annotated_commit (_pointer 'git_annotated_commit))
-(define _commit (_pointer 'git_commit))
-(define _config (_pointer 'git_config))
-(define _config_backend (_pointer 'git_config_backend))
-(define _blame (_pointer 'git_blame))
-(define _blob (_pointer 'git_blob))
-(define _diff (_pointer 'git_diff))
-(define _index (_pointer 'git_index))
-(define _index_conflict_iterator (_pointer 'git_index_conflict_iterator))
-(define _merge_result (_pointer 'git_merge_result))
-(define _note (_pointer 'git_note))
-(define _object (_pointer 'git_object))
-(define _oid (_pointer 'git_oid))
-(define _odb (_pointer 'git_odb))
-(define _odb_backend (_pointer 'git_odb_backend))
-(define _odb_object (_pointer 'git_odb_object))
-(define _odb_stream (_pointer 'git_odb_stream))
-(define _odb_writepack (_pointer 'git_odb_writepack))
-(define _packbuilder (_pointer 'git_packbuilder))
-(define _patch (_pointer 'git_patch))
-(define _push (_pointer 'git_push))
-(define _rebase (_pointer 'git_rebase))
-(define _refdb (_pointer 'git_refdb))
-(define _refdb_backend (_pointer 'git_refdb_backend))
-(define _reference (_pointer 'git_reference))
-(define _reference_iterator (_pointer 'git_reference_iterator))
-(define _reflog (_pointer 'git_reflog))
-(define _reflog_entry (_pointer 'git_reflog_entry))
-(define _refspec (_pointer 'git_refspec))
-(define _remote (_pointer 'git_remote))
-(define _remote_callbacks (_pointer 'git_remote_callbacks))
-(define _remote_head (_pointer 'git_remote_head))
-(define _repository (_pointer 'git_repository))
-(define _revwalk (_pointer 'git_revwalk))
-(define _submodule (_pointer 'git_submodule))
-(define _status_list (_pointer 'git_status_list))
-(define _transaction (_pointer 'git_transaction))
-(define _transport (_pointer 'git_transport))
-(define _tag (_pointer 'git_tag))
-(define _tree (_pointer 'git_tree))
-(define _treebuilder (_pointer 'git_treebuilder))
-(define _tree_entry (_pointer 'git_tree_entry))
-(define _writestream (_pointer 'git_writestream))
+(define-cpointer-type _annotated_commit)
+(define-cpointer-type _commit)
+(define-cpointer-type _config)
+(define-cpointer-type _config_backend)
+(define-cpointer-type _blame)
+(define-cpointer-type _blob)
+(define-cpointer-type _diff)
+(define-cpointer-type _index)
+(define-cpointer-type _index_conflict_iterator)
+(define-cpointer-type _merge_result)
+(define-cpointer-type _note)
+(define-cpointer-type _object)
+(define-cpointer-type _oid)
+(define-cpointer-type _odb)
+(define-cpointer-type _odb_backend)
+(define-cpointer-type _odb_object)
+(define-cpointer-type _odb_stream)
+(define-cpointer-type _odb_writepack)
+(define-cpointer-type _packbuilder)
+(define-cpointer-type _patch)
+(define-cpointer-type _push)
+(define-cpointer-type _rebase)
+(define-cpointer-type _refdb)
+(define-cpointer-type _refdb_backend)
+(define-cpointer-type _reference)
+(define-cpointer-type _reference_iterator)
+(define-cpointer-type _reflog)
+(define-cpointer-type _reflog_entry)
+(define-cpointer-type _refspec)
+(define-cpointer-type _remote)
+(define-cpointer-type _remote_callbacks)
+(define-cpointer-type _remote_head)
+(define-cpointer-type _repository)
+(define-cpointer-type _revwalk)
+(define-cpointer-type _submodule)
+(define-cpointer-type _status_list)
+(define-cpointer-type _transaction)
+(define-cpointer-type _transport)
+(define-cpointer-type _tag)
+(define-cpointer-type _tree)
+(define-cpointer-type _treebuilder)
+(define-cpointer-type _tree_entry)
+(define-cpointer-type _writestream)
 
 (define-cstruct _git_time
   ([time _git_time_t]
@@ -97,7 +93,7 @@
   (_enum '(GIT_FILEMODE_UNREADABLE = 0
            GIT_FILEMODE_TREE = #o0040000
            GIT_FILEMODE_BLOB = #o0100644
-           GIT_FILEMODE_BLOB_EXECUTABLE #o0100755
+           GIT_FILEMODE_BLOB_EXECUTABLE = #o0100755
            GIT_FILEMODE_LINK = #o0120000
            GIT_FILEMODE_COMMIT = #o0160000)))
 
@@ -111,10 +107,10 @@
    [received_bytes _size]))
 
 (define _git_transfer_progress_cb
-  (_fun _git_transfer_progress-pointer (_pointer _void) -> _int))
+  (_fun _git_transfer_progress-pointer (_cpointer _void) -> _int))
 
 (define _git_transport_message_cb
-  (_fun _string _int (_pointer _void) -> _int))
+  (_fun _string _int (_cpointer _void) -> _int))
 
 (define _git_cert_t
   (_enum '(GIT_CERT_NONE
@@ -127,7 +123,7 @@
 (define _cert _git_cert-pointer)
 
 (define _git_transport_certificate_check_cb
-  (_fun _cert _int _string (_pointer _void) -> _int))
+  (_fun _cert _int _string (_cpointer _void) -> _int))
 
 (define _git_submodule_update_t
   (_enum '(GIT_SUBMODULE_UPDATE_DEFAULT
@@ -158,14 +154,14 @@
 
 (define-libgit2 git_buf_free (_fun _buf -> _void))
 (define-libgit2 git_buf_grow (_fun _buf _size -> _int))
-(define-libgit2 git_buf_set (_fun _buf _pointer _size -> _int))
+(define-libgit2 git_buf_set (_fun _buf (_cpointer _void) _size -> _int))
 (define-libgit2 git_buf_is_binary (_fun _buf -> _bool))
 (define-libgit2 git_buf_contains_nul (_fun _buf -> _bool))
 
 ; strarray.h
 
 (define-cstruct _git_strarray
-  ([strings (_pointer _string)]
+  ([strings (_cpointer _string)]
    [count _size]))
 (define _strarray _git_strarray-pointer)
 
@@ -177,13 +173,13 @@
 ; annotated_commit.h
 
 (define-libgit2 git_annotated_commit_from_ref
-  (_fun (_pointer _annotated_commit) _repository _reference -> _int))
+  (_fun (_cpointer _annotated_commit) _repository _reference -> _int))
 (define-libgit2 git_annotated_commit_from_fetchhead
-  (_fun (_pointer _annotated_commit) _repository _string _string _oid -> _int))
+  (_fun (_cpointer _annotated_commit) _repository _string _string _oid -> _int))
 (define-libgit2 git_annotated_commit_lookup
-  (_fun (_pointer _annotated_commit) _repository _oid -> _int))
+  (_fun (_cpointer _annotated_commit) _repository _oid -> _int))
 (define-libgit2 git_annotated_commit_from_revspec
-  (_fun (_pointer _annotated_commit) _repository _string -> _int))
+  (_fun (_cpointer _annotated_commit) _repository _string -> _int))
 (define-libgit2 git_annotated_commit_id
   (_fun _annotated_commit -> _oid))
 (define-libgit2 git_annotated_commit_free
@@ -229,18 +225,18 @@
 (define-libgit2 git_blame_get_hunk_byline
   (_fun _blame _size -> _git_blame_hunk-pointer))
 (define-libgit2 git_blame_file
-  (_fun (_pointer _blame) _repository _string (_pointer _git_blame_opts) -> _int))
+  (_fun (_cpointer _blame) _repository _string (_cpointer _git_blame_opts) -> _int))
 (define-libgit2 git_blame_buffer
-  (_fun (_pointer _blame) _blame _string _size -> _int))
+  (_fun (_cpointer _blame) _blame _string _size -> _int))
 (define-libgit2 git_blame_free
   (_fun _blame -> _void))
 
 ; blob.h
 
 (define-libgit2 git_blob_lookup
-  (_fun (_pointer _blob) _repository _oid -> _int))
+  (_fun (_cpointer _blob) _repository _oid -> _int))
 (define-libgit2 git_blob_lookup_prefix
-  (_fun (_pointer _blob) _repository _oid _size -> _int))
+  (_fun (_cpointer _blob) _repository _oid _size -> _int))
 (define-libgit2 git_blob_free
   (_fun _blob -> _void))
 (define-libgit2 git_blob_id
@@ -248,7 +244,7 @@
 (define-libgit2 git_blob_owner
   (_fun _blob -> _repository))
 (define-libgit2 git_blob_rawcontent
-  (_fun _blob -> (_pointer _void)))
+  (_fun _blob -> (_cpointer _void)))
 (define-libgit2 git_blob_rawsize
   (_fun _blob -> _git_off_t))
 (define-libgit2 git_blob_filtered_content
@@ -258,38 +254,38 @@
 (define-libgit2 git_blob_create_fromdisk
   (_fun _oid _repository _string -> _int))
 (define-libgit2 git_blob_create_fromstream
-  (_fun (_pointer _writestream) _repository _string -> _int))
+  (_fun (_cpointer _writestream) _repository _string -> _int))
 (define-libgit2 git_blob_create_fromstream_commit
   (_fun _oid _writestream -> _int))
 (define-libgit2 git_blob_create_frombuffer
-  (_fun _oid _repository (_pointer _void) _size -> _int))
+  (_fun _oid _repository (_cpointer _void) _size -> _int))
 (define-libgit2 git_blob_is_binary
   (_fun _blob -> _bool))
 (define-libgit2 git_blob_dup
-  (_fun (_pointer _blob) _blob -> _int))
+  (_fun (_cpointer _blob) _blob -> _int))
 
 ; branch.h
 
 (define-libgit2 git_branch_create
-  (_fun (_pointer _reference) _repository _string _commit _bool -> _int))
+  (_fun (_cpointer _reference) _repository _string _commit _bool -> _int))
 (define-libgit2 git_branch_create_from_annotated
-  (_fun (_pointer _reference) _repository _string _annotated_commit _bool -> _int))
+  (_fun (_cpointer _reference) _repository _string _annotated_commit _bool -> _int))
 (define-libgit2 git_branch_delete (_fun _reference -> _int))
 
-(define _branch_iter (_pointer 'git_branch_iterator))
+(define _branch_iter (_cpointer 'git_branch_iterator))
 
 (define-libgit2 git_branch_iterator_new
-  (_fun (_pointer _branch_iter) _repository _git_branch_t -> _int))
+  (_fun (_cpointer _branch_iter) _repository _git_branch_t -> _int))
 (define-libgit2 git_branch_next
-  (_fun (_pointer _branch_iter) (_pointer _git_branch_t) _branch_iter -> _int))
+  (_fun (_cpointer _branch_iter) (_cpointer _git_branch_t) _branch_iter -> _int))
 (define-libgit2 git_branch_move
-  (_fun (_pointer _reference) _reference _string _bool -> _int))
+  (_fun (_cpointer _reference) _reference _string _bool -> _int))
 (define-libgit2 git_branch_lookup
-  (_fun (_pointer _reference) _repository _string _git_branch_t -> _int))
+  (_fun (_cpointer _reference) _repository _string _git_branch_t -> _int))
 (define-libgit2 git_branch_name
-  (_fun (_pointer _string) _reference -> _int))
+  (_fun (_cpointer _string) _reference -> _int))
 (define-libgit2 git_branch_upstream
-  (_fun (_pointer _reference) _reference -> _int))
+  (_fun (_cpointer _reference) _reference -> _int))
 (define-libgit2 git_branch_set_upstream
   (_fun _reference _string -> _int))
 (define-libgit2 git_branch_upstream_name
@@ -370,9 +366,9 @@
    [new_file _git_diff_file]))
 
 (define _git_diff_notify_cb
-  (_fun _diff _git_diff_delta-pointer _string (_pointer _void) -> _int))
+  (_fun _diff _git_diff_delta-pointer _string (_cpointer _void) -> _int))
 (define _git_diff_progress_cb
-  (_fun _diff _string _string (_pointer _void) -> _int))
+  (_fun _diff _string _string (_cpointer _void) -> _int))
 
 (define-cstruct _git_diff_opts
   ([version _int]
@@ -381,7 +377,7 @@
    [pathspec _strarray]
    [notify_cb _git_diff_notify_cb]
    [progress_cb _git_diff_progress_cb]
-   [payload (_pointer _void)]
+   [payload (_cpointer _void)]
    [context_lines _uint32]
    [interhunk_lines _uint32]
    [id_abbrev _uint16]
@@ -393,7 +389,7 @@
   (_fun _git_diff_opts _uint -> _int))
 
 (define _git_diff_file_cb
-  (_fun _git_diff_delta-pointer _float (_pointer _void) -> _int))
+  (_fun _git_diff_delta-pointer _float (_cpointer _void) -> _int))
 
 (define GIT_DIFF_HUNK_HEADER_SIZE 128)
 
@@ -414,7 +410,7 @@
    [new_file _git_diff_binary_file]))
 
 (define _git_diff_binary_cb
-  (_fun _git_diff_delta-pointer _git_diff_binary-pointer (_pointer _void) -> _int))
+  (_fun _git_diff_delta-pointer _git_diff_binary-pointer (_cpointer _void) -> _int))
 
 (define-cstruct _git_diff_hunk
  ([old_start _int]
@@ -425,7 +421,7 @@
   [header (_array _uint8 GIT_DIFF_HUNK_HEADER_SIZE)]))
 
 (define _git_diff_hunk_cb
-  (_fun _git_diff_delta-pointer _git_diff_hunk-pointer (_pointer _void) -> _int))
+  (_fun _git_diff_delta-pointer _git_diff_hunk-pointer (_cpointer _void) -> _int))
 
 (define _git_diff_line_t
   (_enum '(GIT_DIFF_LINE_CONTEXT = 32; = ' '
@@ -449,7 +445,7 @@
    [content _string]))
 
 (define _git_diff_line_cb
-  (_fun _git_diff_delta-pointer _git_diff_hunk-pointer _git_diff_line-pointer (_pointer _void) -> _int))
+  (_fun _git_diff_delta-pointer _git_diff_hunk-pointer _git_diff_line-pointer (_cpointer _void) -> _int))
 
 (define _git_diff_find_t
   (_bitmask '(GIT_DIFF_FIND_BY_CONFIG = 0
@@ -470,20 +466,20 @@
               GIT_DIFF_FIND_REMOVE_UNMODIFIED = #x00010000)))
 
 (define-cstruct _git_diff_similarity_metric
-  ([file_signature (_fun (_pointer (_pointer _void))
+  ([file_signature (_fun (_cpointer (_cpointer _void))
                          _git_diff_file-pointer
                          _string
-                         (_pointer _void)
+                         (_cpointer _void)
                          -> _int)]
-   [buffer_signature (_fun (_pointer (_pointer _void))
+   [buffer_signature (_fun (_cpointer (_cpointer _void))
                          _git_diff_file-pointer
                          _string
                          _size
-                         (_pointer _void)
+                         (_cpointer _void)
                          -> _int)]
-   [free_signature (_fun (_pointer _void) (_pointer _void) -> _void)]
-   [similarity (_fun (_pointer _int) (_pointer _void) (_pointer _void) (_pointer _void) -> _int)]
-   [payload (_pointer _void)]))
+   [free_signature (_fun (_cpointer _void) (_cpointer _void) -> _void)]
+   [similarity (_fun (_cpointer _int) (_cpointer _void) (_cpointer _void) (_cpointer _void) -> _int)]
+   [payload (_cpointer _void)]))
 
 (define-cstruct _git_diff_find_options
   ([version _int]
@@ -500,17 +496,17 @@
 (define-libgit2 git_diff_free
   (_fun _diff -> _void))
 (define-libgit2 git_diff_tree_to_tree
-  (_fun (_pointer _diff) _repository _tree _tree _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _diff) _repository _tree _tree _git_diff_opts-pointer -> _int))
 (define-libgit2 git_diff_tree_to_index
-  (_fun (_pointer _diff) _repository _tree _index _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _diff) _repository _tree _index _git_diff_opts-pointer -> _int))
 (define-libgit2 git_diff_index_to_workdir
-  (_fun (_pointer _diff) _repository _index _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _diff) _repository _index _git_diff_opts-pointer -> _int))
 (define-libgit2 git_diff_tree_to_workdir
-  (_fun (_pointer _diff) _repository _tree _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _diff) _repository _tree _git_diff_opts-pointer -> _int))
 (define-libgit2 git_diff_tree_to_workdir_with_index
-  (_fun (_pointer _diff) _repository _tree _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _diff) _repository _tree _git_diff_opts-pointer -> _int))
 (define-libgit2 git_diff_index_to_index
-  (_fun (_pointer _diff) _repository _index _index _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _diff) _repository _index _index _git_diff_opts-pointer -> _int))
 (define-libgit2 git_diff_merge
   (_fun _diff _diff -> _int))
 (define-libgit2 git_diff_find_similar
@@ -524,7 +520,7 @@
 (define-libgit2 git_diff_is_sorted_icase
   (_fun _diff -> _bool))
 (define-libgit2 git_diff_foreach
-  (_fun _diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_pointer _void) -> _int))
+  (_fun _diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
 (define-libgit2 git_diff_status_char
   (_fun _git_delta_t -> _uint8))
 
@@ -536,7 +532,7 @@
            GIT_DIFF_FORMAT_NAME_STATUS = 5)))
 
 (define-libgit2 git_diff_print
-  (_fun _diff _git_diff_format_t _git_diff_line_cb (_pointer _void) -> _int))
+  (_fun _diff _git_diff_format_t _git_diff_line_cb (_cpointer _void) -> _int))
 (define-libgit2 git_diff_to_buf
   (_fun _buf _diff _git_diff_format_t -> _int))
 
@@ -579,11 +575,11 @@
    [chmod_calls _size]))
 
 (define _git_checkout_notify_cb
-  (_fun _git_checkout_notify_t _string _git_diff_file-pointer _git_diff_file-pointer _git_diff_file-pointer (_pointer _void) -> _int))
+  (_fun _git_checkout_notify_t _string _git_diff_file-pointer _git_diff_file-pointer _git_diff_file-pointer (_cpointer _void) -> _int))
 (define _git_checkout_progress_cb
-  (_fun _string _size _size (_pointer _void) -> _void))
+  (_fun _string _size _size (_cpointer _void) -> _void))
 (define _git_checkout_perfdata_cb
-  (_fun _git_checkout_perfdata-pointer (_pointer _void) -> _void))
+  (_fun _git_checkout_perfdata-pointer (_cpointer _void) -> _void))
 
 (define-cstruct _git_checkout_opts
   ([version _uint]
@@ -594,9 +590,9 @@
    [file_open_flags _int]
    [notify_flags _uint]
    [notify_cb _git_checkout_notify_cb]
-   [notify_payload (_pointer _void)]
+   [notify_payload (_cpointer _void)]
    [progress_cb _git_checkout_progress_cb]
-   [progress_payload (_pointer _void)]
+   [progress_payload (_cpointer _void)]
    [paths _strarray]
    [baseline _tree]
    [baseline_index _index]
@@ -605,7 +601,7 @@
    [our_label _string]
    [their_label _string]
    [perfdata_cb _git_checkout_perfdata_cb]
-   [perfdata_payload (_pointer _void)]))
+   [perfdata_payload (_cpointer _void)]))
 
 (define-libgit2 git_checkout_init_options
   (_fun _git_checkout_opts-pointer _uint -> _int))
@@ -632,15 +628,15 @@
    [symref_target _string]))
 
 (define _git_headlist_cb
-  (_fun _remote_head (_pointer _void) -> _int))
+  (_fun _remote_head (_cpointer _void) -> _int))
 
 ; transport.h
 
 (define _git_transport_cb
-  (_fun (_pointer _transport) _remote (_pointer _void) -> _int))
+  (_fun (_cpointer _transport) _remote (_cpointer _void) -> _int))
 
 (define _git_cert_ssh_t
-  ('bitmask '(GIT_CERT_SSH_MD5 = #x0001
+  (_bitmask '(GIT_CERT_SSH_MD5 = #x0001
               GIT_CERT_SSH_SHA1 = #x0002)))
 (define-cstruct _git_cert_hostkey
   ([parent _cert]
@@ -650,7 +646,7 @@
 
 (define-cstruct _git_cert_x509
   ([parent _cert]
-   [data (_pointer _void)]
+   [data (_cpointer _void)]
    [len _size]))
 
 (define _git_credtype_t
@@ -662,7 +658,7 @@
               GIT_CREDTYPE_USERNAME = #x0020
               GIT_CREDTYPE_SSH_MEMORY = #x0040)))
 
-(define _cred (_pointer 'git_cred))
+(define _cred (_cpointer 'git_cred))
 
 (define-cstruct _git_cred_userpass_plaintext
   ([parent _cred]
@@ -670,9 +666,9 @@
    [password _string]))
 
 (define _git_cred_sign_callback
-  (_fun (_pointer 'LIBSSH2_SESSION) (_pointer _string) (_pointer _size) _string _size (_pointer (_pointer _void)) -> _int))
+  (_fun (_cpointer 'LIBSSH2_SESSION) (_cpointer _string) (_cpointer _size) _string _size (_cpointer (_cpointer _void)) -> _int))
 (define _git_cred_ssh_interactive_callback
-  (_fun _string _int _string _int _int (_pointer 'LIBSSH_USERAUTH_KBDINT_PROMPT) (_pointer 'LIBSSH_USERAUTH_KBDINT_RESPONSE) (_pointer (_pointer _void)) -> _void))
+  (_fun _string _int _string _int _int (_cpointer 'LIBSSH_USERAUTH_KBDINT_PROMPT) (_cpointer 'LIBSSH_USERAUTH_KBDINT_RESPONSE) (_cpointer (_cpointer _void)) -> _void))
 
 (define-cstruct _git_cred_ssh_key
   ([parent _cred]
@@ -684,14 +680,14 @@
   ([parent _cred]
    [username _string]
    [prompt_callback _git_cred_ssh_interactive_callback]
-   [payload (_pointer _void)]))
+   [payload (_cpointer _void)]))
 (define-cstruct _git_cred_ssh_custom
   ([parent _cred]
    [username _string]
    [publickey _string]
    [publickey_len _size]
    [sign_callback _git_cred_sign_callback]
-   [payload (_pointer _void)]))
+   [payload (_cpointer _void)]))
 (define-cstruct _git_cred_username
   ([parent _cred]
    [username (_array _int8 1)]))
@@ -699,26 +695,26 @@
 (define-libgit2 git_cred_has_username
   (_fun _cred -> _bool))
 (define-libgit2 git_cred_userpass_plaintext_new
-  (_fun (_pointer _cred) _string _string -> _int))
+  (_fun (_cpointer _cred) _string _string -> _int))
 (define-libgit2 git_cred_ssh_key_new
-  (_fun (_pointer _cred) _string _string _string _string -> _int))
+  (_fun (_cpointer _cred) _string _string _string _string -> _int))
 (define-libgit2 git_cred_ssh_interactive_new
-  (_fun (_pointer _cred) _string _git_cred_ssh_interactive_callback (_pointer _void) -> _int))
+  (_fun (_cpointer _cred) _string _git_cred_ssh_interactive_callback (_cpointer _void) -> _int))
 (define-libgit2 git_cred_ssh_key_from_agent
-  (_fun (_pointer _cred) _string -> _int))
+  (_fun (_cpointer _cred) _string -> _int))
 (define-libgit2 git_cred_ssh_custom_new
-  (_fun (_pointer _cred) _string _string _size _git_cred_sign_callback (_pointer _void) -> _int))
+  (_fun (_cpointer _cred) _string _string _size _git_cred_sign_callback (_cpointer _void) -> _int))
 (define-libgit2 git_cred_default_new
-  (_fun (_pointer _cred) -> _int))
+  (_fun (_cpointer _cred) -> _int))
 (define-libgit2 git_cred_username_new
-  (_fun (_pointer _cred) _string -> _int))
+  (_fun (_cpointer _cred) _string -> _int))
 (define-libgit2 git_cred_ssh_key_memory_new
-  (_fun (_pointer _cred) _string _string _string _string -> _int))
+  (_fun (_cpointer _cred) _string _string _string _string -> _int))
 (define-libgit2 git_cred_free
   (_fun _cred -> _void))
 
 (define _git_cred_acquire_cb
-  (_fun (_pointer _cred) _string _string _uint (_pointer _void) -> _int))
+  (_fun (_cpointer _cred) _string _string _uint (_cpointer _void) -> _int))
 
 
 ; proxy.h
@@ -734,7 +730,7 @@
    [url _string]
    [credentials _git_cred_acquire_cb]
    [certificate_check _git_transport_certificate_check_cb]
-   [payload (_pointer _void)]))
+   [payload (_cpointer _void)]))
 
 (define-libgit2 git_proxy_init_options
   (_fun _git_proxy_opts-pointer _uint -> _int))
@@ -745,7 +741,7 @@
            GIT_PACKBUILDER_DELTAFICATION)))
 
 (define-libgit2 git_packbuilder_new
-  (_fun (_pointer _packbuilder) _repository -> _int))
+  (_fun (_cpointer _packbuilder) _repository -> _int))
 (define-libgit2 git_packbuilder_set_threads
   (_fun _packbuilder _uint -> _uint))
 (define-libgit2 git_packbuilder_insert
@@ -761,38 +757,38 @@
 (define-libgit2 git_packbuilder_write_buf
   (_fun _buf _packbuilder -> _int))
 (define-libgit2 git_packbuilder_write
-  (_fun _packbuilder _string _uint _git_transfer_progress_cb (_pointer _void) -> _int))
+  (_fun _packbuilder _string _uint _git_transfer_progress_cb (_cpointer _void) -> _int))
 (define-libgit2 git_packbuilder_hash
   (_fun _packbuilder -> _oid))
 
 (define _git_packbuilder_foreach_cb
-  (_fun (_pointer _void) _size (_pointer _void) -> _int))
+  (_fun (_cpointer _void) _size (_cpointer _void) -> _int))
 
 (define-libgit2 git_packbuilder_foreach
-  (_fun _packbuilder _git_packbuilder_foreach_cb (_pointer _void) -> _int))
+  (_fun _packbuilder _git_packbuilder_foreach_cb (_cpointer _void) -> _int))
 (define-libgit2 git_packbuilder_written
   (_fun _packbuilder -> _size))
 
 (define _git_packbuilder_progress
-  (_fun _int _uint32 _uint32 (_pointer _void) -> _int))
+  (_fun _int _uint32 _uint32 (_cpointer _void) -> _int))
 
 (define-libgit2 git_packbuilder_set_callbacks
-  (_fun _packbuilder _git_packbuilder_progress (_pointer _void) -> _int))
+  (_fun _packbuilder _git_packbuilder_progress (_cpointer _void) -> _int))
 (define-libgit2 git_packbuilder_free
   (_fun _packbuilder -> _void))
 
 ; remote.h
 
 (define-libgit2 git_remote_create
-  (_fun (_pointer _remote) _repository _string _string -> _int))
+  (_fun (_cpointer _remote) _repository _string _string -> _int))
 (define-libgit2 git_remote_create_with_fetchspec
-  (_fun (_pointer _remote) _repository _string _string _string -> _int))
+  (_fun (_cpointer _remote) _repository _string _string _string -> _int))
 (define-libgit2 git_remote_create_anonymous
-  (_fun (_pointer _remote) _repository _string -> _int))
+  (_fun (_cpointer _remote) _repository _string -> _int))
 (define-libgit2 git_remote_lookup
-  (_fun (_pointer _remote) _repository _string -> _int))
+  (_fun (_cpointer _remote) _repository _string -> _int))
 (define-libgit2 git_remote_dup
-  (_fun (_pointer _remote) _remote -> _int))
+  (_fun (_cpointer _remote) _remote -> _int))
 (define-libgit2 git_remote_owner
   (_fun _remote -> _repository))
 (define-libgit2 git_remote_name
@@ -818,7 +814,7 @@
 (define-libgit2 git_remote_connect
   (_fun _remote _git_direction _remote_callbacks _git_proxy_opts-pointer _strarray -> _int))
 (define-libgit2 git_remote_ls
-  (_fun (_pointer (_pointer _remote_head)) _size _remote -> _int))
+  (_fun (_cpointer (_cpointer _remote_head)) _size _remote -> _int))
 (define-libgit2 git_remote_connected
   (_fun _remote -> _bool))
 (define-libgit2 git_remote_stop
@@ -836,7 +832,7 @@
            GIT_REMOTE_COMPLETION_ERROR)))
 
 (define _git_push_transfer_progress
-  (_fun _uint _uint _size (_pointer _void) -> _int))
+  (_fun _uint _uint _size (_cpointer _void) -> _int))
 
 (define-cstruct _git_push_update
   ([src_name _string]
@@ -846,22 +842,22 @@
 (define _push_update _git_push_update-pointer)
 
 (define _git_push_negotiation
-  (_fun (_pointer _push_update) _size (_pointer _void) -> _int))
+  (_fun (_cpointer _push_update) _size (_cpointer _void) -> _int))
 
 (define-cstruct _git_remote_callbacks
   ([version _uint]
    [sideband_progress _git_transport_message_cb]
-   [completion (_fun _git_remote_completion_type (_pointer _void) -> _int)]
+   [completion (_fun _git_remote_completion_type (_cpointer _void) -> _int)]
    [credentials _git_cred_acquire_cb]
    [certificate_check _git_transport_certificate_check_cb]
    [transfer_progress _git_transfer_progress_cb]
-   [update_tips (_fun _string _oid _oid (_pointer _void) -> _int)]
+   [update_tips (_fun _string _oid _oid (_cpointer _void) -> _int)]
    [pack_progress _git_packbuilder_progress]
    [push_transfer_progress _git_push_transfer_progress]
-   [push_update_reference (_fun _string _string (_pointer _void) -> _int)]
+   [push_update_reference (_fun _string _string (_cpointer _void) -> _int)]
    [push_negotiation _git_push_negotiation]
    [transport _git_transport_cb]
-   [payload (_pointer _void)]))
+   [payload (_cpointer _void)]))
 
 (define-libgit2 git_remote_init_callbacks
   (_fun _git_remote_callbacks-pointer _uint -> _int))
@@ -933,9 +929,9 @@
            GIT_CLONE_LOCAL_NO_LINKS)))
 
 (define _git_remote_create_cb
-  (_fun (_pointer _remote) _repository _string _string (_pointer _void) -> _int))
+  (_fun (_cpointer _remote) _repository _string _string (_cpointer _void) -> _int))
 (define _git_repository_create_cb
-  (_fun (_pointer _repository) _string _int (_pointer _void) -> _int))
+  (_fun (_cpointer _repository) _string _int (_cpointer _void) -> _int))
 
 (define-cstruct _git_clone_opts
   ([version _uint]
@@ -945,14 +941,14 @@
    [local _git_clone_local_t]
    [checkout_branch _string]
    [repository_cb _git_repository_create_cb]
-   [repository_cb_payload (_pointer _void)]
+   [repository_cb_payload (_cpointer _void)]
    [remote_cb _git_remote_create_cb]
-   [remote_cb_payload (_pointer _void)]))
+   [remote_cb_payload (_cpointer _void)]))
 
 (define-libgit2 git_clone_init_options
   (_fun _git_clone_opts-pointer _uint -> _int))
 (define-libgit2 git_clone
-  (_fun (_pointer _repository) _string _string _git_clone_opts-pointer -> _int))
+  (_fun (_cpointer _repository) _string _string _git_clone_opts-pointer -> _int))
 
 ; oidarray.h
 
@@ -973,7 +969,7 @@
 (define-cstruct _git_oid
   ([id (_array _uint8 GIT_OID_RAWSZ)]))
 
-(define _oid_shorten (_pointer 'git_oid_shorten))
+(define _oid_shorten (_cpointer 'git_oid_shorten))
 
 (define-libgit2 git_oid_fromstr
   (_fun _oid _string -> _int))
@@ -982,7 +978,7 @@
 (define-libgit2 git_oid_fromstrn
   (_fun _oid _string _size -> _int))
 (define-libgit2 git_oid_fromraw
-  (_fun _oid (_pointer _uint8) -> _void))
+  (_fun _oid (_cpointer _uint8) -> _void))
 (define-libgit2 git_oid_fmt
   (_fun _string _oid -> _void))
 (define-libgit2 git_oid_nfmt
@@ -1060,7 +1056,7 @@
            GIT_INDEXCAP_FROM_OWNER = -1)))
 
 (define _git_index_matched_path_cb
-  (_fun _string _string (_pointer _void) -> _int))
+  (_fun _string _string (_cpointer _void) -> _int))
 
 (define _git_index_add_option_t
   (_bitmask '(GIT_INDEX_ADD_DEFAULT = 0
@@ -1076,9 +1072,9 @@
            GIT_INDEX_STAGE_THEIRS)))
 
 (define-libgit2 git_index_open
-  (_fun (_pointer _index) _string -> _int))
+  (_fun (_cpointer _index) _string -> _int))
 (define-libgit2 git_index_new
-  (_fun (_pointer _index) -> _int))
+  (_fun (_cpointer _index) -> _int))
 (define-libgit2 git_index_free
   (_fun _index -> _void))
 (define-libgit2 git_index_owner
@@ -1101,7 +1097,7 @@
   (_fun _index _tree -> _int))
 (define-libgit2 git_index_write_tree_to
   (_fun _oid _index _repository -> _int))
-(define-libgit2 git_index_entry_count
+(define-libgit2 git_index_entrycount
   (_fun _index -> _size))
 (define-libgit2 git_index_get_byindex
   (_fun _index _size -> _index_entry))
@@ -1120,21 +1116,21 @@
 (define-libgit2 git_index_add_bypath
   (_fun _index _string -> _int))
 (define-libgit2 git_index_add_frombuffer
-  (_fun _index _index_entry (_pointer _void) _size -> _int))
+  (_fun _index _index_entry (_cpointer _void) _size -> _int))
 (define-libgit2 git_index_remove_bypath
   (_fun _index _string -> _int))
 (define-libgit2 git_index_add_all
-  (_fun _index _strarray _uint _git_index_matched_path_cb (_pointer _void) -> _int))
+  (_fun _index _strarray _uint _git_index_matched_path_cb (_cpointer _void) -> _int))
 (define-libgit2 git_index_remove_all
-  (_fun _index _strarray _git_index_matched_path_cb (_pointer _void) -> _int))
+  (_fun _index _strarray _git_index_matched_path_cb (_cpointer _void) -> _int))
 (define-libgit2 git_index_update_all
-  (_fun _index _strarray _git_index_matched_path_cb (_pointer _void) -> _int))
+  (_fun _index _strarray _git_index_matched_path_cb (_cpointer _void) -> _int))
 (define-libgit2 git_index_find_prefix
-  (_fun (_pointer _size) _index _string -> _int))
+  (_fun (_cpointer _size) _index _string -> _int))
 (define-libgit2 git_index_conflict_add
   (_fun _index _index_entry _index_entry _index_entry -> _int))
 (define-libgit2 git_index_conflict_get
-  (_fun (_pointer _index_entry) (_pointer _index_entry) (_pointer _index_entry) _index _string -> _int))
+  (_fun (_cpointer _index_entry) (_cpointer _index_entry) (_cpointer _index_entry) _index _string -> _int))
 (define-libgit2 git_index_conflict_remove
   (_fun _index _string -> _int))
 (define-libgit2 git_index_conflict_cleanup
@@ -1142,9 +1138,9 @@
 (define-libgit2 git_index_has_conflicts
   (_fun _index -> _bool))
 (define-libgit2 git_index_conflict_iterator_new
-  (_fun (_pointer _index_conflict_iterator) _index -> _bool))
+  (_fun (_cpointer _index_conflict_iterator) _index -> _bool))
 (define-libgit2 git_index_conflict_next
-  (_fun (_pointer _index_entry) (_pointer _index_entry) (_pointer _index_entry) _index_conflict_iterator -> _bool))
+  (_fun (_cpointer _index_entry) (_cpointer _index_entry) (_cpointer _index_entry) _index_conflict_iterator -> _bool))
 (define-libgit2 git_index_conflict_iterator_free
   (_fun _index_conflict_iterator -> _void))
 
@@ -1228,17 +1224,17 @@
            GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)))
 
 (define-libgit2 git_merge_analysis
-  (_fun (_pointer _git_merge_analysis_t) (_pointer _git_merge_preference_t) _repository (_pointer _annotated_commit) _size -> _int))
+  (_fun (_cpointer _git_merge_analysis_t) (_cpointer _git_merge_preference_t) _repository (_cpointer _annotated_commit) _size -> _int))
 (define-libgit2 git_merge_base
   (_fun _oid _repository _oid _oid -> _int))
 (define-libgit2 git_merge_bases
   (_fun _oidarray _repository _oid _oid -> _int))
 (define-libgit2 git_merge_base_many
-  (_fun _oid _repository _size (_array _oid) -> _int))
+  (_fun _oid _repository _size (_cpointer _oid) -> _int))
 (define-libgit2 git_merge_bases_many
-  (_fun _oidarray _repository _size (_array _oid) -> _int))
+  (_fun _oidarray _repository _size (_cpointer _oid) -> _int))
 (define-libgit2 git_merge_base_octopus
-  (_fun _oid _repository _size (_array _oid) -> _int))
+  (_fun _oid _repository _size (_cpointer _oid) -> _int))
 (define-libgit2 git_merge_file
   (_fun _git_merge_file_result-pointer _git_merge_file_input-pointer _git_merge_file_input-pointer _git_merge_file_input-pointer _git_merge_file_opts-pointer -> _int))
 (define-libgit2 git_merge_file_from_index
@@ -1246,11 +1242,11 @@
 (define-libgit2 git_merge_file_result_free
   (_fun _git_merge_file_result-pointer -> _void))
 (define-libgit2 git_merge_trees
-  (_fun (_pointer _index) _repository _tree _tree _tree _git_merge_opts-pointer -> _int))
+  (_fun (_cpointer _index) _repository _tree _tree _tree _git_merge_opts-pointer -> _int))
 (define-libgit2 git_merge_commits
-  (_fun (_pointer _index) _repository _commit _commit _commit _git_merge_opts-pointer -> _int))
+  (_fun (_cpointer _index) _repository _commit _commit _commit _git_merge_opts-pointer -> _int))
 (define-libgit2 git_merge
-  (_fun _repository (_pointer _annotated_commit) _size _git_merge_opts-pointer _git_checkout_opts-pointer -> _int))
+  (_fun _repository (_cpointer _annotated_commit) _size _git_merge_opts-pointer _git_checkout_opts-pointer -> _int))
 
 ; cherrypick.h
 
@@ -1263,16 +1259,16 @@
 (define-libgit2 git_cherrypick_init_options
   (_fun _git_cherrypick_opts-pointer _uint -> _int))
 (define-libgit2 git_cherrypick_commit
-  (_fun (_pointer _index) _repository _commit _commit _uint _git_merge_opts-pointer -> _int))
+  (_fun (_cpointer _index) _repository _commit _commit _uint _git_merge_opts-pointer -> _int))
 (define-libgit2 git_cherrypick
   (_fun _repository _commit _git_cherrypick_opts-pointer -> _int))
 
 ; commit.h
 
 (define-libgit2 git_commit_lookup
-  (_fun (_pointer _commit) _repository _oid -> _int))
+  (_fun (_cpointer _commit) _repository _oid -> _int))
 (define-libgit2 git_commit_lookup_prefix
-  (_fun (_pointer _commit) _repository _oid _size -> _int))
+  (_fun (_cpointer _commit) _repository _oid _size -> _int))
 (define-libgit2 git_commit_free
   (_fun _commit -> _void))
 (define-libgit2 git_commit_id
@@ -1293,38 +1289,38 @@
   (_fun _commit -> _git_time_t))
 (define-libgit2 git_commit_time_offset
   (_fun _commit -> _int))
-(define-libgit2 git_commit_commiter
+(define-libgit2 git_commit_committer
   (_fun _commit -> _signature))
 (define-libgit2 git_commit_author
   (_fun _commit -> _signature))
 (define-libgit2 git_commit_raw_header
   (_fun _commit -> _string))
 (define-libgit2 git_commit_tree
-  (_fun (_pointer _tree) _commit -> _int))
+  (_fun (_cpointer _tree) _commit -> _int))
 (define-libgit2 git_commit_tree_id
   (_fun _commit -> _oid))
 (define-libgit2 git_commit_parentcount
   (_fun _commit -> _uint))
 (define-libgit2 git_commit_parent
-  (_fun (_pointer _commit) _commit _uint -> _int))
+  (_fun (_cpointer _commit) _commit _uint -> _int))
 (define-libgit2 git_commit_parent_id
   (_fun _commit _uint -> _oid))
 (define-libgit2 git_commit_nth_gen_ancestor
-  (_fun (_pointer _commit) _commit _uint -> _int))
+  (_fun (_cpointer _commit) _commit _uint -> _int))
 (define-libgit2 git_commit_header_field
   (_fun _buf _commit _string -> _int))
 (define-libgit2 git_commit_extract_signature
   (_fun _buf _buf _repository _oid _string -> _int))
 (define-libgit2 git_commit_create
-  (_fun _oid _repository _string _signature _signature _string _string _tree _size (_pointer (_array _commit)) -> _int))
-(define-libgit2 git_commit_ammend
+  (_fun _oid _repository _string _signature _signature _string _string _tree _size (_cpointer (_cpointer _commit)) -> _int))
+(define-libgit2 git_commit_amend
   (_fun _oid _commit _string _signature _signature _string _string _tree -> _int))
 (define-libgit2 git_commit_create_buffer
-  (_fun _buf _repository _signature _signature _string _string _tree _size (_pointer (_array _commit)) -> _int))
+  (_fun _buf _repository _signature _signature _string _string _tree _size (_cpointer (_cpointer _commit)) -> _int))
 (define-libgit2 git_commit_create_with_signature
   (_fun _oid _repository _string _string _string -> _int))
 (define-libgit2 git_commit_dup
-  (_fun (_pointer _commit) _commit -> _int))
+  (_fun (_cpointer _commit) _commit -> _int))
 
 ; config.h
 
@@ -1342,15 +1338,15 @@
    [value _string]
    [level _git_config_level_t]
    [free (_fun _git_config_entry-pointer -> _void)]
-   [payload (_pointer _void)]))
+   [payload (_cpointer _void)]))
 (define _config_entry _git_config_entry-pointer)
 
 (define-libgit2 git_config_entry_free
   (_fun _config_entry -> _void))
 
 (define _git_config_foreach_cb
-  (_fun _git_config_entry-pointer (_pointer _void) -> _int))
-(define _config_iterator (_pointer 'git_config_iterator))
+  (_fun _git_config_entry-pointer (_cpointer _void) -> _int))
+(define _config_iterator (_cpointer 'git_config_iterator))
 (define _git_cvar_t
   (_enum '(GIT_CVAR_FALSE
            GIT_CVAR_TRUE
@@ -1371,41 +1367,41 @@
 (define-libgit2 git_config_find_programdata
   (_fun _buf -> _int))
 (define-libgit2 git_config_open_default
-  (_fun (_pointer _config) -> _int))
+  (_fun (_cpointer _config) -> _int))
 (define-libgit2 git_config_new
-  (_fun (_pointer _config) -> _int))
+  (_fun (_cpointer _config) -> _int))
 (define-libgit2 git_config_add_file_ondisk
   (_fun _config _string _git_config_level_t _int -> _int))
 (define-libgit2 git_config_open_ondisk
-  (_fun (_pointer _config) _string -> _int))
+  (_fun (_cpointer _config) _string -> _int))
 (define-libgit2 git_config_open_level
-  (_fun (_pointer _config) _config _git_config_level_t -> _int))
+  (_fun (_cpointer _config) _config _git_config_level_t -> _int))
 (define-libgit2 git_config_open_global
-  (_fun (_pointer _config) _config -> _int))
+  (_fun (_cpointer _config) _config -> _int))
 (define-libgit2 git_config_snapshot
-  (_fun (_pointer _config) _config -> _int))
+  (_fun (_cpointer _config) _config -> _int))
 (define-libgit2 git_config_free
   (_fun _config -> _void))
 (define-libgit2 git_config_get_entry
-  (_fun (_pointer _config_entry) _config _string -> _int))
+  (_fun (_cpointer _config_entry) _config _string -> _int))
 (define-libgit2 git_config_get_int32
-  (_fun (_pointer _int32) _config _string -> _int))
+  (_fun (_cpointer _int32) _config _string -> _int))
 (define-libgit2 git_config_get_int64
-  (_fun (_pointer _int64) _config _string -> _int))
+  (_fun (_cpointer _int64) _config _string -> _int))
 (define-libgit2 git_config_get_bool
-  (_fun (_pointer _bool) _config _string -> _int))
+  (_fun (_cpointer _bool) _config _string -> _int))
 (define-libgit2 git_config_get_path
   (_fun _buf _config _string -> _int))
 (define-libgit2 git_config_get_string
-  (_fun (_pointer _string) _config _string -> _int))
+  (_fun (_cpointer _string) _config _string -> _int))
 (define-libgit2 git_config_get_string_buf
   (_fun _buf _config _string -> _int))
 (define-libgit2 git_config_get_multivar_foreach
-  (_fun _config _string _string _git_config_foreach_cb (_pointer _void) -> _int))
-(define-libgit2 git_config_get_multivar_iterator_new
-  (_fun (_pointer _config_iterator) _config _string _string -> _int))
+  (_fun _config _string _string _git_config_foreach_cb (_cpointer _void) -> _int))
+(define-libgit2 git_config_multivar_iterator_new
+  (_fun (_cpointer _config_iterator) _config _string _string -> _int))
 (define-libgit2 git_config_next
-  (_fun (_pointer _config_entry) _config_iterator -> _int))
+  (_fun (_cpointer _config_entry) _config_iterator -> _int))
 (define-libgit2 git_config_iterator_free
   (_fun _config_iterator -> _void))
 (define-libgit2 git_config_set_int32
@@ -1423,29 +1419,29 @@
 (define-libgit2 git_config_delete_multivar
   (_fun _config _string _string -> _int))
 (define-libgit2 git_config_foreach
-  (_fun _config _git_config_foreach_cb (_pointer _void) -> _int))
-(define-libgit2 _git_config_iterator_new
-  (_fun (_pointer _config_iterator) _config -> _int))
-(define-libgit2 _git_config_iterator_glob_new
-  (_fun (_pointer _config_iterator) _config _string -> _int))
-(define-libgit2 _git_config_foreach_match
-  (_fun _config _string _git_config_foreach_cb (_pointer _void) -> _int))
-(define-libgit2 _git_config_get_mapped
-  (_fun (_pointer _int) _config _string _git_cvar_map-pointer _size -> _int))
-(define-libgit2 _git_config_lookup_map_value
-  (_fun (_pointer _int) _git_cvar_map-pointer _size _string -> _int))
-(define-libgit2 _git_config_parse_bool
-  (_fun (_pointer _bool) _string -> _int))
-(define-libgit2 _git_config_parse_int32
-  (_fun (_pointer _int32) _string -> _int))
-(define-libgit2 _git_config_parse_int64
-  (_fun (_pointer _int64) _string -> _int))
-(define-libgit2 _git_config_parse_path
+  (_fun _config _git_config_foreach_cb (_cpointer _void) -> _int))
+(define-libgit2 git_config_iterator_new
+  (_fun (_cpointer _config_iterator) _config -> _int))
+(define-libgit2 git_config_iterator_glob_new
+  (_fun (_cpointer _config_iterator) _config _string -> _int))
+(define-libgit2 git_config_foreach_match
+  (_fun _config _string _git_config_foreach_cb (_cpointer _void) -> _int))
+(define-libgit2 git_config_get_mapped
+  (_fun (_cpointer _int) _config _string _git_cvar_map-pointer _size -> _int))
+(define-libgit2 git_config_lookup_map_value
+  (_fun (_cpointer _int) _git_cvar_map-pointer _size _string -> _int))
+(define-libgit2 git_config_parse_bool
+  (_fun (_cpointer _bool) _string -> _int))
+(define-libgit2 git_config_parse_int32
+  (_fun (_cpointer _int32) _string -> _int))
+(define-libgit2 git_config_parse_int64
+  (_fun (_cpointer _int64) _string -> _int))
+(define-libgit2 git_config_parse_path
   (_fun _buf _string -> _int))
-(define-libgit2 _git_config_backend_foreach_match
-  (_fun _config_backend _string _git_config_foreach_cb (_pointer _void) -> _int))
-(define-libgit2 _git_config_lock
-  (_fun (_pointer _transaction) _config -> _int))
+(define-libgit2 git_config_backend_foreach_match
+  (_fun _config_backend _string _git_config_foreach_cb (_cpointer _void) -> _int))
+(define-libgit2 git_config_lock
+  (_fun (_cpointer _transaction) _config -> _int))
 
 ; cred_helpers.h
 
@@ -1454,7 +1450,7 @@
    [password _string]))
 
 (define-libgit2 git_cred_userpass
-  (_fun (_pointer _cred) _string _string _uint (_pointer _void) -> _int))
+  (_fun (_cpointer _cred) _string _string _uint (_cpointer _void) -> _int))
 
 ; describe.h
 
@@ -1486,12 +1482,12 @@
 (define git_describe_init_format_options
   (_fun _git_describe_format_opts-pointer _uint -> _int))
 
-(define _describe_result (_pointer 'git_describe_result))
+(define _describe_result (_cpointer 'git_describe_result))
 
 (define-libgit2 git_describe_commit
-  (_fun (_pointer _describe_result) _object _git_describe_opts-pointer -> _int))
+  (_fun (_cpointer _describe_result) _object _git_describe_opts-pointer -> _int))
 (define-libgit2 git_describe_workdir
-  (_fun (_pointer _describe_result) _repository _git_describe_opts-pointer -> _int))
+  (_fun (_cpointer _describe_result) _repository _git_describe_opts-pointer -> _int))
 (define-libgit2 git_describe_format
   (_fun _buf _describe_result _git_describe_format_opts-pointer -> _int))
 (define-libgit2 git_describe_result_free
@@ -1566,31 +1562,31 @@
            GITERR_FILESYSTEM
            GITERR_PATCH)))
 
-(define-libgit2 git_errlast
-  (_fun _void -> _error))
-(define-libgit2 git_clear
-  (_fun _void -> _void))
+(define-libgit2 giterr_last
+  (_fun -> _error))
+(define-libgit2 giterr_clear
+  (_fun -> _void))
 (define-libgit2 giterr_set_str
   (_fun _int _string -> _void))
-(define-libgit2 git_set_oom
-  (_fun _void -> _void))
+(define-libgit2 giterr_set_oom
+  (_fun -> _void))
 
 ; filter.h
 
 (define _git_filter_mode_t
   (_enum '(GIT_FILTER_TO_WORKTREE = 0
-           GIT_FILTER_SMUDGE = 'GITFILTER_TO_WORKTREE
+           GIT_FILTER_SMUDGE = 0
            GIT_FILTER_TO_ODB = 1
-           GIT_FILTER_CLEAN = 'GIT_FILTER_TO_OBD)))
+           GIT_FILTER_CLEAN = 1)))
 
 (define _git_filter_flag_t
   (_bitmask '(GIT_FILTER_DEFAULT = 0
               GIT_FILTER_ALLOW_UNSAFE = 1)))
 
-(define _filter (_pointer 'git_filter))
+(define _filter (_cpointer 'git_filter))
 
 (define-libgit2 git_filter_list_load
-  (_fun (_pointer _filter) _repository _blob _string _git_filter_mode_t _uint32 -> _int))
+  (_fun (_cpointer _filter) _repository _blob _string _git_filter_mode_t _uint32 -> _int))
 (define-libgit2 git_filter_list_contains
   (_fun _filter _string -> _bool))
 (define-libgit2 git_filter_list_apply_to_data
@@ -1611,14 +1607,14 @@
 ; global.h
 
 (define-libgit2 git_libgit2_init
-  (_fun _void -> _int))
+  (_fun -> _int))
 (define-libgit2 git_libgit2_shutdown
-  (_fun _void -> _int))
+  (_fun -> _int))
 
 ; graph.h
 
 (define-libgit2 git_graph_ahead_behind
-  (_fun (_pointer _size) (_pointer _size) _repository _oid _oid -> _int))
+  (_fun (_cpointer _size) (_cpointer _size) _repository _oid _oid -> _int))
 (define-libgit2 git_graph_descendant_of
   (_fun _repository _oid _oid -> _int))
 
@@ -1629,19 +1625,19 @@
 (define-libgit2 git_ignore_clear_internal_rules
   (_fun _repository -> _int))
 (define-libgit2 git_ignore_path_is_ignored
-  (_fun (_pointer _int) _repository _string -> _int))
+  (_fun (_cpointer _int) _repository _string -> _int))
 
 ; indexer.h
 
-(define _indexer (_pointer 'git_indexer))
+(define _indexer (_cpointer 'git_indexer))
 
 (define-libgit2 git_indexer_new
-  (_fun (_pointer _indexer) _string _uint _odb _git_transfer_progress_cb (_pointer _void) -> _int))
+  (_fun (_cpointer _indexer) _string _uint _odb _git_transfer_progress_cb (_cpointer _void) -> _int))
 (define-libgit2 git_indexer_append
-  (_fun _indexer (_pointer _void) _size _git_transfer_progress-pointer -> _int))
+  (_fun _indexer (_cpointer _void) _size _git_transfer_progress-pointer -> _int))
 (define-libgit2 git_indexer_commit
   (_fun _indexer _git_transfer_progress-pointer -> _int))
-(define-libgit2 git_indexer_has
+(define-libgit2 git_indexer_hash
   (_fun _indexer -> _oid))
 (define-libgit2 git_indexer_free
   (_fun _indexer -> _void))
@@ -1654,21 +1650,21 @@
 ; notes.h
 
 (define _git_note_foreach_cb
-  (_fun _oid _oid (_pointer _void) -> _int))
+  (_fun _oid _oid (_cpointer _void) -> _int))
 
-(define _note_iterator (_pointer 'git_iterator))
+(define _note_iterator (_cpointer 'git_iterator))
 
 (define-libgit2 git_note_iterator_new
-  (_fun (_pointer _note_iterator) _repository _string -> _int))
+  (_fun (_cpointer _note_iterator) _repository _string -> _int))
 (define-libgit2 git_note_iterator_free
   (_fun _note_iterator -> _void))
 (define-libgit2 git_note_next
   (_fun _oid _oid _note_iterator -> _int))
 (define-libgit2 git_note_read
-  (_fun (_pointer _note) _repository _string _oid -> _int))
+  (_fun (_cpointer _note) _repository _string _oid -> _int))
 (define-libgit2 git_note_author
   (_fun _note -> _signature))
-(define-libgit2 git_note_commiter
+(define-libgit2 git_note_committer
   (_fun _note -> _signature))
 (define-libgit2 git_note_message
   (_fun _note -> _string))
@@ -1683,16 +1679,16 @@
 (define-libgit2 git_note_default_ref
   (_fun _buf _repository -> _int))
 (define-libgit2 git_note_foreach
-  (_fun _repository _string _git_note_foreach_cb (_pointer _void) -> _int))
+  (_fun _repository _string _git_note_foreach_cb (_cpointer _void) -> _int))
 
 ; object.h
 
 (define-libgit2 git_object_lookup
-  (_fun (_pointer _object) _repository _oid _git_otype -> _int))
+  (_fun (_cpointer _object) _repository _oid _git_otype -> _int))
 (define-libgit2 git_object_lookup_prefix
-  (_fun (_pointer _object) _repository _oid _size _git_otype -> _int))
+  (_fun (_cpointer _object) _repository _oid _size _git_otype -> _int))
 (define-libgit2 git_object_lookup_bypath
-  (_fun (_pointer _object) _object _string _git_otype -> _int))
+  (_fun (_cpointer _object) _object _string _git_otype -> _int))
 (define-libgit2 git_object_id
   (_fun _object -> _oid))
 (define-libgit2 git_object_type
@@ -1710,29 +1706,29 @@
 (define-libgit2 git_object__size
   (_fun _git_otype -> _size))
 (define-libgit2 git_object_peel
-  (_fun (_pointer _object) _object _git_otype -> _int))
+  (_fun (_cpointer _object) _object _git_otype -> _int))
 (define-libgit2 git_object_dup
-  (_fun (_pointer _object) _object -> _int))
+  (_fun (_cpointer _object) _object -> _int))
 
 ; odb.h
 
 (define _git_odb_foreach_cb
-  (_fun _oid (_pointer _void) -> _int))
+  (_fun _oid (_cpointer _void) -> _int))
 
 (define-libgit2 git_odb_new
-  (_fun (_pointer _odb) -> _int))
+  (_fun (_cpointer _odb) -> _int))
 (define-libgit2 git_odb_open
-  (_fun (_pointer _odb) _string -> _int))
+  (_fun (_cpointer _odb) _string -> _int))
 (define-libgit2 git_odb_add_disk_alternate
   (_fun _odb _string -> _int))
 (define-libgit2 git_odb_free
   (_fun _odb -> _void))
 (define-libgit2 git_odb_read
-  (_fun (_pointer _odb_object) _odb _oid -> _int))
+  (_fun (_cpointer _odb_object) _odb _oid -> _int))
 (define-libgit2 git_odb_read_prefix
-  (_fun (_pointer _odb_object) _odb _oid _size -> _int))
+  (_fun (_cpointer _odb_object) _odb _oid _size -> _int))
 (define-libgit2 git_odb_read_header
-  (_fun (_pointer _size) (_pointer _git_otype) _odb _oid -> _int))
+  (_fun (_cpointer _size) (_cpointer _git_otype) _odb _oid -> _int))
 (define-libgit2 git_odb_exists
   (_fun _odb _oid -> _bool))
 (define-libgit2 git_odb_exists_prefix
@@ -1749,11 +1745,11 @@
 (define-libgit2 git_odb_refresh
   (_fun _odb -> _int))
 (define-libgit2 git_odb_foreach
-  (_fun _odb _git_odb_foreach_cb (_pointer _void) -> _int))
+  (_fun _odb _git_odb_foreach_cb (_cpointer _void) -> _int))
 (define-libgit2 git_odb_write
-  (_fun _oid _odb (_pointer _void) _size _git_otype -> _int))
+  (_fun _oid _odb (_cpointer _void) _size _git_otype -> _int))
 (define-libgit2 git_odb_open_wstream
-  (_fun (_pointer _odb_stream) _odb _git_off_t _git_otype -> _int))
+  (_fun (_cpointer _odb_stream) _odb _git_off_t _git_otype -> _int))
 (define-libgit2 git_odb_stream_write
   (_fun _odb_stream _string _size -> _int))
 (define-libgit2 git_odb_stream_finalize_write
@@ -1763,19 +1759,19 @@
 (define-libgit2 git_odb_stream_free
   (_fun _odb_stream -> _void))
 (define-libgit2 git_odb_open_rstream
-  (_fun (_pointer _odb_stream) _odb _oid -> _int))
+  (_fun (_cpointer _odb_stream) _odb _oid -> _int))
 (define-libgit2 git_odb_write_pack
-  (_fun (_pointer _odb_writepack) _odb _git_transfer_progress_cb (_pointer _void) -> _int))
+  (_fun (_cpointer _odb_writepack) _odb _git_transfer_progress_cb (_cpointer _void) -> _int))
 (define-libgit2 git_odb_hash
-  (_fun _oid (_pointer _void) _size _git_otype -> _int))
+  (_fun _oid (_cpointer _void) _size _git_otype -> _int))
 (define-libgit2 git_odb_hashfile
   (_fun _oid _string _git_otype -> _int))
 (define-libgit2 git_odb_object_dup
-  (_fun (_pointer _odb_object) _odb_object -> _int))
+  (_fun (_cpointer _odb_object) _odb_object -> _int))
 (define-libgit2 git_odb_object_id
   (_fun _odb_object -> _oid))
 (define-libgit2 git_odb_object_data
-  (_fun _odb_object -> (_pointer _void)))
+  (_fun _odb_object -> (_cpointer _void)))
 (define-libgit2 git_odb_object_type
   (_fun _odb_object -> _git_otype))
 (define-libgit2 git_odb_add_backend
@@ -1785,14 +1781,14 @@
 (define-libgit2 git_odb_num_backends
   (_fun _odb -> _size))
 (define-libgit2 git_odb_get_backend
-  (_fun (_pointer _odb_backend) _odb _size -> _int))
+  (_fun (_cpointer _odb_backend) _odb _size -> _int))
 
 ; odb_backend.h
 
 (define-libgit2 git_odb_backend_loose
-  (_fun (_pointer _odb_backend) _string _int _int _uint _uint -> _int))
+  (_fun (_cpointer _odb_backend) _string _int _int _uint _uint -> _int))
 (define-libgit2 git_odb_backend_one_pack
-  (_fun (_pointer _odb_backend) _string -> _int))
+  (_fun (_cpointer _odb_backend) _string -> _int))
 (define _git_odb_stream_t
   (_enum '(GIT_STREAM_RDONLY = 2
            GIT_STREAM_WRONLY = 4
@@ -1801,7 +1797,7 @@
 (define-cstruct _git_odb_stream
   ([backend _odb_backend]
    [mode _uint]
-   [hash_ctx (_pointer _void)]
+   [hash_ctx (_cpointer _void)]
    [declared_size _git_off_t]
    [received_bytes _git_off_t]
    [read (_fun _git_odb_stream-pointer _string _size -> _int)]
@@ -1811,43 +1807,43 @@
 
 (define-cstruct _git_odb_writepack
   ([backend _odb_backend]
-   [append (_fun _git_odb_writepack-pointer (_pointer _void) _size _git_transfer_progress-pointer -> _int)]
+   [append (_fun _git_odb_writepack-pointer (_cpointer _void) _size _git_transfer_progress-pointer -> _int)]
    [commit (_fun _git_odb_writepack-pointer _git_transfer_progress-pointer -> _int)]
    [free (_fun _git_odb_writepack-pointer -> _void)]))
 
 ; patch.h
 
 (define-libgit2 git_patch_from_diff
-  (_fun (_pointer _patch) _diff _size -> _int))
+  (_fun (_cpointer _patch) _diff _size -> _int))
 (define-libgit2 git_patch_from_blobs
-  (_fun (_pointer _patch) _blob _string _blob _string _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _patch) _blob _string _blob _string _git_diff_opts-pointer -> _int))
 (define-libgit2 git_patch_from_blob_and_buffer
-  (_fun (_pointer _patch) _blob _string _string _size _string _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _patch) _blob _string _string _size _string _git_diff_opts-pointer -> _int))
 (define-libgit2 git_patch_from_buffers
-  (_fun (_pointer _patch) (_pointer _void) _size _string _string _size _string _git_diff_opts-pointer -> _int))
+  (_fun (_cpointer _patch) (_cpointer _void) _size _string _string _size _string _git_diff_opts-pointer -> _int))
 (define-libgit2 git_patch_free
   (_fun _patch -> _void))
 (define-libgit2 git_patch_get_delta
   (_fun _patch -> _git_diff_delta-pointer))
 (define-libgit2 git_patch_line_stats
-  (_fun (_pointer _size) (_pointer _size) (_pointer _size) _patch  -> _int))
+  (_fun (_cpointer _size) (_cpointer _size) (_cpointer _size) _patch  -> _int))
 (define-libgit2 git_patch_get_hunk
-  (_fun _git_diff_hunk-pointer (_pointer _size) _patch _size -> _int))
+  (_fun _git_diff_hunk-pointer (_cpointer _size) _patch _size -> _int))
 (define-libgit2 git_patch_num_lines_in_hunk
   (_fun _patch _size -> _int))
 (define-libgit2 git_patch_get_line_in_hunk
-  (_fun (_pointer _git_diff_line-pointer) _patch _size _size -> _int))
+  (_fun (_cpointer _git_diff_line-pointer) _patch _size _size -> _int))
 (define-libgit2 git_patch_size
   (_fun _patch _int _int _int -> _size))
 (define-libgit2 git_patch_print
-  (_fun _patch _git_diff_line_cb (_pointer _void) -> _int))
+  (_fun _patch _git_diff_line_cb (_cpointer _void) -> _int))
 (define-libgit2 git_patch_to_buf
   (_fun _buf _patch -> _int))
 
 ; pathspec.h
 
-(define _pathspec (_pointer 'git_pathspec))
-(define _pathspec_match_list (_pointer 'git_pathspec_match_list))
+(define _pathspec (_cpointer 'git_pathspec))
+(define _pathspec_match_list (_cpointer 'git_pathspec_match_list))
 
 (define _git_pathspec_flag_t
   (_bitmask '(GIT_PATHSPEC_DEFAULT = #x0000
@@ -1859,19 +1855,19 @@
               GIT_PATHSPEC_FAILURES_ONLY = #x0020)))
 
 (define-libgit2 git_pathspec_new
-  (_fun (_pointer _pathspec) _strarray -> _int ))
+  (_fun (_cpointer _pathspec) _strarray -> _int ))
 (define-libgit2 git_pathspec_free
   (_fun _pathspec -> _void))
 (define-libgit2 git_pathspec_matches_path
   (_fun _pathspec _uint32 _string -> _int))
 (define-libgit2 git_pathspec_match_workdir
-  (_fun (_pointer _pathspec_match_list) _repository _uint32 _pathspec -> _int))
+  (_fun (_cpointer _pathspec_match_list) _repository _uint32 _pathspec -> _int))
 (define-libgit2 git_pathspec_match_index
-  (_fun (_pointer _pathspec_match_list) _index _uint32 _pathspec -> _int))
+  (_fun (_cpointer _pathspec_match_list) _index _uint32 _pathspec -> _int))
 (define-libgit2 git_pathspec_match_tree
-  (_fun (_pointer _pathspec_match_list) _tree _uint32 _pathspec -> _int))
+  (_fun (_cpointer _pathspec_match_list) _tree _uint32 _pathspec -> _int))
 (define-libgit2 git_pathspec_match_diff
-  (_fun (_pointer _pathspec_match_list) _diff _uint32 _pathspec -> _int))
+  (_fun (_cpointer _pathspec_match_list) _diff _uint32 _pathspec -> _int))
 (define-libgit2 git_pathspec_match_list_free
   (_fun _pathspec_match_list -> _int))
 (define-libgit2 git_pathspec_match_list_entrycount
@@ -1911,19 +1907,19 @@
 (define-libgit2 git_rebase_init_options
   (_fun _git_rebase_opts-pointer _uint -> _int))
 (define-libgit2 git_rebase_init
-  (_fun (_pointer _rebase) _repository _annotated_commit _annotated_commit  _annotated_commit _git_rebase_opts-pointer -> _int))
+  (_fun (_cpointer _rebase) _repository _annotated_commit _annotated_commit  _annotated_commit _git_rebase_opts-pointer -> _int))
 (define-libgit2 git_rebase_open
-  (_fun (_pointer _rebase) _repository _git_rebase_opts-pointer -> _int))
+  (_fun (_cpointer _rebase) _repository _git_rebase_opts-pointer -> _int))
 (define-libgit2 git_rebase_operation_entrycount
   (_fun _rebase -> _size))
 (define-libgit2 git_rebase_operation_current
   (_fun _rebase -> _git_rebase_operation-pointer))
 (define-libgit2 git_rebase_operation_byindex
   (_fun _rebase _int -> _git_rebase_operation-pointer))
-(define-libgit2 git_rebase_operation_next
-  (_fun (_pointer _git_rebase_operation-pointer) _rebase -> _int))
+(define-libgit2 git_rebase_next
+  (_fun (_cpointer _git_rebase_operation-pointer) _rebase -> _int))
 (define-libgit2 git_rebase_inmemory_index
-  (_fun (_pointer _index) _rebase -> _int))
+  (_fun (_cpointer _index) _rebase -> _int))
 (define-libgit2 git_rebase_commit
   (_fun _oid _rebase _signature _signature _string _string -> _int))
 (define-libgit2 git_rebase_abort
@@ -1936,9 +1932,9 @@
 ; refdb.h
 
 (define-libgit2 git_refdb_new
-  (_fun (_pointer _refdb) _repository -> _int))
+  (_fun (_cpointer _refdb) _repository -> _int))
 (define-libgit2 git_refdb_open
-  (_fun (_pointer _refdb) _repository -> _int))
+  (_fun (_cpointer _refdb) _repository -> _int))
 (define-libgit2 git_refdb_compress
   (_fun _refdb -> _int))
 (define-libgit2 git_refdb_free
@@ -1947,7 +1943,7 @@
 ; reflog.h
 
 (define-libgit2 git_reflog_read
-  (_fun (_pointer _reflog) _repository _string -> _int))
+  (_fun (_cpointer _reflog) _repository _string -> _int))
 (define-libgit2 git_reflog_write
   (_fun _reflog -> _int))
 (define-libgit2 git_reflog_append
@@ -1976,19 +1972,19 @@
 ; refs.h
 
 (define-libgit2 git_reference_lookup
-  (_fun (_pointer _reference) _repository _string -> _int))
+  (_fun (_cpointer _reference) _repository _string -> _int))
 (define-libgit2 git_reference_name_to_id
   (_fun _oid _repository _string -> _int))
 (define-libgit2 git_reference_dwim
-  (_fun (_pointer _reference) _repository _string -> _int))
+  (_fun (_cpointer _reference) _repository _string -> _int))
 (define-libgit2 git_reference_symbolic_create_matching
-  (_fun (_pointer _reference) _repository _string _string _int _string _string -> _int))
+  (_fun (_cpointer _reference) _repository _string _string _int _string _string -> _int))
 (define-libgit2 git_reference_symbolic_create
-  (_fun (_pointer _reference) _repository _string _string _int _string -> _int))
+  (_fun (_cpointer _reference) _repository _string _string _int _string -> _int))
 (define-libgit2 git_reference_create
-  (_fun (_pointer _reference) _repository _string _oid _int _string -> _int))
+  (_fun (_cpointer _reference) _repository _string _oid _int _string -> _int))
 (define-libgit2 git_reference_create_matching
-  (_fun (_pointer _reference) _repository _string _oid _int _oid _string -> _int))
+  (_fun (_cpointer _reference) _repository _string _oid _int _oid _string -> _int))
 (define-libgit2 git_reference_target
   (_fun _reference -> _oid))
 (define-libgit2 git_reference_target_peel
@@ -2000,15 +1996,15 @@
 (define-libgit2 git_reference_name
   (_fun _reference -> _string))
 (define-libgit2 git_reference_resolve
-  (_fun (_pointer _reference) _reference -> _int))
+  (_fun (_cpointer _reference) _reference -> _int))
 (define-libgit2 git_reference_owner
   (_fun _reference -> _repository))
 (define-libgit2 git_reference_symbolic_set_target
-  (_fun (_pointer _reference) _reference _string _string -> _int))
+  (_fun (_cpointer _reference) _reference _string _string -> _int))
 (define-libgit2 git_reference_set_target
-  (_fun (_pointer _reference) _reference _oid _string -> _int))
+  (_fun (_cpointer _reference) _reference _oid _string -> _int))
 (define-libgit2 git_reference_rename
-  (_fun (_pointer _reference) _reference _string _int _string -> _int))
+  (_fun (_cpointer _reference) _reference _string _int _string -> _int))
 (define-libgit2 git_reference_delete
   (_fun _reference -> _int))
 (define-libgit2 git_reference_remove
@@ -2016,31 +2012,31 @@
 (define-libgit2 git_reference_list
   (_fun _strarray _repository -> _int))
 
-(define _git_reference_foreach_cb (_fun _reference (_pointer _void) -> _int))
-(define _git_reference_foreach_name_cb (_fun _string (_pointer _void) -> _int))
+(define _git_reference_foreach_cb (_fun _reference (_cpointer _void) -> _int))
+(define _git_reference_foreach_name_cb (_fun _string (_cpointer _void) -> _int))
 
 (define-libgit2 git_reference_foreach
-  (_fun _repository _git_reference_foreach_cb (_pointer _void) -> _int))
+  (_fun _repository _git_reference_foreach_cb (_cpointer _void) -> _int))
 (define-libgit2 git_reference_foreach_name
-  (_fun _repository _git_reference_foreach_name_cb (_pointer _void) -> _int))
+  (_fun _repository _git_reference_foreach_name_cb (_cpointer _void) -> _int))
 (define-libgit2 git_reference_dup
-  (_fun (_pointer _reference) _reference -> _int))
+  (_fun (_cpointer _reference) _reference -> _int))
 (define-libgit2 git_reference_free
   (_fun _reference -> _void))
 (define-libgit2 git_reference_cmp
   (_fun _repository _repository -> _int))
 (define-libgit2 git_reference_iterator_new
-  (_fun (_pointer _reference_iterator) _repository -> _int))
+  (_fun (_cpointer _reference_iterator) _repository -> _int))
 (define-libgit2 git_reference_iterator_glob_new
-  (_fun (_pointer _reference_iterator) _repository _string -> _int))
+  (_fun (_cpointer _reference_iterator) _repository _string -> _int))
 (define-libgit2 git_reference_next
-  (_fun (_pointer _reference) _reference_iterator -> _int))
+  (_fun (_cpointer _reference) _reference_iterator -> _int))
 (define-libgit2 git_reference_next_name
-  (_fun (_pointer _string) _reference_iterator -> _int))
+  (_fun (_cpointer _string) _reference_iterator -> _int))
 (define-libgit2 git_reference_iterator_free
   (_fun _reference_iterator -> _int))
 (define-libgit2 git_reference_foreach_glob
-  (_fun _repository _string _git_reference_foreach_name_cb (_pointer _void) -> _int))
+  (_fun _repository _string _git_reference_foreach_name_cb (_cpointer _void) -> _int))
 (define-libgit2 git_reference_has_log
   (_fun _repository _string -> _int))
 (define-libgit2 git_reference_ensure_log
@@ -2063,7 +2059,7 @@
 (define-libgit2 git_reference_normalize_name
   (_fun _string _size _string _uint -> _int))
 (define-libgit2 git_reference_peel
-  (_fun (_pointer _object) _reference _git_otype -> _int))
+  (_fun (_cpointer _object) _reference _git_otype -> _int))
 (define-libgit2 git_reference_is_valid_name
   (_fun _string -> _bool))
 (define-libgit2 git_reference_shorthand
@@ -2093,9 +2089,9 @@
 ; repository.h
 
 (define-libgit2 git_repository_open
-  (_fun (_pointer _repository) _string -> _int))
+  (_fun (_cpointer _repository) _string -> _int))
 (define-libgit2 git_repository_wrap_odb
-  (_fun (_pointer _repository) _odb -> _int))
+  (_fun (_cpointer _repository) _odb -> _int))
 (define-libgit2 git_repository_discover
   (_fun _buf _string _int _string -> _int))
 
@@ -2107,20 +2103,20 @@
               GIT_REPOSITORY_OPEN_FROM_ENV = 16)))
 
 (define-libgit2 git_repository_open_ext
-  (_fun (_pointer _repository) _string _uint _string -> _int))
+  (_fun (_cpointer _repository) _string _uint _string -> _int))
 (define-libgit2 git_repository_open_bare
-  (_fun (_pointer _repository) _string -> _int))
+  (_fun (_cpointer _repository) _string -> _int))
 (define-libgit2 git_repository_free
   (_fun _repository -> _void))
 (define-libgit2 git_repository_init
-  (_fun (_pointer _repository) _string _uint -> _int))
+  (_fun (_cpointer _repository) _string _uint -> _int))
 
 (define _git_repository_int_flag_t
   (_bitmask '(GIT_REPOSITORY_INIT_BARE = 1
               GIT_REPOSITORY_INIT_NO_REINIT = 2
               GIT_REPOSITORY_INIT_NO_DOTGIT_DIR = 4
               GIT_REPOSITORY_INIT_MKDIR = 8
-              GIT_REPOSITORY_INIT_MKPATH= 16
+              GIT_REPOSITORY_INIT_MKPATH = 16
               GIT_REPOSITORY_INIT_EXTERNAL_TEMPLATE = 32
               GIT_REPOSITORY_INIT_RELATIVE_GITLINK = 64)))
 
@@ -2142,9 +2138,9 @@
 (define-libgit2 git_repository_init_init_options
   (_fun _git_repository_init_opts-pointer _uint -> _int))
 (define-libgit2 git_repository_init_ext
-  (_fun (_pointer _repository) _string _git_repository_init_opts-pointer -> _int))
+  (_fun (_cpointer _repository) _string _git_repository_init_opts-pointer -> _int))
 (define-libgit2 git_repository_head
-  (_fun (_pointer _reference) _repository -> _int))
+  (_fun (_cpointer _reference) _repository -> _int))
 (define-libgit2 git_repository_head_detached
   (_fun _repository -> _int))
 (define-libgit2 git_repository_head_unborn
@@ -2158,15 +2154,15 @@
 (define-libgit2 git_repository_set_workdir
   (_fun _repository _string _int -> _int))
 (define-libgit2 git_repository_config
-  (_fun (_pointer _config) _repository -> _int))
+  (_fun (_cpointer _config) _repository -> _int))
 (define-libgit2 git_repository_config_snapshot
-  (_fun (_pointer _config) _repository -> _int))
+  (_fun (_cpointer _config) _repository -> _int))
 (define-libgit2 git_repository_odb
-  (_fun (_pointer _odb) _repository -> _int))
+  (_fun (_cpointer _odb) _repository -> _int))
 (define-libgit2 git_repository_refdb
-  (_fun (_pointer _refdb) _repository -> _int))
+  (_fun (_cpointer _refdb) _repository -> _int))
 (define-libgit2 git_repository_index
-  (_fun (_pointer _index) _repository  -> _int))
+  (_fun (_cpointer _index) _repository  -> _int))
 (define-libgit2 git_repository_message
   (_fun _buf _repository -> _int))
 (define-libgit2 git_repository_message_remove
@@ -2175,16 +2171,16 @@
   (_fun _repository -> _int))
 
 (define _git_repository_fetchhead_foreach_cb
-  (_fun _string _string _oid _uint (_pointer _void) -> _int))
+  (_fun _string _string _oid _uint (_cpointer _void) -> _int))
 
 (define-libgit2 git_repository_fetchhead_foreach
-  (_fun _repository _git_repository_fetchhead_foreach_cb (_pointer _void) -> _int))
+  (_fun _repository _git_repository_fetchhead_foreach_cb (_cpointer _void) -> _int))
 
 (define _git_repository_mergehead_foreach_cb
-  (_fun _oid (_pointer _void) -> _int))
+  (_fun _oid (_cpointer _void) -> _int))
 
 (define-libgit2 git_repository_mergehead_foreach
-  (_fun _repository _git_repository_mergehead_foreach_cb (_pointer _void) -> _int))
+  (_fun _repository _git_repository_mergehead_foreach_cb (_cpointer _void) -> _int))
 (define-libgit2 git_repository_hashfile
   (_fun _oid _repository _path _git_otype _string -> _int))
 (define-libgit2 git_repository_set_head
@@ -2219,7 +2215,7 @@
 (define-libgit2 git_repository_is_shallow
   (_fun _repository -> _int))
 (define-libgit2 git_repository_ident
-  (_fun (_pointer _string) (_pointer _string) _repository -> _int))
+  (_fun (_cpointer _string) (_cpointer _string) _repository -> _int))
 (define-libgit2 git_repository_set_ident
   (_fun _repository _string _string -> _int))
 
@@ -2248,16 +2244,16 @@
 (define-libgit2 git_revert_init_options
   (_fun _git_revert_opts-pointer _uint -> _int))
 (define-libgit2 git_revert_commit
-  (_fun (_pointer _index) _repository _commit _commit _uint _git_merge_opts-pointer -> _int))
+  (_fun (_cpointer _index) _repository _commit _commit _uint _git_merge_opts-pointer -> _int))
 (define-libgit2 git_revert
   (_fun _repository _commit _git_revert_opts-pointer -> _int))
 
 ; revparse.h
 
 (define-libgit2 git_revparse_single
-  (_fun (_pointer _object) _repository _string -> _int))
+  (_fun (_cpointer _object) _repository _string -> _int))
 (define-libgit2 git_revparse_ext
-  (_fun (_pointer _object) (_pointer _reference) _repository _string -> _int))
+  (_fun (_cpointer _object) (_cpointer _reference) _repository _string -> _int))
 
 (define _git_revparse_mode_t
   (_bitmask '(GIT_REVPARSE_SINGLE = 1
@@ -2281,7 +2277,7 @@
               GIT_SORT_REVERSE = 4)))
 
 (define-libgit2 git_revwalk_new
-  (_fun (_pointer _revwalk) _repository -> _int))
+  (_fun (_cpointer _revwalk) _repository -> _int))
 (define-libgit2 git_revwalk_reset
   (_fun _revwalk -> _void))
 (define-libgit2 git_revwalk_push
@@ -2314,23 +2310,23 @@
   (_fun _revwalk -> _repository))
 
 (define _git_revwalk_hide_cb
-  (_fun _oid (_pointer _void) -> _int))
+  (_fun _oid (_cpointer _void) -> _int))
 
 (define-libgit2 git_revwalk_add_hide_cb
-  (_fun _revwalk _git_revwalk_hide_cb (_pointer _void) -> _int))
+  (_fun _revwalk _git_revwalk_hide_cb (_cpointer _void) -> _int))
 
 ; signature.h
 
 (define-libgit2 git_signature_new
-  (_fun (_pointer _signature) _string _string _git_time_t _int -> _int))
+  (_fun (_cpointer _signature) _string _string _git_time_t _int -> _int))
 (define-libgit2 git_signature_now
-  (_fun (_pointer _signature) _string _string -> _int))
+  (_fun (_cpointer _signature) _string _string -> _int))
 (define-libgit2 git_signature_default
-  (_fun (_pointer _signature) _repository -> _int))
+  (_fun (_cpointer _signature) _repository -> _int))
 (define-libgit2 git_signature_from_buffer
-  (_fun (_pointer _signature) _buf -> _int))
+  (_fun (_cpointer _signature) _buf -> _int))
 (define-libgit2 git_signature_dup
-  (_fun (_pointer _signature) _signature -> _int))
+  (_fun (_cpointer _signature) _signature -> _int))
 (define-libgit2 git_signature_free
   (_fun _signature -> _void))
 
@@ -2360,23 +2356,23 @@
            GIT_STASH_APPLY_PROGRESS_DONE)))
 
 (define _git_stash_apply_progress_cb
-  (_fun _git_stash_apply_progress_t (_pointer _void) -> _int))
+  (_fun _git_stash_apply_progress_t (_cpointer _void) -> _int))
 
 (define-cstruct _git_stash_apply_opts
   ([version _uint]
    [flags _git_stash_apply_flags]
    [checkout_options _git_checkout_opts]
    [progress_cb _git_stash_apply_progress_cb]
-   [progress_payload (_pointer _void)]))
+   [progress_payload (_cpointer _void)]))
 
 (define-libgit2 git_stash_apply_init_options
   (_fun _git_stash_apply_opts-pointer _uint -> _int))
 (define-libgit2 git_stash_apply
   (_fun _repository _size _git_stash_apply_opts-pointer -> _int))
 (define _git_stash_cb
-  (_fun _size _string _oid (_pointer _void) -> _int))
+  (_fun _size _string _oid (_cpointer _void) -> _int))
 (define-libgit2 git_stash_foreach
-  (_fun _repository _git_stash_cb (_pointer _void) -> _int))
+  (_fun _repository _git_stash_cb (_cpointer _void) -> _int))
 (define-libgit2 git_stash_drop
   (_fun _repository _size -> _int))
 (define-libgit2 git_stash_pop
@@ -2385,23 +2381,23 @@
 ; submodule.h
 
 (define _git_submodule_status_t
-  (_bitmask '(GIT_SUBMODULE_STATUS_IN_HEAD = (arithmetic-shift 1 0)
-              GIT_SUBMODULE_STATUS_IN_INDEX = (arithmetic-shift 1 1)
-              GIT_SUBMODULE_STATUS_IN_CONFIG = (arithmetic-shift 1 2)
-              GIT_SUBMODULE_STATUS_IN_WD = (arithmetic-shift 1 3)
-              GIT_SUBMODULE_STATUS_INDEX_ADDED = (arithmetic-shift 1 4)
-              GIT_SUBMODULE_STATUS_INDEX_DELETED = (arithmetic-shift 1 5)
-              GIT_SUBMODULE_STATUS_INDEX_MODIFIED = (arithmetic-shift 1 6)
-              GIT_SUBMODULE_STATUS_WD_UNITIALIZED = (arithmetic-shift 1 7)
-              GIT_SUBMODULE_STATUS_WD_ADDED = (arithmetic-shift 1 8)
-              GIT_SUBMODULE_STATUS_WD_DELETED = (arithmetic-shift 1 9)
-              GIT_SUBMODULE_STATUS_WD_MODIFIED = (arithmetic-shift 1 10)
-              GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED = (arithmetic-shift 1 11)
-              GIT_SUBMODULE_STATUS_WD_WD_MODIFIED = (arithmetic-shift 1 12)
-              GIT_SUBMODULE_STATUS_WD_UNTRACKED = (arithmetic-shift 1 13))))
+  (_bitmask '(GIT_SUBMODULE_STATUS_IN_HEAD = #x0001
+              GIT_SUBMODULE_STATUS_IN_INDEX = #x0002
+              GIT_SUBMODULE_STATUS_IN_CONFIG = #x0004
+              GIT_SUBMODULE_STATUS_IN_WD = #x0008
+              GIT_SUBMODULE_STATUS_INDEX_ADDED = #x0010
+              GIT_SUBMODULE_STATUS_INDEX_DELETED = #x0020
+              GIT_SUBMODULE_STATUS_INDEX_MODIFIED = #x0040
+              GIT_SUBMODULE_STATUS_WD_UNITIALIZED = #x0080
+              GIT_SUBMODULE_STATUS_WD_ADDED = #x0100
+              GIT_SUBMODULE_STATUS_WD_DELETED = #x0200
+              GIT_SUBMODULE_STATUS_WD_MODIFIED = #x0400
+              GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED = #x0800
+              GIT_SUBMODULE_STATUS_WD_WD_MODIFIED = #x1000
+              GIT_SUBMODULE_STATUS_WD_UNTRACKED = #x2000)))
 
 (define _git_submodule_cb
-  (_fun _submodule _string (_pointer _void) -> _int))
+  (_fun _submodule _string (_cpointer _void) -> _int))
 
 (define-cstruct _git_submodule_update_opts
   ([version _uint]
@@ -2414,13 +2410,13 @@
 (define-libgit2 git_submodule_update
   (_fun _submodule _int _git_submodule_update_opts-pointer -> _int))
 (define-libgit2 git_submodule_lookup
-  (_fun (_pointer _submodule) _repository _string -> _int))
+  (_fun (_cpointer _submodule) _repository _string -> _int))
 (define-libgit2 git_submodule_free
   (_fun _submodule -> _void))
 (define-libgit2 git_submodule_foreach
-  (_fun _repository _git_submodule_cb (_pointer _void) -> _int))
+  (_fun _repository _git_submodule_cb (_cpointer _void) -> _int))
 (define-libgit2 git_submodule_add_setup
-  (_fun (_pointer _submodule) _repository _string _string _int -> _int))
+  (_fun (_cpointer _submodule) _repository _string _string _int -> _int))
 (define-libgit2 git_submodule_add_finalize
   (_fun _submodule -> _int))
 (define-libgit2 git_submodule_add_to_index
@@ -2460,24 +2456,24 @@
 (define-libgit2 git_submodule_init
   (_fun _submodule _int -> _int))
 (define-libgit2 git_submodule_repo_init
-  (_fun (_pointer _repository) _submodule _int -> _int))
+  (_fun (_cpointer _repository) _submodule _int -> _int))
 (define-libgit2 git_submodule_sync
   (_fun _submodule -> _int))
 (define-libgit2 git_submodule_open
-  (_fun (_pointer _repository) _submodule -> _int))
+  (_fun (_cpointer _repository) _submodule -> _int))
 (define-libgit2 git_submodule_reload
   (_fun _submodule _int -> _int))
 (define-libgit2 git_submodule_status
-  (_fun (_pointer _uint) _repository _string _git_submodule_ignore_t -> _int))
+  (_fun (_cpointer _uint) _repository _string _git_submodule_ignore_t -> _int))
 (define-libgit2 git_submodule_location
-  (_fun (_pointer _uint) _submodule -> _int))
+  (_fun (_cpointer _uint) _submodule -> _int))
 
 ; tag.h
 
 (define-libgit2 git_tag_lookup
-  (_fun (_pointer _tag) _repository _oid -> _int))
+  (_fun (_cpointer _tag) _repository _oid -> _int))
 (define-libgit2 git_tag_lookup_prefix
-  (_fun (_pointer _tag) _repository _oid _size -> _int))
+  (_fun (_cpointer _tag) _repository _oid _size -> _int))
 (define-libgit2 git_tag_free
   (_fun _tag -> _void))
 (define-libgit2 git_tag_id
@@ -2485,7 +2481,7 @@
 (define-libgit2 git_tag_owner
   (_fun _tag -> _repository))
 (define-libgit2 git_tag_target
-  (_fun (_pointer _object) _tag -> _int))
+  (_fun (_cpointer _object) _tag -> _int))
 (define-libgit2 git_tag_target_id
   (_fun _tag -> _oid))
 (define-libgit2 git_tag_target_type
@@ -2512,14 +2508,14 @@
   (_fun _strarray _string _repository -> _int))
 
 (define _git_tag_foreach_cb
-  (_fun _string _oid (_pointer _void) -> _int))
+  (_fun _string _oid (_cpointer _void) -> _int))
 
 (define-libgit2 git_tag_foreach
-  (_fun _repository _git_tag_foreach_cb (_pointer _void) -> _int))
+  (_fun _repository _git_tag_foreach_cb (_cpointer _void) -> _int))
 (define-libgit2 git_tag_peel
-  (_fun (_pointer _object) _tag -> _int))
+  (_fun (_cpointer _object) _tag -> _int))
 (define-libgit2 git_tag_dup
-  (_fun (_pointer _tag) _tag -> _int))
+  (_fun (_cpointer _tag) _tag -> _int))
 
 ; trace.h
 
@@ -2540,7 +2536,7 @@
 ; transaction.h
 
 (define-libgit2 git_transaction_new
-  (_fun (_pointer _transaction) _repository -> _int))
+  (_fun (_cpointer _transaction) _repository -> _int))
 (define-libgit2 git_transaction_lock_ref
   (_fun _transaction _string -> _int))
 (define-libgit2 git_transaction_set_target
@@ -2559,9 +2555,9 @@
 ; tree.h
 
 (define-libgit2 git_tree_lookup
-  (_fun (_pointer _tree) _repository _oid -> _int))
+  (_fun (_cpointer _tree) _repository _oid -> _int))
 (define-libgit2 git_tree_lookup_prefix
-  (_fun (_pointer _tree) _repository _oid _size -> _int))
+  (_fun (_cpointer _tree) _repository _oid _size -> _int))
 (define-libgit2 git_tree_free
   (_fun _tree -> _void))
 (define-libgit2 git_tree_id
@@ -2577,11 +2573,11 @@
 (define-libgit2 git_tree_entry_byid
   (_fun _tree _oid -> _tree_entry))
 (define-libgit2 git_tree_entry_bypath
-  (_fun (_pointer _tree_entry) _tree _string -> _int))
-(define-libgit2 git_tree_dup
-  (_fun (_pointer _tree_entry) _tree_entry -> _int))
-(define-libgit2 git_tree_etnry_free
-  (_fun (_pointer _tree_entry) -> _void))
+  (_fun (_cpointer _tree_entry) _tree _string -> _int))
+(define-libgit2 git_tree_entry_dup
+  (_fun (_cpointer _tree_entry) _tree_entry -> _int))
+(define-libgit2 git_tree_entry_free
+  (_fun (_cpointer _tree_entry) -> _void))
 (define-libgit2 git_tree_entry_name
   (_fun _tree_entry -> _string))
 (define-libgit2 git_tree_entry_id
@@ -2593,9 +2589,9 @@
 (define-libgit2 git_tree_entry_cmp
   (_fun _tree_entry _tree_entry -> _int))
 (define-libgit2 git_tree_entry_to_object
-  (_fun (_pointer _object) _repository _tree_entry -> _int))
+  (_fun (_cpointer _object) _repository _tree_entry -> _int))
 (define-libgit2 git_treebuilder_new
-  (_fun (_pointer _treebuilder) _repository _tree -> _int))
+  (_fun (_cpointer _treebuilder) _repository _tree -> _int))
 (define-libgit2 git_treebuilder_clear
   (_fun _treebuilder -> _void))
 (define-libgit2 git_treebuilder_entrycount
@@ -2605,30 +2601,29 @@
 (define-libgit2 git_treebuilder_get
   (_fun _treebuilder _string -> _tree_entry))
 (define-libgit2 git_treebuilder_insert
-  (_fun (_pointer _tree_entry) _treebuilder _string _oid _git_filemode_t -> _int))
+  (_fun (_cpointer _tree_entry) _treebuilder _string _oid _git_filemode_t -> _int))
 (define-libgit2 git_treebuilder_remove
   (_fun _treebuilder _string -> _int))
 
 (define _git_treebuilder_filter_cb
-  (_fun _tree_entry (_pointer _void) -> _int))
-(define-libgit2 _git_treebuilder_filter
-  (_fun _treebuilder _git_treebuilder_filter_cb (_pointer _void) -> _int))
-(define-libgit2 git_treebuidler_write
+  (_fun _tree_entry (_cpointer _void) -> _int))
+(define-libgit2 git_treebuilder_filter
+  (_fun _treebuilder _git_treebuilder_filter_cb (_cpointer _void) -> _int))
+(define-libgit2 git_treebuilder_write
   (_fun _oid _treebuilder -> _int))
-(define-libgit2 git_treebuilder_write_with_buffer
-  (_fun _treebuilder _buf -> _int))
+
 
 (define _git_treewalk_cb
-  (_fun _string _tree_entry (_pointer _void) -> _int))
+  (_fun _string _tree_entry (_cpointer _void) -> _int))
 
 (define _git_treewalk_mode
   (_enum '(GIT_TREEWALK_PRE
            GIT_TREEWALK_POST)))
 
 (define-libgit2 git_tree_walk
-  (_fun _tree _git_treewalk_mode _git_treewalk_cb (_pointer _void) -> _int))
-(define-libgit2 _git_tree_dup
-  (_fun (_pointer _tree) _tree -> _int))
+  (_fun _tree _git_treewalk_mode _git_treewalk_cb (_cpointer _void) -> _int))
+(define-libgit2 git_tree_dup
+  (_fun (_cpointer _tree) _tree -> _int))
 
 (define _git_tree_update_t
   (_enum '(GIT_TREE_UPDATE_UPSERT
