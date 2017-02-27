@@ -1,0 +1,25 @@
+#lang racket
+
+(require ffi/unsafe
+         "define.rkt"
+         "types.rkt"
+         "transport.rkt")
+(provide (all-defined-out))
+
+
+(define _git_proxy_t
+  (_enum '(GIT_PROXY_NONE
+           GIT_PROXY_AUTO
+           GIT_PROXY_SPECIFIED)))
+
+(define-cstruct _git_proxy_opts
+  ([version _uint]
+   [type _git_proxy_t]
+   [url _string]
+   [credentials _git_cred_acquire_cb]
+   [certificate_check _git_transport_certificate_check_cb]
+   [payload (_cpointer _void)]))
+
+(define-libgit2 git_proxy_init_options
+  (_fun _git_proxy_opts-pointer _uint -> _int))
+

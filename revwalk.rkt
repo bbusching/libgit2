@@ -1,0 +1,54 @@
+#lang racket
+
+(require ffi/unsafe
+         "define.rkt"
+         "types.rkt"
+         "oid.rkt")
+(provide (all-defined-out))
+
+
+(define _git_sort_t
+  (_bitmask '(GIT_SORT_NONE = 0
+              GIT_SORT_TOPOLOGICAL = 1
+              GIT_SORT_TIME = 2
+              GIT_SORT_REVERSE = 4)))
+
+(define-libgit2 git_revwalk_new
+  (_fun (_cpointer _revwalk) _repository -> _int))
+(define-libgit2 git_revwalk_reset
+  (_fun _revwalk -> _void))
+(define-libgit2 git_revwalk_push
+  (_fun _revwalk _oid -> _int))
+(define-libgit2 git_revwalk_push_glob
+  (_fun _revwalk _string -> _int))
+(define-libgit2 git_revwalk_push_head
+  (_fun _revwalk -> _int))
+(define-libgit2 git_revwalk_hide
+  (_fun _revwalk _oid -> _int))
+(define-libgit2 git_revwalk_hide_glob
+  (_fun _revwalk _string -> _int))
+(define-libgit2 git_revwalk_hide_head
+  (_fun _revwalk -> _int))
+(define-libgit2 git_revwalk_push_ref
+  (_fun _revwalk _string -> _int))
+(define-libgit2 git_revwalk_hide_ref
+  (_fun _revwalk _string -> _int))
+(define-libgit2 git_revwalk_next
+  (_fun _oid _revwalk -> _int))
+(define-libgit2 git_revwalk_sorting
+  (_fun _revwalk _uint -> _void))
+(define-libgit2 git_revwalk_push_range
+  (_fun _revwalk _string -> _int))
+(define-libgit2 git_revwalk_simplify_first_parent
+  (_fun _revwalk -> _void))
+(define-libgit2 git_revwalk_free
+  (_fun _revwalk -> _void))
+(define-libgit2 git_revwalk_repository
+  (_fun _revwalk -> _repository))
+
+(define _git_revwalk_hide_cb
+  (_fun _oid (_cpointer _void) -> _int))
+
+(define-libgit2 git_revwalk_add_hide_cb
+  (_fun _revwalk _git_revwalk_hide_cb (_cpointer _void) -> _int))
+
