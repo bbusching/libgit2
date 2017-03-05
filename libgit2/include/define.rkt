@@ -5,7 +5,7 @@
          racket/runtime-path)
 (provide (all-defined-out))
 
-(define-runtime-path lib-path "lib")
+(define-runtime-path lib-path "../lib")
 (define win-dll-path (build-path lib-path (system-library-subpath) "git2"))
 
 (define libgit2
