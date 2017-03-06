@@ -2,7 +2,8 @@
 
 (require ffi/unsafe
          "define.rkt"
-         "types.rkt")
+         "types.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -17,6 +18,6 @@
 
 (define _git_trace_callback
   (_fun _git_trace_level_t _string -> _void))
-(define-libgit2 git_trace_set
+(define-libgit2/check git_trace_set
   (_fun _git_trace_level_t _git_trace_callback -> _int))
 

@@ -6,7 +6,8 @@
          "indexer.rkt"
          "checkout.rkt"
          "remote.rkt"
-         "transport.rkt")
+         "transport.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -33,8 +34,8 @@
    [remote_cb _git_remote_create_cb]
    [remote_cb_payload (_cpointer _void)]))
 
-(define-libgit2 git_clone_init_options
+(define-libgit2/check git_clone_init_options
   (_fun _git_clone_opts-pointer _uint -> _int))
-(define-libgit2 git_clone
-  (_fun (_cpointer _repository) _string _string _git_clone_opts-pointer -> _int))
+(define-libgit2/alloc git_clone
+  (_fun _repository _string _string _git_clone_opts-pointer -> _int))
 

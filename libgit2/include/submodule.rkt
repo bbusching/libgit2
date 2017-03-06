@@ -6,7 +6,8 @@
          "oid.rkt"
          "remote.rkt"
          "checkout.rkt"
-         "buffer.rkt")
+         "buffer.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -35,21 +36,21 @@
    [fetch_opts _git_fetch_opts]
    [allow_fetch _int]))
 
-(define-libgit2 git_submodule_update_init_options
+(define-libgit2/check git_submodule_update_init_options
   (_fun _git_submodule_update_opts-pointer _uint -> _int))
-(define-libgit2 git_submodule_update
+(define-libgit2/check git_submodule_update
   (_fun _submodule _int _git_submodule_update_opts-pointer -> _int))
-(define-libgit2 git_submodule_lookup
-  (_fun (_cpointer _submodule) _repository _string -> _int))
+(define-libgit2/alloc git_submodule_lookup
+  (_fun _submodule _repository _string -> _int))
 (define-libgit2 git_submodule_free
   (_fun _submodule -> _void))
-(define-libgit2 git_submodule_foreach
+(define-libgit2/check git_submodule_foreach
   (_fun _repository _git_submodule_cb (_cpointer _void) -> _int))
-(define-libgit2 git_submodule_add_setup
-  (_fun (_cpointer _submodule) _repository _string _string _int -> _int))
-(define-libgit2 git_submodule_add_finalize
+(define-libgit2/alloc git_submodule_add_setup
+  (_fun _submodule _repository _string _string _int -> _int))
+(define-libgit2/check git_submodule_add_finalize
   (_fun _submodule -> _int))
-(define-libgit2 git_submodule_add_to_index
+(define-libgit2/check git_submodule_add_to_index
   (_fun _submodule -> _int))
 (define-libgit2 git_submodule_owner
   (_fun _submodule -> _repository))
@@ -59,13 +60,13 @@
   (_fun _submodule -> _string))
 (define-libgit2 git_submodule_url
   (_fun _submodule -> _string))
-(define-libgit2 git_submodule_resolve_url
+(define-libgit2/check git_submodule_resolve_url
   (_fun _buf _repository _string -> _int))
 (define-libgit2 git_submodule_branch
   (_fun _submodule -> _string))
-(define-libgit2 git_submodule_set_branch
+(define-libgit2/check git_submodule_set_branch
   (_fun _repository _string _string -> _int))
-(define-libgit2 git_submodule_set_url
+(define-libgit2/check git_submodule_set_url
   (_fun _repository _string _string -> _int))
 (define-libgit2 git_submodule_index_id
   (_fun _submodule -> _oid))
@@ -73,28 +74,28 @@
   (_fun _submodule -> _oid))
 (define-libgit2 git_submodule_wd_id
   (_fun _submodule -> _oid))
-(define-libgit2 git_submodule_ignore
+(define-libgit2/check git_submodule_ignore
   (_fun _repository _string _git_submodule_ignore_t -> _int))
 (define-libgit2 git_submodule_update_strategy
   (_fun _submodule -> _git_submodule_update_t))
-(define-libgit2 git_submodule_set_update
+(define-libgit2/check git_submodule_set_update
   (_fun _repository _string _git_submodule_update_t -> _int))
 (define-libgit2 git_submodule_fetch_recurse_submodules
   (_fun _submodule -> _git_submodule_recurse_t))
-(define-libgit2 git_submodule_set_fetch_recurse_submodules
+(define-libgit2/check git_submodule_set_fetch_recurse_submodules
   (_fun _repository _string _git_submodule_recurse_t -> _int))
-(define-libgit2 git_submodule_init
+(define-libgit2/check git_submodule_init
   (_fun _submodule _int -> _int))
-(define-libgit2 git_submodule_repo_init
-  (_fun (_cpointer _repository) _submodule _int -> _int))
-(define-libgit2 git_submodule_sync
+(define-libgit2/alloc git_submodule_repo_init
+  (_fun _repository _submodule _int -> _int))
+(define-libgit2/check git_submodule_sync
   (_fun _submodule -> _int))
-(define-libgit2 git_submodule_open
-  (_fun (_cpointer _repository) _submodule -> _int))
-(define-libgit2 git_submodule_reload
+(define-libgit2/alloc git_submodule_open
+  (_fun _repository _submodule -> _int))
+(define-libgit2/check git_submodule_reload
   (_fun _submodule _int -> _int))
-(define-libgit2 git_submodule_status
-  (_fun (_cpointer _uint) _repository _string _git_submodule_ignore_t -> _int))
-(define-libgit2 git_submodule_location
-  (_fun (_cpointer _uint) _submodule -> _int))
+(define-libgit2/alloc git_submodule_status
+  (_fun _uint _repository _string _git_submodule_ignore_t -> _int))
+(define-libgit2/alloc git_submodule_location
+  (_fun _uint _submodule -> _int))
 

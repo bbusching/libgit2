@@ -3,7 +3,8 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt")
+         "oid.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 (define _git_blame_flag_t
@@ -23,7 +24,7 @@
   [min_line _size]
   [max_line _size]))
 
-(define-libgit2 git_blame_init_options
+(define-libgit2/check git_blame_init_options
   (_fun _git_blame_opts-pointer _uint -> _int))
 
 (define-cstruct _git_blame_hunk
@@ -43,10 +44,10 @@
   (_fun _blame _uint32 -> _git_blame_hunk-pointer))
 (define-libgit2 git_blame_get_hunk_byline
   (_fun _blame _size -> _git_blame_hunk-pointer))
-(define-libgit2 git_blame_file
-  (_fun (_cpointer _blame) _repository _string (_cpointer _git_blame_opts) -> _int))
-(define-libgit2 git_blame_buffer
-  (_fun (_cpointer _blame) _blame _string _size -> _int))
+(define-libgit2/alloc git_blame_file
+  (_fun _blame _repository _string (_cpointer _git_blame_opts) -> _int))
+(define-libgit2/alloc git_blame_buffer
+  (_fun _blame _blame _string _size -> _int))
 (define-libgit2 git_blame_free
   (_fun _blame -> _void))
 

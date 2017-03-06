@@ -6,7 +6,8 @@
          "oid.rkt"
          "annotated_commit.rkt"
          "merge.rkt"
-         "checkout.rkt")
+         "checkout.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -31,27 +32,27 @@
    [id _git_oid]
    [exec _string]))
 
-(define-libgit2 git_rebase_init_options
+(define-libgit2/check git_rebase_init_options
   (_fun _git_rebase_opts-pointer _uint -> _int))
-(define-libgit2 git_rebase_init
-  (_fun (_cpointer _rebase) _repository _annotated_commit _annotated_commit  _annotated_commit _git_rebase_opts-pointer -> _int))
-(define-libgit2 git_rebase_open
-  (_fun (_cpointer _rebase) _repository _git_rebase_opts-pointer -> _int))
+(define-libgit2/alloc git_rebase_init
+  (_fun _rebase _repository _annotated_commit _annotated_commit  _annotated_commit _git_rebase_opts-pointer -> _int))
+(define-libgit2/alloc git_rebase_open
+  (_fun _rebase _repository _git_rebase_opts-pointer -> _int))
 (define-libgit2 git_rebase_operation_entrycount
   (_fun _rebase -> _size))
 (define-libgit2 git_rebase_operation_current
   (_fun _rebase -> _git_rebase_operation-pointer))
 (define-libgit2 git_rebase_operation_byindex
   (_fun _rebase _int -> _git_rebase_operation-pointer))
-(define-libgit2 git_rebase_next
-  (_fun (_cpointer _git_rebase_operation-pointer) _rebase -> _int))
-(define-libgit2 git_rebase_inmemory_index
-  (_fun (_cpointer _index) _rebase -> _int))
-(define-libgit2 git_rebase_commit
+(define-libgit2/alloc git_rebase_next
+  (_fun _git_rebase_operation-pointer _rebase -> _int))
+(define-libgit2/alloc git_rebase_inmemory_index
+  (_fun _index _rebase -> _int))
+(define-libgit2/check git_rebase_commit
   (_fun _oid _rebase _signature _signature _string _string -> _int))
-(define-libgit2 git_rebase_abort
+(define-libgit2 /checkgit_rebase_abort
   (_fun _rebase -> _int))
-(define-libgit2 git_rebase_finish
+(define-libgit2 /checkgit_rebase_finish
   (_fun _rebase _signature -> _int))
 (define-libgit2 git_rebase_free
   (_fun _rebase -> _void))

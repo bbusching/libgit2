@@ -2,7 +2,8 @@
 
 (require ffi/unsafe
          "define.rkt"
-         "types.rkt")
+         "types.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -15,11 +16,11 @@
 
 (define _oid_shorten (_cpointer 'git_oid_shorten))
 
-(define-libgit2 git_oid_fromstr
+(define-libgit2/check git_oid_fromstr
   (_fun _oid _string -> _int))
-(define-libgit2 git_oid_fromstrp
+(define-libgit2/check git_oid_fromstrp
   (_fun _oid _string -> _int))
-(define-libgit2 git_oid_fromstrn
+(define-libgit2/check git_oid_fromstrn
   (_fun _oid _string _size -> _int))
 (define-libgit2 git_oid_fromraw
   (_fun _oid (_cpointer _uint8) -> _void))

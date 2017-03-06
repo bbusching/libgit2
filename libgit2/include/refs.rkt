@@ -4,24 +4,25 @@
          "define.rkt"
          "types.rkt"
          "oid.rkt"
-         "strarray.rkt")
+         "strarray.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
-(define-libgit2 git_reference_lookup
-  (_fun (_cpointer _reference) _repository _string -> _int))
-(define-libgit2 git_reference_name_to_id
+(define-libgit2/alloc git_reference_lookup
+  (_fun _reference _repository _string -> _int))
+(define-libgit2/check git_reference_name_to_id
   (_fun _oid _repository _string -> _int))
-(define-libgit2 git_reference_dwim
-  (_fun (_cpointer _reference) _repository _string -> _int))
-(define-libgit2 git_reference_symbolic_create_matching
-  (_fun (_cpointer _reference) _repository _string _string _int _string _string -> _int))
-(define-libgit2 git_reference_symbolic_create
-  (_fun (_cpointer _reference) _repository _string _string _int _string -> _int))
-(define-libgit2 git_reference_create
-  (_fun (_cpointer _reference) _repository _string _oid _int _string -> _int))
-(define-libgit2 git_reference_create_matching
-  (_fun (_cpointer _reference) _repository _string _oid _int _oid _string -> _int))
+(define-libgit2/alloc git_reference_dwim
+  (_fun _reference _repository _string -> _int))
+(define-libgit2/alloc git_reference_symbolic_create_matching
+  (_fun _reference _repository _string _string _int _string _string -> _int))
+(define-libgit2/alloc git_reference_symbolic_create
+  (_fun _reference _repository _string _string _int _string -> _int))
+(define-libgit2/alloc git_reference_create
+  (_fun _reference _repository _string _oid _int _string -> _int))
+(define-libgit2/alloc git_reference_create_matching
+  (_fun _reference _repository _string _oid _int _oid _string -> _int))
 (define-libgit2 git_reference_target
   (_fun _reference -> _oid))
 (define-libgit2 git_reference_target_peel
@@ -32,51 +33,51 @@
   (_fun _reference -> _git_ref_t))
 (define-libgit2 git_reference_name
   (_fun _reference -> _string))
-(define-libgit2 git_reference_resolve
-  (_fun (_cpointer _reference) _reference -> _int))
+(define-libgit2/alloc git_reference_resolve
+  (_fun _reference _reference -> _int))
 (define-libgit2 git_reference_owner
   (_fun _reference -> _repository))
-(define-libgit2 git_reference_symbolic_set_target
-  (_fun (_cpointer _reference) _reference _string _string -> _int))
-(define-libgit2 git_reference_set_target
-  (_fun (_cpointer _reference) _reference _oid _string -> _int))
-(define-libgit2 git_reference_rename
-  (_fun (_cpointer _reference) _reference _string _int _string -> _int))
-(define-libgit2 git_reference_delete
+(define-libgit2/alloc git_reference_symbolic_set_target
+  (_fun _reference _reference _string _string -> _int))
+(define-libgit2/alloc git_reference_set_target
+  (_fun _reference _reference _oid _string -> _int))
+(define-libgit2/alloc git_reference_rename
+  (_fun _reference _reference _string _int _string -> _int))
+(define-libgit2/check git_reference_delete
   (_fun _reference -> _int))
-(define-libgit2 git_reference_remove
+(define-libgit2/check git_reference_remove
   (_fun _repository _string -> _int))
-(define-libgit2 git_reference_list
+(define-libgit2/check git_reference_list
   (_fun _strarray _repository -> _int))
 
 (define _git_reference_foreach_cb (_fun _reference (_cpointer _void) -> _int))
 (define _git_reference_foreach_name_cb (_fun _string (_cpointer _void) -> _int))
 
-(define-libgit2 git_reference_foreach
+(define-libgit2/check git_reference_foreach
   (_fun _repository _git_reference_foreach_cb (_cpointer _void) -> _int))
-(define-libgit2 git_reference_foreach_name
+(define-libgit2/check git_reference_foreach_name
   (_fun _repository _git_reference_foreach_name_cb (_cpointer _void) -> _int))
-(define-libgit2 git_reference_dup
-  (_fun (_cpointer _reference) _reference -> _int))
+(define-libgit2/alloc git_reference_dup
+  (_fun _reference _reference -> _int))
 (define-libgit2 git_reference_free
   (_fun _reference -> _void))
-(define-libgit2 git_reference_cmp
+(define-libgit2/check git_reference_cmp
   (_fun _repository _repository -> _int))
-(define-libgit2 git_reference_iterator_new
-  (_fun (_cpointer _reference_iterator) _repository -> _int))
-(define-libgit2 git_reference_iterator_glob_new
-  (_fun (_cpointer _reference_iterator) _repository _string -> _int))
-(define-libgit2 git_reference_next
-  (_fun (_cpointer _reference) _reference_iterator -> _int))
-(define-libgit2 git_reference_next_name
-  (_fun (_cpointer _string) _reference_iterator -> _int))
-(define-libgit2 git_reference_iterator_free
+(define-libgit2/alloc git_reference_iterator_new
+  (_fun _reference_iterator _repository -> _int))
+(define-libgit2/alloc git_reference_iterator_glob_new
+  (_fun _reference_iterator _repository _string -> _int))
+(define-libgit2/alloc git_reference_next
+  (_fun _reference _reference_iterator -> _int))
+(define-libgit2/alloc git_reference_next_name
+  (_fun _string _reference_iterator -> _int))
+(define-libgit2/check git_reference_iterator_free
   (_fun _reference_iterator -> _int))
-(define-libgit2 git_reference_foreach_glob
+(define-libgit2/check git_reference_foreach_glob
   (_fun _repository _string _git_reference_foreach_name_cb (_cpointer _void) -> _int))
 (define-libgit2 git_reference_has_log
   (_fun _repository _string -> _int))
-(define-libgit2 git_reference_ensure_log
+(define-libgit2/check git_reference_ensure_log
   (_fun _repository _string -> _int))
 (define-libgit2 git_reference_is_branch
   (_fun _reference -> _int))
@@ -93,10 +94,10 @@
               GIT_REF_FORMAT_REFSPEC_PATTERN = 2
               GIT_REF_FORMAT_REFSPEC_SHORTHAND = 4)))
 
-(define-libgit2 git_reference_normalize_name
+(define-libgit2/check git_reference_normalize_name
   (_fun _string _size _string _uint -> _int))
-(define-libgit2 git_reference_peel
-  (_fun (_cpointer _object) _reference _git_otype -> _int))
+(define-libgit2/alloc git_reference_peel
+  (_fun _object _reference _git_otype -> _int))
 (define-libgit2 git_reference_is_valid_name
   (_fun _string -> _bool))
 (define-libgit2 git_reference_shorthand

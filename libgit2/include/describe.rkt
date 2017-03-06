@@ -3,10 +3,9 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "buffer.rkt")
+         "buffer.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
-
-
 
 
 (define _git_describe_strategy_t
@@ -39,11 +38,11 @@
 
 (define _describe_result (_cpointer 'git_describe_result))
 
-(define-libgit2 git_describe_commit
-  (_fun (_cpointer _describe_result) _object _git_describe_opts-pointer -> _int))
-(define-libgit2 git_describe_workdir
-  (_fun (_cpointer _describe_result) _repository _git_describe_opts-pointer -> _int))
-(define-libgit2 git_describe_format
+(define-libgit2/alloc git_describe_commit
+  (_fun _describe_result _object _git_describe_opts-pointer -> _int))
+(define-libgit2/alloc git_describe_workdir
+  (_fun _describe_result _repository _git_describe_opts-pointer -> _int))
+(define-libgit2/check git_describe_format
   (_fun _buf _describe_result _git_describe_format_opts-pointer -> _int))
 (define-libgit2 git_describe_result_free
   (_fun _describe_result -> _void))

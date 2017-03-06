@@ -3,7 +3,8 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt")
+         "oid.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -13,31 +14,31 @@
               GIT_SORT_TIME = 2
               GIT_SORT_REVERSE = 4)))
 
-(define-libgit2 git_revwalk_new
-  (_fun (_cpointer _revwalk) _repository -> _int))
+(define-libgit2/alloc git_revwalk_new
+  (_fun _revwalk _repository -> _int))
 (define-libgit2 git_revwalk_reset
   (_fun _revwalk -> _void))
-(define-libgit2 git_revwalk_push
+(define-libgit2/check git_revwalk_push
   (_fun _revwalk _oid -> _int))
-(define-libgit2 git_revwalk_push_glob
+(define-libgit2/check git_revwalk_push_glob
   (_fun _revwalk _string -> _int))
-(define-libgit2 git_revwalk_push_head
+(define-libgit2/check git_revwalk_push_head
   (_fun _revwalk -> _int))
-(define-libgit2 git_revwalk_hide
+(define-libgit2/check git_revwalk_hide
   (_fun _revwalk _oid -> _int))
-(define-libgit2 git_revwalk_hide_glob
+(define-libgit2/check git_revwalk_hide_glob
   (_fun _revwalk _string -> _int))
-(define-libgit2 git_revwalk_hide_head
+(define-libgit2/check git_revwalk_hide_head
   (_fun _revwalk -> _int))
-(define-libgit2 git_revwalk_push_ref
+(define-libgit2/check git_revwalk_push_ref
   (_fun _revwalk _string -> _int))
-(define-libgit2 git_revwalk_hide_ref
+(define-libgit2/check git_revwalk_hide_ref
   (_fun _revwalk _string -> _int))
-(define-libgit2 git_revwalk_next
+(define-libgit2/check git_revwalk_next
   (_fun _oid _revwalk -> _int))
 (define-libgit2 git_revwalk_sorting
   (_fun _revwalk _uint -> _void))
-(define-libgit2 git_revwalk_push_range
+(define-libgit2/check git_revwalk_push_range
   (_fun _revwalk _string -> _int))
 (define-libgit2 git_revwalk_simplify_first_parent
   (_fun _revwalk -> _void))
@@ -49,6 +50,6 @@
 (define _git_revwalk_hide_cb
   (_fun _oid (_cpointer _void) -> _int))
 
-(define-libgit2 git_revwalk_add_hide_cb
+(define-libgit2/check git_revwalk_add_hide_cb
   (_fun _revwalk _git_revwalk_hide_cb (_cpointer _void) -> _int))
 

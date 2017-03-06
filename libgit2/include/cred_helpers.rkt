@@ -6,8 +6,6 @@
 (provide (all-defined-out))
 
 
-
-
 (define-cstruct _git_cred_userpass_payload
   ([username _string]
    [password _string]))

@@ -1,7 +1,8 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt")
+         "define.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 (define-cstruct _git_strarray
@@ -11,6 +12,6 @@
 
 (define-libgit2 git_strarray_free
   (_fun _strarray -> _void))
-(define-libgit2 git_strarray_copy
+(define-libgit2/check git_strarray_copy
   (_fun _strarray _strarray -> _int))
 

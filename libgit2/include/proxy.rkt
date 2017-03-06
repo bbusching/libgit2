@@ -3,7 +3,8 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "transport.rkt")
+         "transport.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -20,6 +21,6 @@
    [certificate_check _git_transport_certificate_check_cb]
    [payload (_cpointer _void)]))
 
-(define-libgit2 git_proxy_init_options
+(define-libgit2/check git_proxy_init_options
   (_fun _git_proxy_opts-pointer _uint -> _int))
 

@@ -2,14 +2,15 @@
 
 (require ffi/unsafe
          "define.rkt"
-         "types.rkt")
+         "types.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
-(define-libgit2 git_odb_backend_loose
-  (_fun (_cpointer _odb_backend) _string _int _int _uint _uint -> _int))
-(define-libgit2 git_odb_backend_one_pack
-  (_fun (_cpointer _odb_backend) _string -> _int))
+(define-libgit2/alloc git_odb_backend_loose
+  (_fun _odb_backend _string _int _int _uint _uint -> _int))
+(define-libgit2/alloc git_odb_backend_one_pack
+  (_fun _odb_backend _string -> _int))
 (define _git_odb_stream_t
   (_enum '(GIT_STREAM_RDONLY = 2
            GIT_STREAM_WRONLY = 4

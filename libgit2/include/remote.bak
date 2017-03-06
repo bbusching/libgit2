@@ -11,8 +11,7 @@
          "transport.rkt"
          "pack.rkt"
          "proxy.rkt"
-         "buffer.rkt"
-         "utils.rkt")
+         "buffer.rkt")
 (provide (all-defined-out))
 
 

@@ -4,7 +4,8 @@
          "define.rkt"
          "types.rkt"
          "diff.rkt"
-         "strarray.rkt")
+         "strarray.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -73,13 +74,13 @@
    [perfdata_cb _git_checkout_perfdata_cb]
    [perfdata_payload (_cpointer _void)]))
 
-(define-libgit2 git_checkout_init_options
+(define-libgit2/check git_checkout_init_options
   (_fun _git_checkout_opts-pointer _uint -> _int))
 
-(define-libgit2 git_checkout_head
+(define-libgit2/check git_checkout_head
   (_fun _repository _git_checkout_opts-pointer -> _int))
-(define-libgit2 git_checkout_index
+(define-libgit2/check git_checkout_index
   (_fun _repository _index _git_checkout_opts-pointer -> _int))
-(define-libgit2 git_checkout_tree
+(define-libgit2/check git_checkout_tree
   (_fun _repository _object _git_checkout_opts-pointer -> _int))
 

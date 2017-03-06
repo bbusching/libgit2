@@ -4,7 +4,8 @@
          "define.rkt"
          "indexer.rkt"
          "net.rkt"
-         "types.rkt")
+         "types.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 (define _git_transport_cb
@@ -69,22 +70,22 @@
 
 (define-libgit2 git_cred_has_username
   (_fun _cred -> _bool))
-(define-libgit2 git_cred_userpass_plaintext_new
-  (_fun (_cpointer _cred) _string _string -> _int))
-(define-libgit2 git_cred_ssh_key_new
-  (_fun (_cpointer _cred) _string _string _string _string -> _int))
-(define-libgit2 git_cred_ssh_interactive_new
-  (_fun (_cpointer _cred) _string _git_cred_ssh_interactive_callback (_cpointer _void) -> _int))
-(define-libgit2 git_cred_ssh_key_from_agent
-  (_fun (_cpointer _cred) _string -> _int))
-(define-libgit2 git_cred_ssh_custom_new
-  (_fun (_cpointer _cred) _string _string _size _git_cred_sign_callback (_cpointer _void) -> _int))
-(define-libgit2 git_cred_default_new
-  (_fun (_cpointer _cred) -> _int))
-(define-libgit2 git_cred_username_new
-  (_fun (_cpointer _cred) _string -> _int))
-(define-libgit2 git_cred_ssh_key_memory_new
-  (_fun (_cpointer _cred) _string _string _string _string -> _int))
+(define-libgit2/alloc git_cred_userpass_plaintext_new
+  (_fun _cred _string _string -> _int))
+(define-libgit2/alloc git_cred_ssh_key_new
+  (_fun _cred _string _string _string _string -> _int))
+(define-libgit2/alloc git_cred_ssh_interactive_new
+  (_fun _cred _string _git_cred_ssh_interactive_callback (_cpointer _void) -> _int))
+(define-libgit2/alloc git_cred_ssh_key_from_agent
+  (_fun _cred _string -> _int))
+(define-libgit2/alloc git_cred_ssh_custom_new
+  (_fun _cred _string _string _size _git_cred_sign_callback (_cpointer _void) -> _int))
+(define-libgit2/alloc git_cred_default_new
+  (_fun _cred -> _int))
+(define-libgit2/alloc git_cred_username_new
+  (_fun _cred _string -> _int))
+(define-libgit2/alloc git_cred_ssh_key_memory_new
+  (_fun _cred _string _string _string _string -> _int))
 (define-libgit2 git_cred_free
   (_fun _cred -> _void))
 

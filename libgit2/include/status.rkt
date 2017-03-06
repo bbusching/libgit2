@@ -3,7 +3,8 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "checkout.rkt")
+         "checkout.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -13,7 +14,7 @@
               GIT_STASH_INCLUDE_UNTRACKED = 2
               GIT_STASH_INCLUDE_IGNORED = 4)))
 
-(define-libgit2 git_stash_save
+(define-libgit2/check git_stash_save
   (_fun _oid _repository _signature _string _uint32 -> _int))
 
 (define _git_stash_apply_flags
@@ -40,16 +41,16 @@
    [progress_cb _git_stash_apply_progress_cb]
    [progress_payload (_cpointer _void)]))
 
-(define-libgit2 git_stash_apply_init_options
+(define-libgit2/check git_stash_apply_init_options
   (_fun _git_stash_apply_opts-pointer _uint -> _int))
-(define-libgit2 git_stash_apply
+(define-libgit2/check git_stash_apply
   (_fun _repository _size _git_stash_apply_opts-pointer -> _int))
 (define _git_stash_cb
   (_fun _size _string _oid (_cpointer _void) -> _int))
-(define-libgit2 git_stash_foreach
+(define-libgit2/check git_stash_foreach
   (_fun _repository _git_stash_cb (_cpointer _void) -> _int))
-(define-libgit2 git_stash_drop
+(define-libgit2/check git_stash_drop
   (_fun _repository _size -> _int))
-(define-libgit2 git_stash_pop
+(define-libgit2/check git_stash_pop
   (_fun _repository _size _git_stash_apply_opts-pointer -> _int))
 

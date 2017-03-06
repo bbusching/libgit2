@@ -5,8 +5,6 @@
 (provide (all-defined-out))
 
 
-
-
 (define _git_error_code
   (_enum '(GIT_OK = 0
            GIT_ERROR = -1

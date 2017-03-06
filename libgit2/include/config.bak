@@ -3,8 +3,7 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "buffer.rkt"
-         "utils.rkt")
+         "buffer.rkt")
 (provide (all-defined-out))
 
 

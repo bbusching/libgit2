@@ -4,7 +4,8 @@
          "define.rkt"
          "types.rkt"
          "oid.rkt"
-         "buffer.rkt")
+         "buffer.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -20,21 +21,21 @@
 
 (define _filter (_cpointer 'git_filter))
 
-(define-libgit2 git_filter_list_load
-  (_fun (_cpointer _filter) _repository _blob _string _git_filter_mode_t _uint32 -> _int))
+(define-libgit2/alloc git_filter_list_load
+  (_fun _filter _repository _blob _string _git_filter_mode_t _uint32 -> _int))
 (define-libgit2 git_filter_list_contains
   (_fun _filter _string -> _bool))
-(define-libgit2 git_filter_list_apply_to_data
+(define-libgit2/check git_filter_list_apply_to_data
   (_fun _buf _filter _buf -> _int))
-(define-libgit2 git_filter_list_apply_to_file
+(define-libgit2/check git_filter_list_apply_to_file
   (_fun _buf _filter _repository _string -> _int))
-(define-libgit2 git_filter_list_apply_to_blob
+(define-libgit2/check git_filter_list_apply_to_blob
   (_fun _buf _filter _blob -> _int))
-(define-libgit2 git_filter_list_stream_data
+(define-libgit2/check git_filter_list_stream_data
   (_fun _filter _buf _writestream -> _int))
-(define-libgit2 git_filter_list_stream_file
+(define-libgit2/check git_filter_list_stream_file
   (_fun _filter _repository _string _writestream -> _int))
-(define-libgit2 git_filter_list_stream_blob
+(define-libgit2/check git_filter_list_stream_blob
   (_fun _filter _blob _writestream -> _int))
 (define-libgit2 git_filter_list_free
   (_fun _filter -> _void))

@@ -7,7 +7,8 @@
          "tree.rkt"
          "refs.rkt"
          "strarray.rkt"
-         "buffer.rkt")
+         "buffer.rkt"
+         "utils.rkt")
 (provide (all-defined-out))
 
 
@@ -203,25 +204,25 @@
    [rename_limit _size]
    [metric _git_diff_similarity_metric-pointer]))
 
-(define-libgit2 git_diff_find_init_options
+(define-libgit2/check git_diff_find_init_options
   (_fun _git_diff_find_options-pointer _uint -> _int))
 (define-libgit2 git_diff_free
   (_fun _diff -> _void))
-(define-libgit2 git_diff_tree_to_tree
-  (_fun (_cpointer _diff) _repository _tree _tree _git_diff_opts-pointer -> _int))
-(define-libgit2 git_diff_tree_to_index
-  (_fun (_cpointer _diff) _repository _tree _index _git_diff_opts-pointer -> _int))
-(define-libgit2 git_diff_index_to_workdir
-  (_fun (_cpointer _diff) _repository _index _git_diff_opts-pointer -> _int))
-(define-libgit2 git_diff_tree_to_workdir
-  (_fun (_cpointer _diff) _repository _tree _git_diff_opts-pointer -> _int))
-(define-libgit2 git_diff_tree_to_workdir_with_index
-  (_fun (_cpointer _diff) _repository _tree _git_diff_opts-pointer -> _int))
-(define-libgit2 git_diff_index_to_index
-  (_fun (_cpointer _diff) _repository _index _index _git_diff_opts-pointer -> _int))
-(define-libgit2 git_diff_merge
+(define-libgit2/alloc git_diff_tree_to_tree
+  (_fun _diff _repository _tree _tree _git_diff_opts-pointer -> _int))
+(define-libgit2/alloc git_diff_tree_to_index
+  (_fun _diff _repository _tree _index _git_diff_opts-pointer -> _int))
+(define-libgit2/alloc git_diff_index_to_workdir
+  (_fun _diff _repository _index _git_diff_opts-pointer -> _int))
+(define-libgit2/alloc git_diff_tree_to_workdir
+  (_fun _diff _repository _tree _git_diff_opts-pointer -> _int))
+(define-libgit2/alloc git_diff_tree_to_workdir_with_index
+  (_fun _diff _repository _tree _git_diff_opts-pointer -> _int))
+(define-libgit2/alloc git_diff_index_to_index
+  (_fun _diff _repository _index _index _git_diff_opts-pointer -> _int))
+(define-libgit2/check git_diff_merge
   (_fun _diff _diff -> _int))
-(define-libgit2 git_diff_find_similar
+(define-libgit2/check git_diff_find_similar
   (_fun _diff _git_diff_opts-pointer -> _int))
 (define-libgit2 git_diff_num_deltas
   (_fun _diff -> _size))
@@ -231,7 +232,7 @@
   (_fun _diff _size -> _git_diff_delta-pointer))
 (define-libgit2 git_diff_is_sorted_icase
   (_fun _diff -> _bool))
-(define-libgit2 git_diff_foreach
+(define-libgit2/check git_diff_foreach
   (_fun _diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
 (define-libgit2 git_diff_status_char
   (_fun _git_delta_t -> _uint8))
@@ -243,8 +244,8 @@
            GIT_DIFF_FORMAT_NAME_ONLY = 4
            GIT_DIFF_FORMAT_NAME_STATUS = 5)))
 
-(define-libgit2 git_diff_print
+(define-libgit2/check git_diff_print
   (_fun _diff _git_diff_format_t _git_diff_line_cb (_cpointer _void) -> _int))
-(define-libgit2 git_diff_to_buf
+(define-libgit2/check git_diff_to_buf
   (_fun _buf _diff _git_diff_format_t -> _int))
 
