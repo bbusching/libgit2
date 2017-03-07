@@ -8,6 +8,8 @@
 (provide (all-defined-out))
 
 
+; Types
+
 (define _git_describe_strategy_t
   (_enum '(GIT_CESCRIBE_DEFAULT
            GIT_CESCRIBE_TAGS
@@ -23,9 +25,7 @@
 
 (define GIT_DESCRIBE_DEFAULT_MAX_CANDIDATES_TAGS 10)
 (define GIT_DESCRIBE_DEFAULT_ABBREVIATED_SIZE 7)
-
-(define git_describe_init_options
-  (_fun _git_describe_opts-pointer _uint -> _int))
+(define GIT_DESCRIBE_OPTS_VERSION 1)
 
 (define-cstruct _git_describe_format_opts
   ([version _uint]
@@ -33,17 +33,28 @@
    [always_use_long_format _int]
    [dirty_suffix _string]))
 
-(define git_describe_init_format_options
-  (_fun _git_describe_format_opts-pointer _uint -> _int))
+(define GIT_DESCRIBE_FORMAT_OPTS_VERSION 1)
 
 (define _describe_result (_cpointer 'git_describe_result))
 
+; Functions
+
 (define-libgit2/alloc git_describe_commit
-  (_fun _describe_result _object _git_describe_opts-pointer -> _int))
-(define-libgit2/alloc git_describe_workdir
-  (_fun _describe_result _repository _git_describe_opts-pointer -> _int))
+  (_fun _describe_result _object _git_describe_opts-pointer/null -> _int)
+  git_describe_result_free)
+
 (define-libgit2/check git_describe_format
-  (_fun _buf _describe_result _git_describe_format_opts-pointer -> _int))
+  (_fun _buf _describe_result _git_describe_format_opts-pointer/null -> _int))
+
 (define-libgit2 git_describe_result_free
   (_fun _describe_result -> _void))
 
+(define-libgit2/alloc git_describe_workdir
+  (_fun _describe_result _repository _git_describe_opts-pointer/null -> _int)
+  git_describe_result_free)
+
+(define git_describe_init_options
+  (_fun _git_describe_opts-pointer _uint -> _int))
+
+(define git_describe_init_format_options
+  (_fun _git_describe_format_opts-pointer _uint -> _int))

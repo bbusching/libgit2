@@ -9,4 +9,3 @@
   (_fun -> _int))
 (define-libgit2 git_libgit2_shutdown
   (_fun -> _int))
-

@@ -68,6 +68,7 @@
 (define-cpointer-type _tree_entry)
 (define-cpointer-type _writestream)
 
+
 (define-cstruct _git_time
   ([time _git_time_t]
    [offset _int]))
@@ -77,6 +78,7 @@
    [email _string]
    [when _git_time]))
 (define _signature _git_signature-pointer)
+(define _signature/null _git_signature-pointer/null)
 
 (define _git_ref_t
   (_enum '(GIT_REF_INVALID
@@ -136,6 +138,3 @@
   (_enum '(GIT_SUBMODULE_RECURSE_NO
            GIT_SUBMODULE_RECURSE_YES
            GIT_SUBMODULE_RECURSE_ONDEMAND)))
-
-
-

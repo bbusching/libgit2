@@ -9,6 +9,8 @@
 (provide (all-defined-out))
 
 
+; Types
+
 (define _git_filter_mode_t
   (_enum '(GIT_FILTER_TO_WORKTREE = 0
            GIT_FILTER_SMUDGE = 0
@@ -19,24 +21,41 @@
   (_bitmask '(GIT_FILTER_DEFAULT = 0
               GIT_FILTER_ALLOW_UNSAFE = 1)))
 
-(define _filter (_cpointer 'git_filter))
+(define _filter_list (_cpointer 'git_filter_list))
+
+; Functions
+
+(define-libgit2/check git_filter_list_apply_to_blob
+  (_fun _buf _filter_list _blob -> _int))
+
+(define-libgit2/check git_filter_list_apply_to_data
+  (_fun _buf _filter_list _buf -> _int))
+
+(define-libgit2/check git_filter_list_apply_to_file
+  (_fun _buf _filter_list _repository _string -> _int))
+
+(define-libgit2 git_filter_list_contains
+  (_fun _filter_list _string -> _bool))
+
+(define-libgit2/dealloc git_filter_list_free
+  (_fun _filter_list -> _void))
+
+(define-libgit2 git_filter_list_length
+  (_fun _filter_list -> _size))
 
 (define-libgit2/alloc git_filter_list_load
-  (_fun _filter _repository _blob _string _git_filter_mode_t _uint32 -> _int))
-(define-libgit2 git_filter_list_contains
-  (_fun _filter _string -> _bool))
-(define-libgit2/check git_filter_list_apply_to_data
-  (_fun _buf _filter _buf -> _int))
-(define-libgit2/check git_filter_list_apply_to_file
-  (_fun _buf _filter _repository _string -> _int))
-(define-libgit2/check git_filter_list_apply_to_blob
-  (_fun _buf _filter _blob -> _int))
-(define-libgit2/check git_filter_list_stream_data
-  (_fun _filter _buf _writestream -> _int))
-(define-libgit2/check git_filter_list_stream_file
-  (_fun _filter _repository _string _writestream -> _int))
-(define-libgit2/check git_filter_list_stream_blob
-  (_fun _filter _blob _writestream -> _int))
-(define-libgit2 git_filter_list_free
-  (_fun _filter -> _void))
+  (_fun _filter_list _repository _blob _string _git_filter_mode_t _uint32 -> _int)
+  git_filter_list_free)
 
+(define-libgit2/alloc git_filter_list_new
+  (_fun _filter_list _repository _git_filter_mode_t _uint32 -> _int)
+  git_filter_list_free)
+
+(define-libgit2/check git_filter_list_stream_blob
+  (_fun _filter_list _blob _writestream -> _int))
+
+(define-libgit2/check git_filter_list_stream_data
+  (_fun _filter_list _buf _writestream -> _int))
+
+(define-libgit2/check git_filter_list_stream_file
+  (_fun _filter_list _repository _string _writestream -> _int))

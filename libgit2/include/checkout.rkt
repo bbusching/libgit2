@@ -9,6 +9,8 @@
 (provide (all-defined-out))
 
 
+; Types
+
 (define _git_checkout_strategy_t
   (_bitmask '(GIT_CHECKOUT_NONE = #x00000000
               GIT_CHECKOUT_SAFE = #x00000001
@@ -74,13 +76,16 @@
    [perfdata_cb _git_checkout_perfdata_cb]
    [perfdata_payload (_cpointer _void)]))
 
+; Functions
+
+(define-libgit2/check git_checkout_head
+  (_fun _repository _git_checkout_opts-pointer/null -> _int))
+
+(define-libgit2/check git_checkout_index
+  (_fun _repository _index/null _git_checkout_opts-pointer/null -> _int))
+
 (define-libgit2/check git_checkout_init_options
   (_fun _git_checkout_opts-pointer _uint -> _int))
 
-(define-libgit2/check git_checkout_head
-  (_fun _repository _git_checkout_opts-pointer -> _int))
-(define-libgit2/check git_checkout_index
-  (_fun _repository _index _git_checkout_opts-pointer -> _int))
 (define-libgit2/check git_checkout_tree
-  (_fun _repository _object _git_checkout_opts-pointer -> _int))
-
+  (_fun _repository _object/null _git_checkout_opts-pointer/null -> _int))

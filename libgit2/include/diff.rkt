@@ -12,6 +12,8 @@
 (provide (all-defined-out))
 
 
+; Types
+
 (define _git_diff_option_t
   (_bitmask '(GIT_DIFF_NORMAL = #x00000000
               GIT_DIFF_REVERSE = #x00000001
@@ -98,8 +100,7 @@
    [old_prefix _string]
    [new_prefix _string]))
 
-(define-libgit2 git_diff_init_options
-  (_fun _git_diff_opts _uint -> _int))
+(define GIT_DIFF_OPTS_VERSION 1)
 
 (define _git_diff_file_cb
   (_fun _git_diff_delta-pointer _float (_cpointer _void) -> _int))
@@ -204,38 +205,7 @@
    [rename_limit _size]
    [metric _git_diff_similarity_metric-pointer]))
 
-(define-libgit2/check git_diff_find_init_options
-  (_fun _git_diff_find_options-pointer _uint -> _int))
-(define-libgit2 git_diff_free
-  (_fun _diff -> _void))
-(define-libgit2/alloc git_diff_tree_to_tree
-  (_fun _diff _repository _tree _tree _git_diff_opts-pointer -> _int))
-(define-libgit2/alloc git_diff_tree_to_index
-  (_fun _diff _repository _tree _index _git_diff_opts-pointer -> _int))
-(define-libgit2/alloc git_diff_index_to_workdir
-  (_fun _diff _repository _index _git_diff_opts-pointer -> _int))
-(define-libgit2/alloc git_diff_tree_to_workdir
-  (_fun _diff _repository _tree _git_diff_opts-pointer -> _int))
-(define-libgit2/alloc git_diff_tree_to_workdir_with_index
-  (_fun _diff _repository _tree _git_diff_opts-pointer -> _int))
-(define-libgit2/alloc git_diff_index_to_index
-  (_fun _diff _repository _index _index _git_diff_opts-pointer -> _int))
-(define-libgit2/check git_diff_merge
-  (_fun _diff _diff -> _int))
-(define-libgit2/check git_diff_find_similar
-  (_fun _diff _git_diff_opts-pointer -> _int))
-(define-libgit2 git_diff_num_deltas
-  (_fun _diff -> _size))
-(define-libgit2 git_diff_num_deltas_of_type
-  (_fun _diff _git_delta_t -> _size))
-(define-libgit2 git_diff_get_delta
-  (_fun _diff _size -> _git_diff_delta-pointer))
-(define-libgit2 git_diff_is_sorted_icase
-  (_fun _diff -> _bool))
-(define-libgit2/check git_diff_foreach
-  (_fun _diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
-(define-libgit2 git_diff_status_char
-  (_fun _git_delta_t -> _uint8))
+(define GIT_DIFF_FIND_OPTS_VERSION 1)
 
 (define _git_diff_format_t
   (_enum '(GIT_DIFF_FORMAT_PATCH = 1
@@ -244,8 +214,133 @@
            GIT_DIFF_FORMAT_NAME_ONLY = 4
            GIT_DIFF_FORMAT_NAME_STATUS = 5)))
 
+(define-cpointer-type _diff_stats)
+
+(define _git_diff_stats_format_t
+  (_bitmask '(GIT_DIFF_STATS_NONE = 0
+              GIT_DIFF_STATS_FULL = 1
+              GIT_DIFF_STATS_SHORT = 2
+              GIT_DIFF_STATS_NUMBER = 4
+              GIT_DIFF_STATS_INCLUDE_SUMMARY = 8)))
+
+(define _git_diff_format_email_flags_t
+  (_bitmask '(GIT_DIFF_FORMAT_EMAIL_NONE = 0
+              GIT_DIFF_FORMAT_EMAIL_EXCLUDE_SUBJECT_PATCH_MARKER = 1)))
+
+(define-cstruct _git_diff_format_email_opts
+  ([version _uint]
+   [flags _git_diff_format_email_flags_t]
+   [patch_no _size]
+   [total_patches _size]
+   [id _oid]
+   [summary _string]
+   [body _string]
+   [author _signature]))
+
+(define GIT_DIFF_FORMAT_EMAIL_OPTS_VERSION 1)
+
+; Functions
+
+(define-libgit2/check git_diff_blob_to_buffer
+  (_fun _blob/null _string _string _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
+
+(define-libgit2/check git_diff_blobs
+  (_fun _blob/null _string _blob/null _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
+
+(define-libgit2/check git_diff_buffers
+  (_fun (_cpointer _void) _size _string (_cpointer _void) _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
+
+(define-libgit2/check git_diff_commit_as_email
+  (_fun _buf _repository _commit _size _size _git_diff_format_email_flags_t _git_diff_opts-pointer/null -> _int))
+
+(define-libgit2/check git_diff_find_init_options
+  (_fun _git_diff_find_options-pointer _uint -> _int))
+
+(define-libgit2/check git_diff_find_similar
+  (_fun _diff _git_diff_opts-pointer/null -> _int))
+
+(define-libgit2/check git_diff_foreach
+  (_fun _diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
+
+(define-libgit2/check git_diff_format_email
+  (_fun _buf _diff _git_diff_format_email_opts-pointer/null -> _int))
+
+(define-libgit2/check git_diff_format_email_init_options
+  (_fun _git_diff_format_email_opts-pointer _uint -> _int))
+
+(define-libgit2/dealloc git_diff_free
+  (_fun _diff -> _void))
+
+(define-libgit2/alloc git_diff_from_buffer
+  (_fun _diff _string _size -> _int)
+  git_diff_free)
+
+(define-libgit2 git_diff_get_delta
+  (_fun _diff _size -> _git_diff_delta-pointer/null))
+
+(define-libgit2/alloc git_diff_get_stats
+  (_fun _diff_stats _diff -> _int)
+  git_diff_stats_free)
+
+(define-libgit2/alloc git_diff_index_to_index
+  (_fun _diff _repository _index _index _git_diff_opts-pointer/null -> _int)
+  git_diff_free)
+
+(define-libgit2/alloc git_diff_index_to_workdir
+  (_fun _diff _repository _index _git_diff_opts-pointer -> _int)
+  git_diff_free)
+
+(define-libgit2 git_diff_init_options
+  (_fun _git_diff_opts _uint -> _int))
+
+(define-libgit2 git_diff_is_sorted_icase
+  (_fun _diff -> _bool))
+
+(define-libgit2/check git_diff_merge
+  (_fun _diff _diff -> _int))
+
+(define-libgit2 git_diff_num_deltas
+  (_fun _diff -> _size))
+
+(define-libgit2 git_diff_num_deltas_of_type
+  (_fun _diff _git_delta_t -> _size))
+
 (define-libgit2/check git_diff_print
   (_fun _diff _git_diff_format_t _git_diff_line_cb (_cpointer _void) -> _int))
+
+(define-libgit2 git_diff_stats_deletions
+  (_fun _diff_stats -> _size))
+
+(define-libgit2 git_diff_stats_files_changed
+  (_fun _diff_stats -> _size))
+
+(define-libgit2/dealloc git_diff_stats_free
+  (_fun _diff_stats -> _void))
+
+(define-libgit2 git_diff_stats_insertions
+  (_fun _diff_stats -> _size))
+
+(define-libgit2/check git_diff_stats_to_buf
+  (_fun _buf _diff_stats _git_diff_stats_format_t _size -> _int))
+
+(define-libgit2 git_diff_status_char
+  (_fun _git_delta_t -> _uint8))
+
 (define-libgit2/check git_diff_to_buf
   (_fun _buf _diff _git_diff_format_t -> _int))
 
+(define-libgit2/alloc git_diff_tree_to_index
+  (_fun _diff _repository _tree _index _git_diff_opts-pointer -> _int)
+  git_diff_free)
+
+(define-libgit2/alloc git_diff_tree_to_tree
+  (_fun _diff _repository _tree _tree _git_diff_opts-pointer -> _int)
+  git_diff_free)
+
+(define-libgit2/alloc git_diff_tree_to_workdir
+  (_fun _diff _repository _tree _git_diff_opts-pointer -> _int)
+  git_diff_free)
+
+(define-libgit2/alloc git_diff_tree_to_workdir_with_index
+  (_fun _diff _repository _tree _git_diff_opts-pointer -> _int)
+  git_diff_free)

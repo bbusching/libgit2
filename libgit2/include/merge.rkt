@@ -13,6 +13,8 @@
 (provide (all-defined-out))
 
 
+; Types
+
 (define-cstruct _git_merge_file_input
   ([version _uint]
    [ptr _string]
@@ -20,8 +22,7 @@
    [path _string]
    [mode _uint]))
 
-(define-libgit2 git_merge_file_init_input
-  (_fun _git_merge_file_input-pointer _uint -> _int))
+(define GIT_MERGE_FILE_INPUT_VERSION 1)
 
 (define _git_merge_flag_t
   (_bitmask '(GIT_MERGE_FIND_RENAMES = #x0001
@@ -54,8 +55,7 @@
    [favor _git_merge_file_favor_t]
    [flags _git_merge_file_flag_t]))
 
-(define-libgit2/check git_merge_file_init_options
-  (_fun _git_merge_file_opts-pointer _uint -> _int))
+(define GIT_MERGE_FILE_OPTS_VERSION 1)
 
 (define-cstruct _git_merge_file_result
   ([automergeable _uint]
@@ -75,8 +75,7 @@
    [file_favor _git_merge_file_favor_t]
    [file_flags _git_merge_file_flag_t]))
 
-(define-libgit2/check git_merge_init_options
-  (_fun _git_merge_opts-pointer _uint -> _int))
+(define GIT_MERGE_OPTS_VERSION 1)
 
 (define _git_merge_analysis_t
   (_bitmask '(GIT_MERGE_ANALYSIS_NONE = #x0000
@@ -90,28 +89,51 @@
            GIT_MERGE_PREFERENCE_NO_FASTFORWARD
            GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)))
 
-(define-libgit2/check git_merge_analysis
-  (_fun (_cpointer _git_merge_analysis_t) (_cpointer _git_merge_preference_t) _repository (_cpointer _annotated_commit) _size -> _int))
-(define-libgit2/check git_merge_base
-  (_fun _oid _repository _oid _oid -> _int))
-(define-libgit2/check git_merge_bases
-  (_fun _oidarray _repository _oid _oid -> _int))
-(define-libgit2/check git_merge_base_many
-  (_fun _oid _repository _size (_cpointer _oid) -> _int))
-(define-libgit2/check git_merge_bases_many
-  (_fun _oidarray _repository _size (_cpointer _oid) -> _int))
-(define-libgit2/check git_merge_base_octopus
-  (_fun _oid _repository _size (_cpointer _oid) -> _int))
-(define-libgit2/check git_merge_file
-  (_fun _git_merge_file_result-pointer _git_merge_file_input-pointer _git_merge_file_input-pointer _git_merge_file_input-pointer _git_merge_file_opts-pointer -> _int))
-(define-libgit2/check git_merge_file_from_index
-  (_fun _git_merge_file_result-pointer _repository _index_entry _index_entry _index_entry _git_merge_file_opts-pointer -> _int))
-(define-libgit2/check git_merge_file_result_free
-  (_fun _git_merge_file_result-pointer -> _void))
-(define-libgit2/alloc git_merge_trees
-  (_fun _index _repository _tree _tree _tree _git_merge_opts-pointer -> _int))
-(define-libgit2/alloc git_merge_commits
-  (_fun _index _repository _commit _commit _commit _git_merge_opts-pointer -> _int))
+; Functions
+
 (define-libgit2/check git_merge
   (_fun _repository (_cpointer _annotated_commit) _size _git_merge_opts-pointer _git_checkout_opts-pointer -> _int))
 
+(define-libgit2/check git_merge_analysis
+  (_fun (_cpointer _git_merge_analysis_t) (_cpointer _git_merge_preference_t) _repository (_cpointer _annotated_commit) _size -> _int))
+
+(define-libgit2/check git_merge_base
+  (_fun _oid _repository _oid _oid -> _int))
+
+(define-libgit2/check git_merge_base_many
+  (_fun _oid _repository _size (_cpointer _oid) -> _int))
+
+(define-libgit2/check git_merge_base_octopus
+  (_fun _oid _repository _size (_cpointer _oid) -> _int))
+
+(define-libgit2/check git_merge_bases
+  (_fun _oidarray _repository _oid _oid -> _int))
+
+(define-libgit2/check git_merge_bases_many
+  (_fun _oidarray _repository _size (_cpointer _oid) -> _int))
+
+(define-libgit2/alloc git_merge_commits
+  (_fun _index _repository _commit _commit _commit _git_merge_opts-pointer -> _int)
+  git_index_free)
+
+(define-libgit2/check git_merge_file
+  (_fun _git_merge_file_result-pointer _git_merge_file_input-pointer _git_merge_file_input-pointer _git_merge_file_input-pointer _git_merge_file_opts-pointer -> _int))
+
+(define-libgit2/check git_merge_file_from_index
+  (_fun _git_merge_file_result-pointer _repository _index_entry _index_entry _index_entry _git_merge_file_opts-pointer -> _int))
+
+(define-libgit2/check git_merge_file_init_input
+  (_fun _git_merge_file_input-pointer _uint -> _int))
+
+(define-libgit2/check git_merge_file_init_options
+  (_fun _git_merge_file_opts-pointer _uint -> _int))
+
+(define-libgit2/dealloc git_merge_file_result_free
+  (_fun _git_merge_file_result-pointer -> _void))
+
+(define-libgit2/check git_merge_init_options
+  (_fun _git_merge_opts-pointer _uint -> _int))
+
+(define-libgit2/alloc git_merge_trees
+  (_fun _index _repository _tree _tree _tree _git_merge_opts-pointer -> _int)
+  git_index_free)

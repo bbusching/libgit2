@@ -1,14 +1,18 @@
 #lang racket
 
 (require ffi/unsafe
+         ffi/unsafe/alloc
          "define.rkt"
          "types.rkt"
          "indexer.rkt"
          "oid.rkt"
          "strarray.rkt"
+         "repository.rkt"
          "utils.rkt")
 (provide (all-defined-out))
 
+
+; Types
 
 (define-cstruct _git_index_time
   ([seconds _int32]
@@ -28,6 +32,7 @@
    [flags_extended _uint16]
    [path _string]))
 (define _index_entry _git_index_entry-pointer)
+(define _index_entry/null _git_index_entry-pointer/null)
 
 (define _git_indxentry_flag_t
   (_enum '(GIT_IDXENTRY_EXTENDED = #x4000
@@ -71,76 +76,130 @@
            GIT_INDEX_STAGE_OURS
            GIT_INDEX_STAGE_THEIRS)))
 
-(define-libgit2/alloc git_index_open
-  (_fun _index _string -> _int))
-(define-libgit2/alloc git_index_new
-  (_fun _index -> _int))
-(define-libgit2 git_index_free
-  (_fun _index -> _void))
-(define-libgit2 git_index_owner
-  (_fun _index -> _repository))
-(define-libgit2 git_index_caps
-  (_fun _index -> _int))
-(define-libgit2/check git_index_set_caps
-  (_fun _index _int -> _int))
-(define-libgit2 git_index_version
-  (_fun _index -> _uint))
-(define-libgit2/check git_index_set_version
-  (_fun _index _uint -> _int))
-(define-libgit2/check git_index_read
-  (_fun _index _int -> _int))
-(define-libgit2/check git_index_write
-  (_fun _index -> _int))
-(define-libgit2 git_index_path
-  (_fun _index -> _string))
-(define-libgit2/check git_index_read_tree
-  (_fun _index _tree -> _int))
-(define-libgit2/check git_index_write_tree_to
-  (_fun _oid _index _repository -> _int))
-(define-libgit2 git_index_entrycount
-  (_fun _index -> _size))
-(define-libgit2 git_index_get_byindex
-  (_fun _index _size -> _index_entry))
-(define-libgit2 git_index_get_bypath
-  (_fun _index _string _int -> _index_entry))
-(define-libgit2/check git_index_remove
-  (_fun _index _string _int -> _int))
-(define-libgit2/check git_index_remove_directory
-  (_fun _index _string _int -> _int))
+; Functions
+
 (define-libgit2/check git_index_add
   (_fun _index _index_entry -> _int))
-(define-libgit2/check git_index_entry_stage
-  (_fun _index_entry -> _int))
-(define-libgit2 git_index_entry_is_conflict
-  (_fun _index_entry -> _bool))
-(define-libgit2/check git_index_add_bypath
-  (_fun _index _string -> _int))
-(define-libgit2/check git_index_add_frombuffer
-  (_fun _index _index_entry (_cpointer _void) _size -> _int))
-(define-libgit2/check git_index_remove_bypath
-  (_fun _index _string -> _int))
+
 (define-libgit2/check git_index_add_all
   (_fun _index _strarray _uint _git_index_matched_path_cb (_cpointer _void) -> _int))
-(define-libgit2/check git_index_remove_all
-  (_fun _index _strarray _git_index_matched_path_cb (_cpointer _void) -> _int))
-(define-libgit2/check git_index_update_all
-  (_fun _index _strarray _git_index_matched_path_cb (_cpointer _void) -> _int))
-(define-libgit2/alloc git_index_find_prefix
-  (_fun _size _index _string -> _int))
+
+(define-libgit2/check git_index_add_bypath
+  (_fun _index _string -> _int))
+
+(define-libgit2/check git_index_add_frombuffer
+  (_fun _index _index_entry (_cpointer _void) _size -> _int))
+
+(define-libgit2 git_index_caps
+  (_fun _index -> _int))
+
+(define-libgit2 git_index_checksum
+  (_fun _index -> _oid))
+
+(define-libgit2/check git_index_clear
+  (_fun _index -> _int))
+
 (define-libgit2/check git_index_conflict_add
   (_fun _index _index_entry _index_entry _index_entry -> _int))
-(define-libgit2/check git_index_conflict_get
-  (_fun (_cpointer _index_entry) (_cpointer _index_entry) (_cpointer _index_entry) _index _string -> _int))
-(define-libgit2/check git_index_conflict_remove
-  (_fun _index _string -> _int))
+
 (define-libgit2/check git_index_conflict_cleanup
   (_fun _index -> _int))
-(define-libgit2 git_index_has_conflicts
-  (_fun _index -> _bool))
-(define-libgit2/alloc git_index_conflict_iterator_new
-  (_fun _index_conflict_iterator _index -> _bool))
-(define-libgit2 git_index_conflict_next
-  (_fun (_cpointer _index_entry) (_cpointer _index_entry) (_cpointer _index_entry) _index_conflict_iterator -> _bool))
-(define-libgit2 git_index_conflict_iterator_free
+
+(define-libgit2 git_index_conflict_get
+  (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _index _string -> (v : _int)
+        -> (check-lg2 v (values ancestor our their) 'git_index_conflict_get)))
+
+(define-libgit2/dealloc git_index_conflict_iterator_free
   (_fun _index_conflict_iterator -> _void))
 
+(define-libgit2/alloc git_index_conflict_iterator_new
+  (_fun _index_conflict_iterator _index -> _bool)
+  git_index_conflict_iterator_free)
+
+(define-libgit2 git_index_conflict_next
+  (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _index_conflict_iterator -> (v : _int)
+        -> (check-lg2 v (values ancestor our their) 'git_index_conflict_next)))
+
+(define-libgit2/check git_index_conflict_remove
+  (_fun _index _string -> _int))
+
+(define-libgit2 git_index_entry_is_conflict
+  (_fun _index_entry -> _bool))
+
+(define-libgit2 git_index_entry_stage
+  (_fun _index_entry -> _int))
+
+(define-libgit2 git_index_entrycount
+  (_fun _index -> _size))
+
+(define-libgit2/alloc git_index_find
+  (_fun _size _index _string -> _int))
+
+(define-libgit2/alloc git_index_find_prefix
+  (_fun _size _index _string -> _int))
+
+(define-libgit2/dealloc git_index_free
+  (_fun _index -> _void))
+
+(define-libgit2 git_index_get_byindex
+  (_fun _index _size -> _index_entry/null))
+
+(define-libgit2 git_index_get_bypath
+  (_fun _index _string _int -> _index_entry/null))
+
+(define-libgit2 git_index_has_conflicts
+  (_fun _index -> _bool))
+
+(define-libgit2/alloc git_index_new
+  (_fun _index -> _int)
+  git_index_free)
+
+(define-libgit2/alloc git_index_open
+  (_fun _index _string -> _int)
+  git_index_free)
+
+(define-libgit2 git_index_owner
+  (_fun _index -> _repository)
+  #:wrap (allocator git_repository_free))
+
+(define-libgit2 git_index_path
+  (_fun _index -> _string))
+
+(define-libgit2/check git_index_read
+  (_fun _index _bool -> _int))
+
+(define-libgit2/check git_index_read_tree
+  (_fun _index _tree -> _int))
+
+(define-libgit2/check git_index_remove
+  (_fun _index _string _int -> _int))
+
+(define-libgit2/check git_index_remove_all
+  (_fun _index _strarray _git_index_matched_path_cb (_cpointer _void) -> _int))
+
+(define-libgit2/check git_index_remove_bypath
+  (_fun _index _string -> _int))
+
+(define-libgit2/check git_index_remove_directory
+  (_fun _index _string _int -> _int))
+
+(define-libgit2/check git_index_set_caps
+  (_fun _index _int -> _int))
+
+(define-libgit2 git_index_version
+  (_fun _index -> _uint))
+
+(define-libgit2/check git_index_set_version
+  (_fun _index _uint -> _int))
+
+(define-libgit2/check git_index_update_all
+  (_fun _index _strarray _git_index_matched_path_cb (_cpointer _void) -> _int))
+
+(define-libgit2/check git_index_write
+  (_fun _index -> _int))
+
+(define-libgit2/check git_index_write_tree
+  (_fun _oid _index -> _int))
+
+(define-libgit2/check git_index_write_tree_to
+  (_fun _oid _index _repository -> _int))

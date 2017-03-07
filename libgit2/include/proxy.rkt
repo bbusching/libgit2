@@ -7,6 +7,7 @@
          "utils.rkt")
 (provide (all-defined-out))
 
+; Types
 
 (define _git_proxy_t
   (_enum '(GIT_PROXY_NONE
@@ -21,6 +22,9 @@
    [certificate_check _git_transport_certificate_check_cb]
    [payload (_cpointer _void)]))
 
+(define GIT_PROXY_OPTS_VERSION 1)
+
+; Functions
+
 (define-libgit2/check git_proxy_init_options
   (_fun _git_proxy_opts-pointer _uint -> _int))
-

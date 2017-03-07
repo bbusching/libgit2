@@ -30,7 +30,7 @@
 (define-libgit2 git_repository_free
   (_fun _repository -> _void))
 (define-libgit2/alloc git_repository_init
-  (_fun _repository _string _uint -> _int))
+  (_fun _repository _string _bool -> _int))
 
 (define _git_repository_int_flag_t
   (_bitmask '(GIT_REPOSITORY_INIT_BARE = 1
@@ -63,11 +63,13 @@
 (define-libgit2/alloc git_repository_head
   (_fun _reference _repository -> _int))
 (define-libgit2/check git_repository_head_detached
-  (_fun _repository -> _int))
+  (_fun _repository -> _bool))
 (define-libgit2/check git_repository_head_unborn
-  (_fun _repository -> _int))
+  (_fun _repository -> _bool))
 (define-libgit2 git_repository_is_empty
-  (_fun _repository -> _int))
+  (_fun _repository -> _bool))
+(define-libgit2 git_repository_is_bare
+  (_fun _repository -> _bool))
 (define-libgit2 git_repository_path
   (_fun _repository -> _string))
 (define-libgit2 git_repository_workdir

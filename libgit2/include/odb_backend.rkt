@@ -7,10 +7,8 @@
 (provide (all-defined-out))
 
 
-(define-libgit2/alloc git_odb_backend_loose
-  (_fun _odb_backend _string _int _int _uint _uint -> _int))
-(define-libgit2/alloc git_odb_backend_one_pack
-  (_fun _odb_backend _string -> _int))
+; Types
+
 (define _git_odb_stream_t
   (_enum '(GIT_STREAM_RDONLY = 2
            GIT_STREAM_WRONLY = 4
@@ -33,3 +31,16 @@
    [commit (_fun _git_odb_writepack-pointer _git_transfer_progress-pointer -> _int)]
    [free (_fun _git_odb_writepack-pointer -> _void)]))
 
+; Functions
+
+(define-libgit2/alloc git_odb_backend_loose
+  (_fun _odb_backend _string _int _int _uint _uint -> _int))
+
+(define-libgit2/alloc git_odb_backend_one_pack
+  (_fun _odb_backend _string -> _int))
+
+(define-libgit2/alloc git_odb_backend_pack
+  (_fun _odb_backend _string -> _int))
+
+(define-libgit2/check git_odb_init_backend
+  (_fun _odb_backend _uint -> _int))

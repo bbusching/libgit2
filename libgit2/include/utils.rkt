@@ -1,6 +1,7 @@
 #lang racket
 
 (require ffi/unsafe
+         ffi/unsafe/alloc
          "errors.rkt"
          "define.rkt")
 (provide (all-defined-out))
@@ -18,7 +19,17 @@
   (define-libgit2 name (_fun ... -> (retval : _int)
                              -> (check-lg2 retval retval name))))
 
+(define-syntax define-libgit2/alloc
+  (syntax-rules ()
+    [(define-libgit2/alloc name (_fun _type args ... -> _int))
+     (define-libgit2 name (_fun (out : (_ptr o _type)) args ... -> (retval : _int)
+                                -> (check-lg2 retval out name)))]
+    [(define-libgit2/alloc name (_fun _type args ... -> _int) dealloc_fun)
+     (define-libgit2 name (_fun (out : (_ptr o _type)) args ... -> (retval : _int)
+                                -> (check-lg2 retval out name))
+       #:wrap (allocator dealloc_fun))]))
+
 (define-syntax-rule
-  (define-libgit2/alloc name (_fun _type args ... -> _int))
-  (define-libgit2 name (_fun (out : (_ptr o _type)) args ... -> (retval : _int)
-                             -> (check-lg2 retval out name))))
+  (define-libgit2/dealloc name (_fun ...))
+  (define-libgit2 name (_fun ...)
+    #:wrap (deallocator)))

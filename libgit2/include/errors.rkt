@@ -5,6 +5,8 @@
 (provide (all-defined-out))
 
 
+; Types
+
 (define _git_error_code
   (_enum '(GIT_OK = 0
            GIT_ERROR = -1
@@ -72,6 +74,8 @@
            GITERR_FILESYSTEM
            GITERR_PATCH)))
 
+; Functions
+
 (define-libgit2 giterr_last
   (_fun -> _error))
 (define-libgit2 giterr_clear
@@ -80,4 +84,3 @@
   (_fun _int _string -> _void))
 (define-libgit2 giterr_set_oom
   (_fun -> _void))
-
