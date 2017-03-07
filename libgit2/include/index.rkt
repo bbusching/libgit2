@@ -7,7 +7,6 @@
          "indexer.rkt"
          "oid.rkt"
          "strarray.rkt"
-         "repository.rkt"
          "utils.rkt")
 (provide (all-defined-out))
 
@@ -159,8 +158,7 @@
   git_index_free)
 
 (define-libgit2 git_index_owner
-  (_fun _index -> _repository)
-  #:wrap (allocator git_repository_free))
+  (_fun _index -> _repository))
 
 (define-libgit2 git_index_path
   (_fun _index -> _string))

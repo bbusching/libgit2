@@ -9,8 +9,9 @@
   ([strings (_cpointer _string)]
    [count _size]))
 (define _strarray _git_strarray-pointer)
+(define _strarray/null _git_strarray-pointer/null)
 
-(define-libgit2 git_strarray_free
+(define-libgit2/dealloc git_strarray_free
   (_fun _strarray -> _void))
 (define-libgit2/check git_strarray_copy
   (_fun _strarray _strarray -> _int))
