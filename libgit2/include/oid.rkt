@@ -10,13 +10,6 @@
 
 ; Types
 
-(define GIT_OID_RAWSZ 20)
-(define GIT_OID_HEXSZ (* GIT_OID_RAWSZ 2))
-(define GIT_OID_MINPREFIXLEN 4)
-
-(define-cstruct _git_oid
-  ([id (_array _uint8 GIT_OID_RAWSZ)]))
-
 (define _oid_shorten (_cpointer 'git_oid_shorten))
 
 ; Functions

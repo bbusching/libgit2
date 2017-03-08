@@ -3,10 +3,7 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "repository.rkt"
-         "refspec.rkt"
          "net.rkt"
-         "indexer.rkt"
          "strarray.rkt"
          "transport.rkt"
          "pack.rkt"
@@ -86,6 +83,9 @@
 
 ; Functions
 
+(define-libgit2/dealloc git_remote_free
+  (_fun _remote -> _void))
+
 (define-libgit2/check git_remote_add_fetch
   (_fun _repository _remote _string -> _int))
 
@@ -131,9 +131,6 @@
 
 (define-libgit2/check git_remote_fetch
   (_fun _remote _strarray/null _git_fetch_opts-pointer/null _string -> _int))
-
-(define-libgit2/dealloc git_remote_free
-  (_fun _remote -> _void))
 
 (define-libgit2/check git_remote_get_fetch_refspecs
   (_fun _strarray _remote -> _int))

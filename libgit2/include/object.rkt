@@ -3,11 +3,13 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
          "buffer.rkt"
          "utils.rkt")
 (provide (all-defined-out))
 
+
+(define-libgit2/dealloc git_object_free
+  (_fun _object -> _void))
 
 (define-libgit2 git_object__size
   (_fun _git_otype -> _size))
@@ -15,9 +17,6 @@
 (define-libgit2/alloc git_object_dup
   (_fun _object _object -> _int)
   git_object_free)
-
-(define-libgit2/dealloc git_object_free
-  (_fun _object -> _void))
 
 (define-libgit2 git_object_id
   (_fun _object -> _oid))

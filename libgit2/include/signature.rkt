@@ -8,6 +8,9 @@
 (provide (all-defined-out))
 
 
+(define-libgit2/dealloc git_signature_free
+  (_fun _signature -> _void))
+
 (define-libgit2/alloc git_signature_default
   (_fun _signature _repository -> _int)
   git_signature_free)
@@ -15,9 +18,6 @@
 (define-libgit2/alloc git_signature_dup
   (_fun _signature _signature -> _int)
   git_signature_free)
-
-(define-libgit2/dealloc git_signature_free
-  (_fun _signature -> _void))
 
 (define-libgit2/alloc git_signature_from_buffer
   (_fun _signature _buf -> _int)

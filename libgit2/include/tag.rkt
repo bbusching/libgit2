@@ -3,7 +3,6 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
          "object.rkt"
          "strarray.rkt"
          "utils.rkt")
@@ -32,15 +31,15 @@
 (define-libgit2/check git_tag_delete
   (_fun _repository _string -> _int))
 
+(define-libgit2/dealloc git_tag_free
+  (_fun _tag -> _void))
+
 (define-libgit2/alloc git_tag_dup
   (_fun _tag _tag -> _int)
   git_tag_free)
 
 (define-libgit2/check git_tag_foreach
   (_fun _repository _git_tag_foreach_cb (_cpointer _void) -> _int))
-
-(define-libgit2/dealloc git_tag_free
-  (_fun _tag -> _void))
 
 (define-libgit2 git_tag_id
   (_fun _tag -> _oid))

@@ -28,6 +28,9 @@
 (define-libgit2/dealloc git_pathspec_free
   (_fun _pathspec -> _void))
 
+(define-libgit2/dealloc git_pathspec_match_list_free
+  (_fun _pathspec_match_list -> _int))
+
 (define-libgit2/alloc git_pathspec_match_diff
   (_fun _pathspec_match_list _diff _uint32 _pathspec -> _int)
   git_pathspec_match_list_free)
@@ -50,9 +53,6 @@
 
 (define-libgit2 git_pathspec_match_list_failed_entrycount
   (_fun _pathspec_match_list -> _size))
-
-(define-libgit2/dealloc git_pathspec_match_list_free
-  (_fun _pathspec_match_list -> _int))
 
 (define-libgit2/alloc git_pathspec_match_tree
   (_fun _pathspec_match_list _tree _uint32 _pathspec -> _int)

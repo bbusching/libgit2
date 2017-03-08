@@ -4,14 +4,15 @@
          ffi/unsafe/alloc
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
-         "object.rkt"
          "buffer.rkt"
          "repository.rkt"
          "tree.rkt"
          "utils.rkt")
 (provide (all-defined-out))
 
+
+(define-libgit2/dealloc git_commit_free
+  (_fun _commit -> _void))
 
 (define-libgit2/check git_commit_amend
   (_fun _oid _commit _string _signature/null _signature/null _string _string _tree/null -> _int))
@@ -43,9 +44,6 @@
 
 (define-libgit2/check git_commit_extract_signature
   (_fun _buf _buf _repository _oid _string -> _int))
-
-(define-libgit2/dealloc git_commit_free
-  (_fun _commit -> _void))
 
 (define-libgit2/check git_commit_header_field
   (_fun _buf _commit _string -> _int))

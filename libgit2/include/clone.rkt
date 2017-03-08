@@ -3,10 +3,8 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "indexer.rkt"
          "checkout.rkt"
          "remote.rkt"
-         "transport.rkt"
          "repository.rkt"
          "utils.rkt")
 (provide (all-defined-out))

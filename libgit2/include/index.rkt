@@ -1,10 +1,8 @@
 #lang racket
 
 (require ffi/unsafe
-         ffi/unsafe/alloc
          "define.rkt"
          "types.rkt"
-         "indexer.rkt"
          "oid.rkt"
          "strarray.rkt"
          "utils.rkt")

@@ -3,9 +3,6 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
-         "tree.rkt"
-         "refs.rkt"
          "strarray.rkt"
          "buffer.rkt"
          "utils.rkt")
@@ -241,6 +238,12 @@
 
 ; Functions
 
+(define-libgit2/dealloc git_diff_free
+  (_fun _diff -> _void))
+
+(define-libgit2/dealloc git_diff_stats_free
+  (_fun _diff_stats -> _void))
+
 (define-libgit2/check git_diff_blob_to_buffer
   (_fun _blob/null _string _string _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
 
@@ -267,9 +270,6 @@
 
 (define-libgit2/check git_diff_format_email_init_options
   (_fun _git_diff_format_email_opts-pointer _uint -> _int))
-
-(define-libgit2/dealloc git_diff_free
-  (_fun _diff -> _void))
 
 (define-libgit2/alloc git_diff_from_buffer
   (_fun _diff _string _size -> _int)
@@ -313,9 +313,6 @@
 
 (define-libgit2 git_diff_stats_files_changed
   (_fun _diff_stats -> _size))
-
-(define-libgit2/dealloc git_diff_stats_free
-  (_fun _diff_stats -> _void))
 
 (define-libgit2 git_diff_stats_insertions
   (_fun _diff_stats -> _size))

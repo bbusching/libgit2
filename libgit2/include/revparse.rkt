@@ -37,3 +37,4 @@
 (define-libgit2/alloc git_revparse_single
   (_fun _object _repository _string -> _int)
   git_object_free)
+

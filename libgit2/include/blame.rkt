@@ -3,7 +3,6 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
          "utils.rkt")
 (provide (all-defined-out))
 
@@ -41,6 +40,9 @@
 
 ; Functions
 
+(define-libgit2/dealloc git_blame_free
+  (_fun _blame -> _void))
+
 (define-libgit2/alloc git_blame_buffer
   (_fun _blame _blame _string _size -> _int)
   git_blame_free)
@@ -48,9 +50,6 @@
 (define-libgit2/alloc git_blame_file
   (_fun _blame _repository _string _git_blame_opts-pointer/null -> _int)
   git_blame_free)
-
-(define-libgit2/dealloc git_blame_free
-  (_fun _blame -> _void))
 
 (define-libgit2 git_blame_get_hunk_byindex
   (_fun _blame _uint32 -> _git_blame_hunk-pointer/null))

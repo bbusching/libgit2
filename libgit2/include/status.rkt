@@ -25,7 +25,7 @@
               GIT_STATUS_WT_RENAMED = #x0800
               GIT_STATUS_WT_UNREADABLE = #x1000
               GIT_STATUS_IGNORED = #x4000
-              GIT_STATUS_CONFLICTED = #x8 000)))
+              GIT_STATUS_CONFLICTED = #x8000)))
 
 (define _git_status_cb
   (_fun string _git_status_t (_cpointer _void) -> _int))
@@ -95,7 +95,8 @@
   (_fun _status_list -> _void))
 
 (define-libgit2/alloc git_status_list_new
-  (_fun _status_list _repository _git_status_opts-pointer -> _int))
+  (_fun _status_list _repository _git_status_opts-pointer -> _int)
+  git_status_list_free)
 
 (define-libgit2/alloc git_status_should_ignore
   (_fun _bool _repository _string -> _int))

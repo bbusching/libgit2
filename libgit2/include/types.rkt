@@ -36,7 +36,16 @@
 (define-cpointer-type _merge_result)
 (define-cpointer-type _note)
 (define-cpointer-type _object)
-(define-cpointer-type _oid)
+
+(define GIT_OID_RAWSZ 20)
+(define GIT_OID_HEXSZ (* GIT_OID_RAWSZ 2))
+(define GIT_OID_MINPREFIXLEN 4)
+
+(define-cstruct _git_oid
+  ([id (_array _uint8 GIT_OID_RAWSZ)]))
+(define _oid _git_oid-pointer)
+(define _oid/null _git_oid-pointer/null)
+
 (define-cpointer-type _odb)
 (define-cpointer-type _odb_backend)
 (define-cpointer-type _odb_object)

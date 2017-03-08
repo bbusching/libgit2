@@ -3,11 +3,9 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
          "oidarray.rkt"
          "checkout.rkt"
          "index.rkt"
-         "annotated_commit.rkt"
          "diff.rkt"
          "utils.rkt")
 (provide (all-defined-out))

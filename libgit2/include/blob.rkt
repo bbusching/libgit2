@@ -4,12 +4,13 @@
          ffi/unsafe/alloc
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
-         "object.rkt"
          "buffer.rkt"
          "repository.rkt"
          "utils.rkt")
 (provide (all-defined-out))
+
+(define-libgit2/dealloc git_blob_free
+  (_fun _blob -> _void))
 
 (define-libgit2/check git_blob_create_frombuffer
   (_fun _oid _repository (_cpointer _void) _size -> _int))
@@ -33,8 +34,7 @@
 (define-libgit2/check git_blob_filtered_content
   (_fun _buf _blob _string _bool -> _int))
 
-(define-libgit2/dealloc git_blob_free
-  (_fun _blob -> _void))
+
 
 (define-libgit2 git_blob_id
   (_fun _blob -> _oid))

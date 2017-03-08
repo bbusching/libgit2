@@ -39,15 +39,15 @@
 
 ; Functions
 
+(define-libgit2/dealloc git_describe_result_free
+  (_fun _describe_result -> _void))
+
 (define-libgit2/alloc git_describe_commit
   (_fun _describe_result _object _git_describe_opts-pointer/null -> _int)
   git_describe_result_free)
 
 (define-libgit2/check git_describe_format
   (_fun _buf _describe_result _git_describe_format_opts-pointer/null -> _int))
-
-(define-libgit2 git_describe_result_free
-  (_fun _describe_result -> _void))
 
 (define-libgit2/alloc git_describe_workdir
   (_fun _describe_result _repository _git_describe_opts-pointer/null -> _int)

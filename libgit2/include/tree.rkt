@@ -3,7 +3,6 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
          "object.rkt"
          "utils.rkt")
 (provide (all-defined-out))
@@ -32,6 +31,9 @@
    [path _string]))
 
 ; Functions
+
+(define-libgit2/dealloc git_tree_free
+  (_fun _tree -> _void))
 
 (define-libgit2/check git_tree_create_updated
   (_fun _oid _repository _tree _size _git_tree_update-pointer -> _int))
@@ -82,9 +84,6 @@
 
 (define-libgit2 git_tree_entrycount
   (_fun _tree -> _size))
-
-(define-libgit2/dealloc git_tree_free
-  (_fun _tree -> _void))
 
 (define-libgit2 git_tree_id
   (_fun _tree -> _oid))

@@ -2,8 +2,6 @@
 
 (require ffi/unsafe
          "define.rkt"
-         "indexer.rkt"
-         "net.rkt"
          "types.rkt"
          "utils.rkt")
 (provide (all-defined-out))
@@ -79,12 +77,12 @@
 
 ; Functions
 
+(define-libgit2/dealloc git_cred_free
+  (_fun _cred -> _void))
+
 (define-libgit2/alloc git_cred_default_new
   (_fun _cred -> _int)
   git_cred_free)
-
-(define-libgit2/dealloc git_cred_free
-  (_fun _cred -> _void))
 
 (define-libgit2 git_cred_has_username
   (_fun _cred -> _bool))

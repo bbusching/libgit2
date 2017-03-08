@@ -3,8 +3,6 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
-         "oidarray.rkt"
          "utils.rkt")
 (provide (all-defined-out))
 
@@ -64,12 +62,12 @@
 (define-libgit2 git_odb_object_data
   (_fun _odb_object -> (_cpointer _void)))
 
+(define-libgit2/dealloc git_odb_object_free
+  (_fun _odb_object -> _void))
+
 (define-libgit2/alloc git_odb_object_dup
   (_fun _odb_object _odb_object -> _int)
   git_odb_object_free)
-
-(define-libgit2/dealloc git_odb_object_free
-  (_fun _odb_object -> _void))
 
 (define-libgit2 git_odb_object_id
   (_fun _odb_object -> _oid))

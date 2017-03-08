@@ -2,7 +2,6 @@
 
 (require ffi/unsafe
          "define.rkt"
-         "types.rkt"
          "utils.rkt")
 (provide (all-defined-out))
 

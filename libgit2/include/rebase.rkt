@@ -4,7 +4,6 @@
          "define.rkt"
          "types.rkt"
          "oid.rkt"
-         "annotated_commit.rkt"
          "merge.rkt"
          "checkout.rkt"
          "index.rkt"

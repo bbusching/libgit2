@@ -3,7 +3,6 @@
 (require ffi/unsafe
          "define.rkt"
          "types.rkt"
-         "oid.rkt"
          "buffer.rkt"
          "utils.rkt")
 (provide (all-defined-out))
@@ -25,6 +24,9 @@
 
 ; Functions
 
+(define-libgit2/dealloc git_filter_list_free
+  (_fun _filter_list -> _void))
+
 (define-libgit2/check git_filter_list_apply_to_blob
   (_fun _buf _filter_list _blob -> _int))
 
@@ -36,9 +38,6 @@
 
 (define-libgit2 git_filter_list_contains
   (_fun _filter_list _string -> _bool))
-
-(define-libgit2/dealloc git_filter_list_free
-  (_fun _filter_list -> _void))
 
 (define-libgit2 git_filter_list_length
   (_fun _filter_list -> _size))

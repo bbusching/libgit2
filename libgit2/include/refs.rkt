@@ -26,6 +26,9 @@
 
 ; Functions
 
+(define-libgit2/dealloc git_reference_free
+  (_fun _reference -> _void))
+
 (define-libgit2 git_reference__alloc
   (_fun _string _oid _oid -> _reference/null)
   #:wrap (allocator git_reference_free))
@@ -67,9 +70,6 @@
 
 (define-libgit2/check git_reference_foreach_name
   (_fun _repository _git_reference_foreach_name_cb (_cpointer _void) -> _int))
-
-(define-libgit2/dealloc git_reference_free
-  (_fun _reference -> _void))
 
 (define-libgit2 git_reference_has_log
   (_fun _repository _string -> _bool))
