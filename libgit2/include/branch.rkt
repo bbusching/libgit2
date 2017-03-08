@@ -1,6 +1,7 @@
 #lang racket
 
 (require ffi/unsafe
+         ffi/unsafe/alloc
          "define.rkt"
          "types.rkt"
          "oid.rkt"
@@ -49,7 +50,7 @@
 
 (define-libgit2 git_branch_next
   (_fun (ref : (_ptr o _reference)) (type : (_ptr o _git_branch_t)) _branch_iter -> (v : _int)
-        -> (check-lg2 v (values ref type) 'git_branch_next)))
+        -> (check-lg2 v (values ((allocator git_reference_free) ref) type) 'git_branch_next)))
 
 (define-libgit2/check git_branch_set_upstream
   (_fun _reference _string -> _int))
