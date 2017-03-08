@@ -7,6 +7,8 @@
 (provide (all-defined-out))
 
 
+; Types
+
 (define _git_trace_level_t
   (_enum '(GIT_TRACE_NONE
            GIT_TRACE_FATAL
@@ -18,6 +20,8 @@
 
 (define _git_trace_callback
   (_fun _git_trace_level_t _string -> _void))
+
+; Functions
+
 (define-libgit2/check git_trace_set
   (_fun _git_trace_level_t _git_trace_callback -> _int))
-
