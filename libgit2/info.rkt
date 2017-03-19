@@ -2,4 +2,4 @@
 
 (define name "libgit2")
 
-(define scribblings '(("manual.scrbl" ())))
+(define scribblings '(("scribblings/manual.scrbl" (multi-page))))
