@@ -31,19 +31,19 @@
            GIT_STASH_APPLY_PROGRESS_DONE)))
 
 (define _git_stash_apply_progress_cb
-  (_fun _git_stash_apply_progress_t (_cpointer _void) -> _int))
+  (_fun _git_stash_apply_progress_t _bytes -> _int))
 
 (define-cstruct _git_stash_apply_opts
   ([version _uint]
    [flags _git_stash_apply_flags]
    [checkout_options _git_checkout_opts]
    [progress_cb _git_stash_apply_progress_cb]
-   [progress_payload (_cpointer _void)]))
+   [progress_payload _bytes]))
 
 (define GIT_STASH_APPLY_OPTS_VERSION 1)
 
 (define _git_stash_cb
-  (_fun _size _string _oid (_cpointer _void) -> _int))
+  (_fun _size _string _oid _bytes -> _int))
 
 ; Functions
 
@@ -57,7 +57,7 @@
   (_fun _repository _size -> _int))
 
 (define-libgit2/check git_stash_foreach
-  (_fun _repository _git_stash_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_stash_cb _bytes -> _int))
 
 (define-libgit2/check git_stash_pop
   (_fun _repository _size _git_stash_apply_opts-pointer -> _int))

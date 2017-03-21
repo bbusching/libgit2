@@ -58,7 +58,7 @@
            GIT_INDEXCAP_FROM_OWNER = -1)))
 
 (define _git_index_matched_path_cb
-  (_fun _string _string (_cpointer _void) -> _int))
+  (_fun _string _string _bytes -> _int))
 
 (define _git_index_add_option_t
   (_bitmask '(GIT_INDEX_ADD_DEFAULT = 0
@@ -79,13 +79,13 @@
   (_fun _index _index_entry -> _int))
 
 (define-libgit2/check git_index_add_all
-  (_fun _index _strarray _uint _git_index_matched_path_cb (_cpointer _void) -> _int))
+  (_fun _index _strarray _uint _git_index_matched_path_cb _bytes -> _int))
 
 (define-libgit2/check git_index_add_bypath
   (_fun _index _string -> _int))
 
 (define-libgit2/check git_index_add_frombuffer
-  (_fun _index _index_entry (_cpointer _void) _size -> _int))
+  (_fun _index _index_entry _bytes _size -> _int))
 
 (define-libgit2 git_index_caps
   (_fun _index -> _int))
@@ -171,7 +171,7 @@
   (_fun _index _string _int -> _int))
 
 (define-libgit2/check git_index_remove_all
-  (_fun _index _strarray _git_index_matched_path_cb (_cpointer _void) -> _int))
+  (_fun _index _strarray _git_index_matched_path_cb _bytes -> _int))
 
 (define-libgit2/check git_index_remove_bypath
   (_fun _index _string -> _int))
@@ -189,7 +189,7 @@
   (_fun _index _uint -> _int))
 
 (define-libgit2/check git_index_update_all
-  (_fun _index _strarray _git_index_matched_path_cb (_cpointer _void) -> _int))
+  (_fun _index _strarray _git_index_matched_path_cb _bytes -> _int))
 
 (define-libgit2/check git_index_write
   (_fun _index -> _int))

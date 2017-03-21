@@ -17,7 +17,7 @@
 (define-cstruct _git_odb_stream
   ([backend _odb_backend]
    [mode _uint]
-   [hash_ctx (_cpointer _void)]
+   [hash_ctx _bytes]
    [declared_size _git_off_t]
    [received_bytes _git_off_t]
    [read (_fun _git_odb_stream-pointer _string _size -> _int)]
@@ -27,7 +27,7 @@
 
 (define-cstruct _git_odb_writepack
   ([backend _odb_backend]
-   [append (_fun _git_odb_writepack-pointer (_cpointer _void) _size _git_transfer_progress-pointer -> _int)]
+   [append (_fun _git_odb_writepack-pointer _bytes _size _git_transfer_progress-pointer -> _int)]
    [commit (_fun _git_odb_writepack-pointer _git_transfer_progress-pointer -> _int)]
    [free (_fun _git_odb_writepack-pointer -> _void)]))
 

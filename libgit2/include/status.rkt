@@ -28,7 +28,7 @@
               GIT_STATUS_CONFLICTED = #x8000)))
 
 (define _git_status_cb
-  (_fun string _git_status_t (_cpointer _void) -> _int))
+  (_fun string _git_status_t _bytes -> _int))
 
 (define _git_status_show_t
   (_enum '(GIT_STATUS_SHOW_INDEX_AND_WORKDIR = 0
@@ -80,10 +80,10 @@
   (_fun _uint _repository _string -> _int))
 
 (define-libgit2/check git_status_foreach
-  (_fun _repository _git_status_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_status_cb _bytes -> _int))
 
 (define-libgit2/check git_status_foreach_ext
-  (_fun _repository _git_status_opts-pointer _git_status_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_status_opts-pointer _git_status_cb _bytes -> _int))
 
 (define-libgit2/check git_status_init_options
   (_fun _git_status_opts-pointer _uint -> _int))

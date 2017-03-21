@@ -19,4 +19,4 @@
    [symref_target _string]))
 
 (define _git_headlist_cb
-  (_fun _remote_head (_cpointer _void) -> _int))
+  (_fun _remote_head _bytes -> _int))

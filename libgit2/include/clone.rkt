@@ -19,9 +19,9 @@
            GIT_CLONE_LOCAL_NO_LINKS)))
 
 (define _git_remote_create_cb
-  (_fun (_cpointer _remote) _repository _string _string (_cpointer _void) -> _int))
+  (_fun (_cpointer _remote) _repository _string _string _bytes -> _int))
 (define _git_repository_create_cb
-  (_fun (_cpointer _repository) _string _int (_cpointer _void) -> _int))
+  (_fun (_cpointer _repository) _string _int _bytes -> _int))
 
 (define-cstruct _git_clone_opts
   ([version _uint]
@@ -31,9 +31,9 @@
    [local _git_clone_local_t]
    [checkout_branch _string]
    [repository_cb _git_repository_create_cb]
-   [repository_cb_payload (_cpointer _void)]
+   [repository_cb_payload _bytes]
    [remote_cb _git_remote_create_cb]
-   [remote_cb_payload (_cpointer _void)]))
+   [remote_cb_payload _bytes]))
 
 (define GIT_CLONE_OPTS_VERSION 1)
 

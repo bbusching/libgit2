@@ -49,10 +49,10 @@
 (define GIT_REPOSITORY_INIT_OPTS_VERSION 1)
 
 (define _git_repository_fetchhead_foreach_cb
-  (_fun _string _string _oid _uint (_cpointer _void) -> _int))
+  (_fun _string _string _oid _uint _bytes -> _int))
 
 (define _git_repository_mergehead_foreach_cb
-  (_fun _oid (_cpointer _void) -> _int))
+  (_fun _oid _bytes -> _int))
 
 (define _git_repository_state_t
   (_enum '(GIT_REPOSITORY_STATE_NONE
@@ -85,7 +85,7 @@
   (_fun _buf _string _int _string -> _int))
 
 (define-libgit2/check git_repository_fetchhead_foreach
-  (_fun _repository _git_repository_fetchhead_foreach_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_repository_fetchhead_foreach_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_repository_free
   (_fun _repository -> _void))
@@ -134,7 +134,7 @@
   (_fun _repository -> _bool))
 
 (define-libgit2/check git_repository_mergehead_foreach
-  (_fun _repository _git_repository_mergehead_foreach_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_repository_mergehead_foreach_cb _bytes -> _int))
 
 (define-libgit2/check git_repository_message
   (_fun _buf _repository -> _int))

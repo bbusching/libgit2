@@ -16,12 +16,12 @@
               GIT_SORT_REVERSE = 4)))
 
 (define _git_revwalk_hide_cb
-  (_fun _oid (_cpointer _void) -> _int))
+  (_fun _oid _bytes -> _int))
 
 ; Functions
 
 (define-libgit2/check git_revwalk_add_hide_cb
-  (_fun _revwalk _git_revwalk_hide_cb (_cpointer _void) -> _int))
+  (_fun _revwalk _git_revwalk_hide_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_revwalk_free
   (_fun _revwalk -> _void))

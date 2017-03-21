@@ -24,11 +24,11 @@
    [value _string]
    [level _git_config_level_t]
    [free (_fun _git_config_entry-pointer -> _void)]
-   [payload (_cpointer _void)]))
+   [payload _bytes]))
 (define _config_entry _git_config_entry-pointer)
 
 (define _git_config_foreach_cb
-  (_fun _git_config_entry-pointer (_cpointer _void) -> _int))
+  (_fun _git_config_entry-pointer _bytes -> _int))
 
 (define _config_iterator (_cpointer 'git_config_iterator))
 
@@ -52,7 +52,7 @@
   (_fun _config _string _git_config_level_t _bool -> _int))
 
 (define-libgit2/check git_config_backend_foreach_match
-  (_fun _config_backend _string _git_config_foreach_cb (_cpointer _void) -> _int))
+  (_fun _config_backend _string _git_config_foreach_cb _bytes -> _int))
 
 (define-libgit2/check git_config_delete_entry
   (_fun _config _string -> _int))
@@ -76,10 +76,10 @@
   (_fun _buf -> _int))
 
 (define-libgit2/check git_config_foreach
-  (_fun _config _git_config_foreach_cb (_cpointer _void) -> _int))
+  (_fun _config _git_config_foreach_cb _bytes -> _int))
 
 (define-libgit2/check git_config_foreach_match
-  (_fun _config _string _git_config_foreach_cb (_cpointer _void) -> _int))
+  (_fun _config _string _git_config_foreach_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_config_free
   (_fun _config -> _void))
@@ -101,7 +101,7 @@
   (_fun _int _config _string _git_cvar_map-pointer _size -> _int))
 
 (define-libgit2/check git_config_get_multivar_foreach
-  (_fun _config _string _string _git_config_foreach_cb (_cpointer _void) -> _int))
+  (_fun _config _string _string _git_config_foreach_cb _bytes -> _int))
 
 (define-libgit2/check git_config_get_path
   (_fun _buf _config _string -> _int))

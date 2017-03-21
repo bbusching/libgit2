@@ -12,7 +12,7 @@
 ; Types
 
 (define _git_tag_foreach_cb
-  (_fun _string _oid (_cpointer _void) -> _int))
+  (_fun _string _oid _bytes -> _int))
 
 ; Functions
 
@@ -39,7 +39,7 @@
   git_tag_free)
 
 (define-libgit2/check git_tag_foreach
-  (_fun _repository _git_tag_foreach_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_tag_foreach_cb _bytes -> _int))
 
 (define-libgit2 git_tag_id
   (_fun _tag -> _oid))

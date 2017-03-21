@@ -15,15 +15,15 @@
            GIT_PACKBUILDER_DELTAFICATION)))
 
 (define _git_packbuilder_foreach_cb
-  (_fun (_cpointer _void) _size (_cpointer _void) -> _int))
+  (_fun _bytes _size _bytes -> _int))
 
 (define _git_packbuilder_progress
-  (_fun _int _uint32 _uint32 (_cpointer _void) -> _int))
+  (_fun _int _uint32 _uint32 _bytes -> _int))
 
 ; Functions
 
 (define-libgit2/check git_packbuilder_foreach
-  (_fun _packbuilder _git_packbuilder_foreach_cb (_cpointer _void) -> _int))
+  (_fun _packbuilder _git_packbuilder_foreach_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_packbuilder_free
   (_fun _packbuilder -> _void))
@@ -54,13 +54,13 @@
   (_fun _packbuilder -> _size))
 
 (define-libgit2/check git_packbuilder_set_callbacks
-  (_fun _packbuilder _git_packbuilder_progress (_cpointer _void) -> _int))
+  (_fun _packbuilder _git_packbuilder_progress _bytes -> _int))
 
 (define-libgit2 git_packbuilder_set_threads
   (_fun _packbuilder _uint -> _uint))
 
 (define-libgit2/check git_packbuilder_write
-  (_fun _packbuilder _string _uint _git_transfer_progress_cb (_cpointer _void) -> _int))
+  (_fun _packbuilder _string _uint _git_transfer_progress_cb _bytes -> _int))
 
 (define-libgit2 git_packbuilder_written
   (_fun _packbuilder -> _size))

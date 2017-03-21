@@ -21,7 +21,7 @@
   git_patch_free)
 
 (define-libgit2/alloc git_patch_from_buffers
-  (_fun _patch (_cpointer _void) _size _string _string _size _string _git_diff_opts-pointer/null -> _int)
+  (_fun _patch _bytes _size _string _string _size _string _git_diff_opts-pointer/null -> _int)
   git_patch_free)
 
 (define-libgit2/alloc git_patch_from_diff
@@ -49,7 +49,7 @@
   (_fun _patch _size -> _int))
 
 (define-libgit2/check git_patch_print
-  (_fun _patch _git_diff_line_cb (_cpointer _void) -> _int))
+  (_fun _patch _git_diff_line_cb _bytes -> _int))
 
 (define-libgit2 git_patch_size
   (_fun _patch _int _int _int -> _size))

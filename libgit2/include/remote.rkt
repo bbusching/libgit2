@@ -21,7 +21,7 @@
            GIT_REMOTE_COMPLETION_ERROR)))
 
 (define _git_push_transfer_progress
-  (_fun _uint _uint _size (_cpointer _void) -> _int))
+  (_fun _uint _uint _size _bytes -> _int))
 
 (define-cstruct _git_push_update
   ([src_name _string]
@@ -31,22 +31,22 @@
 (define _push_update _git_push_update-pointer)
 
 (define _git_push_negotiation
-  (_fun (_cpointer _push_update) _size (_cpointer _void) -> _int))
+  (_fun (_cpointer _push_update) _size _bytes -> _int))
 
 (define-cstruct _git_remote_callbacks
   ([version _uint]
    [sideband_progress _git_transport_message_cb]
-   [completion (_fun _git_remote_completion_type (_cpointer _void) -> _int)]
+   [completion (_fun _git_remote_completion_type _bytes -> _int)]
    [credentials _git_cred_acquire_cb]
    [certificate_check _git_transport_certificate_check_cb]
    [transfer_progress _git_transfer_progress_cb]
-   [update_tips (_fun _string _oid _oid (_cpointer _void) -> _int)]
+   [update_tips (_fun _string _oid _oid _bytes -> _int)]
    [pack_progress _git_packbuilder_progress]
    [push_transfer_progress _git_push_transfer_progress]
-   [push_update_reference (_fun _string _string (_cpointer _void) -> _int)]
+   [push_update_reference (_fun _string _string _bytes -> _int)]
    [push_negotiation _git_push_negotiation]
    [transport _git_transport_cb]
-   [payload (_cpointer _void)]))
+   [payload _bytes]))
 
 (define GIT_REMOTE_CB_VERSION 1)
 

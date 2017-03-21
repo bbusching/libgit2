@@ -14,9 +14,9 @@
 ; Types
 
 (define _git_reference_foreach_cb
-  (_fun _reference (_cpointer _void) -> _int))
+  (_fun _reference _bytes -> _int))
 (define _git_reference_foreach_name_cb
-  (_fun _string (_cpointer _void) -> _int))
+  (_fun _string _bytes -> _int))
 
 (define _git_reference_normalize_t
   (_bitmask '(GIT_REF_FORMAT_NORMAL = 0
@@ -63,13 +63,13 @@
   (_fun _repository _string -> _int))
 
 (define-libgit2/check git_reference_foreach
-  (_fun _repository _git_reference_foreach_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_reference_foreach_cb _bytes -> _int))
 
 (define-libgit2/check git_reference_foreach_glob
-  (_fun _repository _string _git_reference_foreach_name_cb (_cpointer _void) -> _int))
+  (_fun _repository _string _git_reference_foreach_name_cb _bytes -> _int))
 
 (define-libgit2/check git_reference_foreach_name
-  (_fun _repository _git_reference_foreach_name_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_reference_foreach_name_cb _bytes -> _int))
 
 (define-libgit2 git_reference_has_log
   (_fun _repository _string -> _bool))

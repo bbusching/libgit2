@@ -20,7 +20,7 @@
    [url _string]
    [credentials _git_cred_acquire_cb]
    [certificate_check _git_transport_certificate_check_cb]
-   [payload (_cpointer _void)]))
+   [payload _bytes]))
 
 (define GIT_PROXY_OPTS_VERSION 1)
 

@@ -113,10 +113,10 @@
    [received_bytes _size]))
 
 (define _git_transfer_progress_cb
-  (_fun _git_transfer_progress-pointer (_cpointer _void) -> _int))
+  (_fun _git_transfer_progress-pointer _bytes -> _int))
 
 (define _git_transport_message_cb
-  (_fun _string _int (_cpointer _void) -> _int))
+  (_fun _string _int _bytes -> _int))
 
 (define _git_cert_t
   (_enum '(GIT_CERT_NONE
@@ -129,7 +129,7 @@
 (define _cert _git_cert-pointer)
 
 (define _git_transport_certificate_check_cb
-  (_fun _cert _int _string (_cpointer _void) -> _int))
+  (_fun _cert _int _string _bytes -> _int))
 
 (define _git_submodule_update_t
   (_enum '(GIT_SUBMODULE_UPDATE_DEFAULT

@@ -10,7 +10,7 @@
 ; Types
 
 (define _git_note_foreach_cb
-  (_fun _oid _oid (_cpointer _void) -> _int))
+  (_fun _oid _oid _bytes -> _int))
 
 (define _note_iterator (_cpointer 'git_iterator))
 
@@ -26,7 +26,7 @@
   (_fun _oid _repository _string _signature _signature _oid _note _int -> _int))
 
 (define-libgit2/check git_note_foreach
-  (_fun _repository _string _git_note_foreach_cb (_cpointer _void) -> _int))
+  (_fun _repository _string _git_note_foreach_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_note_free
   (_fun _note -> _void))

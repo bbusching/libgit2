@@ -32,7 +32,7 @@
               GIT_SUBMODULE_STATUS_WD_UNTRACKED = #x2000)))
 
 (define _git_submodule_cb
-  (_fun _submodule _string (_cpointer _void) -> _int))
+  (_fun _submodule _string _bytes -> _int))
 
 (define-cstruct _git_submodule_update_opts
   ([version _uint]
@@ -60,7 +60,7 @@
   (_fun _submodule -> _git_submodule_recurse_t))
 
 (define-libgit2/check git_submodule_foreach
-  (_fun _repository _git_submodule_cb (_cpointer _void) -> _int))
+  (_fun _repository _git_submodule_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_submodule_free
   (_fun _submodule -> _void))

@@ -78,9 +78,9 @@
    [new_file _git_diff_file]))
 
 (define _git_diff_notify_cb
-  (_fun _diff _git_diff_delta-pointer _string (_cpointer _void) -> _int))
+  (_fun _diff _git_diff_delta-pointer _string _bytes -> _int))
 (define _git_diff_progress_cb
-  (_fun _diff _string _string (_cpointer _void) -> _int))
+  (_fun _diff _string _string _bytes -> _int))
 
 (define-cstruct _git_diff_opts
   ([version _int]
@@ -89,7 +89,7 @@
    [pathspec _strarray]
    [notify_cb _git_diff_notify_cb]
    [progress_cb _git_diff_progress_cb]
-   [payload (_cpointer _void)]
+   [payload _bytes]
    [context_lines _uint32]
    [interhunk_lines _uint32]
    [id_abbrev _uint16]
@@ -100,7 +100,7 @@
 (define GIT_DIFF_OPTS_VERSION 1)
 
 (define _git_diff_file_cb
-  (_fun _git_diff_delta-pointer _float (_cpointer _void) -> _int))
+  (_fun _git_diff_delta-pointer _float _bytes -> _int))
 
 (define GIT_DIFF_HUNK_HEADER_SIZE 128)
 
@@ -121,7 +121,7 @@
    [new_file _git_diff_binary_file]))
 
 (define _git_diff_binary_cb
-  (_fun _git_diff_delta-pointer _git_diff_binary-pointer (_cpointer _void) -> _int))
+  (_fun _git_diff_delta-pointer _git_diff_binary-pointer _bytes -> _int))
 
 (define-cstruct _git_diff_hunk
  ([old_start _int]
@@ -132,7 +132,7 @@
   [header (_array _uint8 GIT_DIFF_HUNK_HEADER_SIZE)]))
 
 (define _git_diff_hunk_cb
-  (_fun _git_diff_delta-pointer _git_diff_hunk-pointer (_cpointer _void) -> _int))
+  (_fun _git_diff_delta-pointer _git_diff_hunk-pointer _bytes -> _int))
 
 (define _git_diff_line_t
   (_enum '(GIT_DIFF_LINE_CONTEXT = 32; = ' '
@@ -156,7 +156,7 @@
    [content _string]))
 
 (define _git_diff_line_cb
-  (_fun _git_diff_delta-pointer _git_diff_hunk-pointer _git_diff_line-pointer (_cpointer _void) -> _int))
+  (_fun _git_diff_delta-pointer _git_diff_hunk-pointer _git_diff_line-pointer _bytes -> _int))
 
 (define _git_diff_find_t
   (_bitmask '(GIT_DIFF_FIND_BY_CONFIG = 0
@@ -177,20 +177,20 @@
               GIT_DIFF_FIND_REMOVE_UNMODIFIED = #x00010000)))
 
 (define-cstruct _git_diff_similarity_metric
-  ([file_signature (_fun (_cpointer (_cpointer _void))
+  ([file_signature (_fun (_cpointer _bytes)
                          _git_diff_file-pointer
                          _string
-                         (_cpointer _void)
+                         _bytes
                          -> _int)]
-   [buffer_signature (_fun (_cpointer (_cpointer _void))
+   [buffer_signature (_fun (_cpointer _bytes)
                          _git_diff_file-pointer
                          _string
                          _size
-                         (_cpointer _void)
+                         _bytes
                          -> _int)]
-   [free_signature (_fun (_cpointer _void) (_cpointer _void) -> _void)]
-   [similarity (_fun (_cpointer _int) (_cpointer _void) (_cpointer _void) (_cpointer _void) -> _int)]
-   [payload (_cpointer _void)]))
+   [free_signature (_fun _bytes _bytes -> _void)]
+   [similarity (_fun (_cpointer _int) _bytes _bytes _bytes -> _int)]
+   [payload _bytes]))
 
 (define-cstruct _git_diff_find_options
   ([version _int]
@@ -245,13 +245,13 @@
   (_fun _diff_stats -> _void))
 
 (define-libgit2/check git_diff_blob_to_buffer
-  (_fun _blob/null _string _string _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
+  (_fun _blob/null _string _string _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb _bytes -> _int))
 
 (define-libgit2/check git_diff_blobs
-  (_fun _blob/null _string _blob/null _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
+  (_fun _blob/null _string _blob/null _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb _bytes -> _int))
 
 (define-libgit2/check git_diff_buffers
-  (_fun (_cpointer _void) _size _string (_cpointer _void) _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
+  (_fun _bytes _size _string _bytes _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb _bytes -> _int))
 
 (define-libgit2/check git_diff_commit_as_email
   (_fun _buf _repository _commit _size _size _git_diff_format_email_flags_t _git_diff_opts-pointer/null -> _int))
@@ -263,7 +263,7 @@
   (_fun _diff _git_diff_opts-pointer/null -> _int))
 
 (define-libgit2/check git_diff_foreach
-  (_fun _diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb (_cpointer _void) -> _int))
+  (_fun _diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb _bytes -> _int))
 
 (define-libgit2/check git_diff_format_email
   (_fun _buf _diff _git_diff_format_email_opts-pointer/null -> _int))
@@ -306,7 +306,7 @@
   (_fun _diff _git_delta_t -> _size))
 
 (define-libgit2/check git_diff_print
-  (_fun _diff _git_diff_format_t _git_diff_line_cb (_cpointer _void) -> _int))
+  (_fun _diff _git_diff_format_t _git_diff_line_cb _bytes -> _int))
 
 (define-libgit2 git_diff_stats_deletions
   (_fun _diff_stats -> _size))

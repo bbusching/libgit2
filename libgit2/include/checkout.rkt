@@ -48,11 +48,11 @@
    [chmod_calls _size]))
 
 (define _git_checkout_notify_cb
-  (_fun _git_checkout_notify_t _string _git_diff_file-pointer _git_diff_file-pointer _git_diff_file-pointer (_cpointer _void) -> _int))
+  (_fun _git_checkout_notify_t _string _git_diff_file-pointer _git_diff_file-pointer _git_diff_file-pointer _bytes -> _int))
 (define _git_checkout_progress_cb
-  (_fun _string _size _size (_cpointer _void) -> _void))
+  (_fun _string _size _size _bytes -> _void))
 (define _git_checkout_perfdata_cb
-  (_fun _git_checkout_perfdata-pointer (_cpointer _void) -> _void))
+  (_fun _git_checkout_perfdata-pointer _bytes -> _void))
 
 (define-cstruct _git_checkout_opts
   ([version _uint]
@@ -63,9 +63,9 @@
    [file_open_flags _int]
    [notify_flags _uint]
    [notify_cb _git_checkout_notify_cb]
-   [notify_payload (_cpointer _void)]
+   [notify_payload _bytes]
    [progress_cb _git_checkout_progress_cb]
-   [progress_payload (_cpointer _void)]
+   [progress_payload _bytes]
    [paths _strarray]
    [baseline _tree]
    [baseline_index _index]
@@ -74,7 +74,7 @@
    [our_label _string]
    [their_label _string]
    [perfdata_cb _git_checkout_perfdata_cb]
-   [perfdata_payload (_cpointer _void)]))
+   [perfdata_payload _bytes]))
 
 ; Functions
 

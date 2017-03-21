@@ -11,10 +11,10 @@
 ; Types
 
 (define _git_treebuilder_filter_cb
-  (_fun _tree_entry (_cpointer _void) -> _int))
+  (_fun _tree_entry _bytes -> _int))
 
 (define _git_treewalk_cb
-  (_fun _string _tree_entry (_cpointer _void) -> _int))
+  (_fun _string _tree_entry _bytes -> _int))
 
 (define _git_treewalk_mode
   (_enum '(GIT_TREEWALK_PRE
@@ -100,7 +100,7 @@
   (_fun _tree -> _repository))
 
 (define-libgit2/check git_tree_walk
-  (_fun _tree _git_treewalk_mode _git_treewalk_cb (_cpointer _void) -> _int))
+  (_fun _tree _git_treewalk_mode _git_treewalk_cb _bytes -> _int))
 
 
 (define-libgit2 git_treebuilder_clear
@@ -110,7 +110,7 @@
   (_fun _treebuilder -> _uint))
 
 (define-libgit2/check git_treebuilder_filter
-  (_fun _treebuilder _git_treebuilder_filter_cb (_cpointer _void) -> _int))
+  (_fun _treebuilder _git_treebuilder_filter_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_treebuilder_free
   (_fun _treebuilder -> _void))

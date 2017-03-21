@@ -13,7 +13,7 @@
   (_fun _blob -> _void))
 
 (define-libgit2/check git_blob_create_frombuffer
-  (_fun _oid _repository (_cpointer _void) _size -> _int))
+  (_fun _oid _repository _bytes _size -> _int))
 
 (define-libgit2/check git_blob_create_fromdisk
   (_fun _oid _repository _string -> _int))
@@ -55,7 +55,7 @@
   #:wrap (allocator git_repository_free))
 
 (define-libgit2 git_blob_rawcontent
-  (_fun _blob -> (_cpointer _void)))
+  (_fun _blob -> _bytes))
 
 (define-libgit2 git_blob_rawsize
   (_fun _blob -> _git_off_t))
