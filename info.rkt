@@ -5,5 +5,6 @@
 (define deps (list "base"))
 
 (define build-deps
-  (list "scribble-lib"
+  (list "rackunit-lib"
+        "scribble-lib"
         "racket-doc"))
