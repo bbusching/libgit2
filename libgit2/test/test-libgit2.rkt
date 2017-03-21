@@ -122,11 +122,12 @@
     (check-not-exn (λ () (git_repository_free (git_repository_open_bare (path->string repo-dir))))))
 
    #;(let [(repo (git_repository_open (path->string clone-dir)))]
-     (test-case "git repo head" (check-not-exn (λ () (git_reference_free (git_repository_head repo)))))
-     (test-case "git repo detach head"
-                (check-not-exn (λ () (git_repository_detach_head repo)))
-                (check-true (git_repository_head_detached repo)))
-     (test-case "git repo head unborn" (check-false (git_repository_head_unborn repo))))
+       (test-case "git repo head" (check-not-exn (λ () (git_reference_free (git_repository_head repo)))))
+       (test-case "git repo detach head"
+                  (check-not-exn (λ () (git_repository_detach_head repo)))
+                  (check-true (git_repository_head_detached repo)))
+       (test-case "git repo head unborn" (check-false (git_repository_head_unborn repo)))
+       (git_repository_free repo))
    )
   (test-suite
    "signature"
@@ -145,7 +146,8 @@
                                                                       "bradley.busching@gmail.com")))))
      (let [(sig (git_signature_default repo))]
        (check-not-exn (λ () (git_signature_free (git_signature_dup sig))))
-       (git_signature_free sig))))
+       (git_signature_free sig))
+     (git_repository_free repo)))
   (test-suite
    "buf"
    (let [(buf (make-git_buf #f 0 0))]
@@ -154,6 +156,71 @@
      (check-true (git_buf_is_binary buf))
      (check-true (git_buf_contains_nul buf))
      (check-not-exn (λ () (git_buf_free buf)))))
+  (test-suite
+   "ignore"
+   (let [(repo (git_repository_open (path->string repo-dir)))]
+     (test-case "add rule"
+                (check-not-exn (λ () (git_ignore_add_rule repo ".gitignore")))
+                (check-true (git_ignore_path_is_ignored repo ".gitignore"))
+                (check-false (git_ignore_path_is_ignored repo "*.rkt")))
+     (test-case "clear rules"
+                (check-not-exn (λ () (git_ignore_clear_internal_rules repo)))
+                (check-false (git_ignore_path_is_ignored repo ".gitignore"))
+                (check-false (git_ignore_path_is_ignored repo "*.rkt")))
+     (git_repository_free repo)))
+  #;(test-suite
+   "strarray"
+   (let [(strarr (make-git_strarray (malloc _char-ptrptr) 0))]
+     (check-not-exn (λ () (git_strarray_free (git_strarray_copy strarr))))))
+  (test-suite
+   "config"
+   (test-case "new" (check-not-exn (git_config_free (git_config_new))))
+   (test-case "open default" (check-not-exn (git_config_free (git_config_open_default))))
+   (test-suite
+    "parse"
+    (test-case "bool"
+               (check-true (git_config_parse_bool "true"))
+               (check-true (git_config_parse_bool "yes"))
+               (check-true (git_config_parse_bool "on"))
+               (check-true (git_config_parse_bool "1"))
+               (check-false (git_config_parse_bool "false"))
+               (check-false (git_config_parse_bool "no"))
+               (check-false (git_config_parse_bool "off"))
+               (check-false (git_config_parse_bool "0")))
+    (test-case "int32"
+               (check-eq? (git_config_parse_int32 "1k") 1024)
+               (check-eq? (git_config_parse_int32 "1m") 1048576)
+               (check-eq? (git_config_parse_int32 "2g") 2147483648))
+    (test-case "int64"
+               (check-eq? (git_config_parse_int32 "1k") 1024)
+               (check-eq? (git_config_parse_int32 "1m") 1048576)
+               (check-eq? (git_config_parse_int32 "2g") 2147483648))
+    (test-case "path"
+               (let [(buf (make-git_buf #f 0 0))]
+                 (check-not-exn (λ () (git_config_parse_path buf "asdf")))
+                 (check-equal? (git_buf-ptr buf) "asdf")
+                 (git_buf_free buf))))
+   (let* [(repo (git_repository_open (path->string repo-dir)))
+          (config (git_repository_config repo))]
+     (test-case "open global" (git_config_free (git_config_open_global config)))
+     (test-case "open level" (git_config_free (git_config_open_level config 'GIT_CONFIG_LEVEL_PROGRAM_DATA)))
+     (test-case "set/get bool"
+                (check-not-exn (λ () (git_config_set_bool config "mybool1" #t)))
+                (check-not-exn (λ () (git_config_set_bool config "mybool2" #f)))
+                (check-true (git_config_get_bool config "mybool1"))
+                (check-false (git_config_get_bool config "mybool2")))
+     (test-case "set/get int32"
+                (check-not-exn (λ () (git_config_set_int32 config "myint32-1" 12345)))
+                (check-not-exn (λ () (git_config_set_int32 config "myint32-2" -12345)))
+                (check-eq? (git_config_get_int32 "myint32-1") 12345)
+                (check-eq? (git_config_get_int32 "myint32-2") -12345))
+     (test-case "set/get int64"
+                (check-not-exn (λ () (git_config_set_int64 config "myint64-1" 12345)))
+                (check-not-exn (λ () (git_config_set_int64 config "myint64-2" -12345)))
+                (check-eq? (git_config_get_int64 "myint64-1") 12345)
+                (check-eq? (git_config_get_int64 "myint64-2") -12345))
+     (git_config_free config)
+     (git_repository_free repo)))
   #;(test-suite
    "reference"
    (clear-repo-dir)
