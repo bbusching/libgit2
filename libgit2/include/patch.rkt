@@ -33,14 +33,14 @@
 
 (define-libgit2 git_patch_get_hunk
   (_fun (out : (_ptr o _git_diff_hunk-pointer)) (lines : (_ptr o _size)) _patch _size -> (v : _int)
-        -> (check-lg2 v (values out lines) 'git_patch_get_hunk)))
+        -> (check-lg2 v (λ () (values out lines)) 'git_patch_get_hunk)))
 
 (define-libgit2/alloc git_patch_get_line_in_hunk
   (_fun _git_diff_line-pointer _patch _size _size -> _int))
 
 (define-libgit2 git_patch_line_stats
   (_fun (context : (_ptr o _size)) (additions : (_ptr o _size)) (deletions : (_ptr o _size)) _patch  -> (v : _int)
-        -> (check-lg2 v (values context additions deletions) 'git_patch_line_stats)))
+        -> (check-lg2 v (λ () (values context additions deletions)) 'git_patch_line_stats)))
 
 (define-libgit2 git_patch_num_hunks
   (_fun _patch -> _size))

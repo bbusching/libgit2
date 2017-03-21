@@ -97,18 +97,22 @@
   (_fun _oid _repository _path _git_otype _string -> _int))
 
 (define-libgit2/alloc git_repository_head
-  (_fun _reference _repository -> _int)
+  (_fun _reference/null _repository -> _int)
   git_reference_free)
 
-(define-libgit2/check git_repository_head_detached
+(define-libgit2 git_repository_head_detached
   (_fun _repository -> _bool))
 
-(define-libgit2/check git_repository_head_unborn
-  (_fun _repository -> _bool))
+(define-libgit2 git_repository_head_unborn
+  (_fun _repository -> (v : _int)
+        -> (cond
+             [(eq? v 0) #f]
+             [(eq? v 1) #t]
+             [else (check-lg2 v v 'git_repository_head_unborn)])))
 
 (define-libgit2 git_repository_ident
   (_fun (name : (_ptr o _string)) (email : (_ptr o _string)) _repository -> (v : _int)
-        -> (check-lg2 v (values name email) 'git_repostiory_ident)))
+        -> (check-lg2 v (λ () (values name email)) 'git_repostiory_ident)))
 
 (define-libgit2/alloc git_repository_index
   (_fun _index _repository -> _int)
@@ -169,7 +173,7 @@
   (_fun _refdb _repository -> _int)
   git_refdb_free)
 
-(define-libgit2/check git_reinit_filesystem
+(define-libgit2/check git_repository_reinit_filesystem
   (_fun _repository _int -> _int))
 
 (define-libgit2/check git_repository_set_bare
@@ -190,7 +194,7 @@
 (define-libgit2/check git_repository_set_ident
   (_fun _repository _string _string -> _int))
 
-(define-libgit2 git_set_index
+(define-libgit2 git_repository_set_index
   (_fun _repository _index -> _void))
 
 (define-libgit2/check git_repository_set_namespace

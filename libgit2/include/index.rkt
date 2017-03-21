@@ -104,7 +104,7 @@
 
 (define-libgit2 git_index_conflict_get
   (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _index _string -> (v : _int)
-        -> (check-lg2 v (values ancestor our their) 'git_index_conflict_get)))
+        -> (check-lg2 v (λ () (values ancestor our their)) 'git_index_conflict_get)))
 
 (define-libgit2/dealloc git_index_conflict_iterator_free
   (_fun _index_conflict_iterator -> _void))
@@ -115,7 +115,7 @@
 
 (define-libgit2 git_index_conflict_next
   (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _index_conflict_iterator -> (v : _int)
-        -> (check-lg2 v (values ancestor our their) 'git_index_conflict_next)))
+        -> (check-lg2 v (λ () (values ancestor our their)) 'git_index_conflict_next)))
 
 (define-libgit2/check git_index_conflict_remove
   (_fun _index _string -> _int))

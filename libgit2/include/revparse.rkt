@@ -30,8 +30,8 @@
 (define-libgit2 git_revparse_ext
   (_fun (object_out : (_ptr o _object)) (reference_out : (_ptr o _reference)) _repository _string -> (v : _int)
         -> (check-lg2 v
-                      (values ((allocator git_object_free) object_out)
-                              ((allocator git_reference_free) reference_out))
+                      (λ () (values ((allocator git_object_free) object_out)
+                                    ((allocator git_reference_free) reference_out)))
                       'git_revparse_ext)))
 
 (define-libgit2/alloc git_revparse_single

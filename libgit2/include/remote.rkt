@@ -156,7 +156,7 @@
 
 (define-libgit2 git_remote_ls
   (_fun (out : (_ptr o (_cpointer _remote_head))) (size : (_ptr o _size)) _remote -> (v : _int)
-        -> (check-lg2 v (values out size) 'git_remote_ls)))
+        -> (check-lg2 v (λ () (values out size)) 'git_remote_ls)))
 
 (define-libgit2 git_remote_name
   (_fun _remote -> _string))
