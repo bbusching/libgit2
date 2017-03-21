@@ -174,8 +174,8 @@
      (check-not-exn (λ () (git_strarray_free (git_strarray_copy strarr))))))
   (test-suite
    "config"
-   (test-case "new" (check-not-exn (git_config_free (git_config_new))))
-   (test-case "open default" (check-not-exn (git_config_free (git_config_open_default))))
+   (test-case "new" (check-not-exn (λ () (git_config_free (git_config_new)))))
+   (test-case "open default" (check-not-exn (λ () (git_config_free (git_config_open_default)))))
    (test-suite
     "parse"
     (test-case "bool"
@@ -190,35 +190,54 @@
     (test-case "int32"
                (check-eq? (git_config_parse_int32 "1k") 1024)
                (check-eq? (git_config_parse_int32 "1m") 1048576)
-               (check-eq? (git_config_parse_int32 "2g") 2147483648))
+               (check-eq? (git_config_parse_int32 "-2g") -2147483648))
     (test-case "int64"
-               (check-eq? (git_config_parse_int32 "1k") 1024)
-               (check-eq? (git_config_parse_int32 "1m") 1048576)
-               (check-eq? (git_config_parse_int32 "2g") 2147483648))
+               (check-eq? (git_config_parse_int64 "1k") 1024)
+               (check-eq? (git_config_parse_int64 "1m") 1048576)
+               (check-eq? (git_config_parse_int64 "2g") 2147483648))
     (test-case "path"
-               (let [(buf (make-git_buf #f 0 0))]
-                 (check-not-exn (λ () (git_config_parse_path buf "asdf")))
-                 (check-equal? (git_buf-ptr buf) "asdf")
-                 (git_buf_free buf))))
+                 (let [(buf (make-git_buf #f 0 0))]
+                   (check-not-exn (λ () (git_config_parse_path buf "asdf")))
+                   (check-equal? (git_buf-ptr buf) "asdf")
+                   (git_buf_free buf))))
+   #;(test-suite
+      "find"
+      (test-case "global"
+                 (check-not-exn (λ () (let [(buf (make-git_buf #f 0 0))]
+                                        (git_config_find_global buf)
+                                        (git_buf_free buf)))))
+      (test-case "programdata"
+                 (check-not-exn (λ () (let [(buf (make-git_buf #f 0 0))]
+                                        (git_config_find_programdata buf)
+                                        (git_buf_free buf)))))
+      (test-case "system"
+                 (check-not-exn (λ () (let [(buf (make-git_buf #f 0 0))]
+                                        (git_config_find_system buf)
+                                        (git_buf_free buf)))))
+      (test-case "xdg"
+                 (check-not-exn (λ () (let [(buf (make-git_buf #f 0 0))]
+                                        (git_config_find_xdg buf)
+                                        (git_buf_free buf))))))
    (let* [(repo (git_repository_open (path->string repo-dir)))
           (config (git_repository_config repo))]
      (test-case "open global" (git_config_free (git_config_open_global config)))
      (test-case "open level" (git_config_free (git_config_open_level config 'GIT_CONFIG_LEVEL_PROGRAM_DATA)))
      (test-case "set/get bool"
-                (check-not-exn (λ () (git_config_set_bool config "mybool1" #t)))
-                (check-not-exn (λ () (git_config_set_bool config "mybool2" #f)))
-                (check-true (git_config_get_bool config "mybool1"))
-                (check-false (git_config_get_bool config "mybool2")))
+                (check-not-exn (λ () (git_config_set_bool config "core.filemode" #t)))
+                (check-true (git_config_get_bool config "core.filemode")))
      (test-case "set/get int32"
-                (check-not-exn (λ () (git_config_set_int32 config "myint32-1" 12345)))
-                (check-not-exn (λ () (git_config_set_int32 config "myint32-2" -12345)))
-                (check-eq? (git_config_get_int32 "myint32-1") 12345)
-                (check-eq? (git_config_get_int32 "myint32-2") -12345))
+                (check-not-exn (λ () (git_config_set_int32 config "core.bigFileThreshold" (* 512 1024))))
+                (check-eq? (git_config_get_int32 config "core.bigFileThreshold") (* 512 1024)))
      (test-case "set/get int64"
-                (check-not-exn (λ () (git_config_set_int64 config "myint64-1" 12345)))
-                (check-not-exn (λ () (git_config_set_int64 config "myint64-2" -12345)))
-                (check-eq? (git_config_get_int64 "myint64-1") 12345)
-                (check-eq? (git_config_get_int64 "myint64-2") -12345))
+                (check-not-exn (λ () (git_config_set_int64 config "core.bigFileThreshold" (* 512 1024))))
+                (check-eq? (git_config_get_int64 config "core.bigFileThreshold") (* 512 1024)))
+     #;(test-case "iterator"
+                  (check-not-exn (λ ()
+                                   (let [(iter (git_config_iterator_new config))]
+                                     (git_config_entry_free (git_config_next iter))
+                                     (git_config_iterator_free iter)))))
+     #;(test-case "transaction"
+                  (check-not-exn (λ () (git_transaction_free (git_config_lock config)))))
      (git_config_free config)
      (git_repository_free repo)))
   #;(test-suite
