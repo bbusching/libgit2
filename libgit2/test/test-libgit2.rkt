@@ -72,7 +72,7 @@
                               (git_repository_init_ext (path->string repo-dir) init_opts))))))
    
    (let [(repo (git_repository_open (path->string repo-dir)))]
-     ;(check-true (git_repository_is_bare repo) "is bare") ;??? can't find git_repository_is_bare
+     (check-false (git_repository_is_bare repo) "is bare")
      (test-case "git repo is_empty" (check-true (git_repository_is_empty repo) "is empty"))
      (test-case "git repo is_shallow" (check-false (git_repository_is_shallow repo) "is shallow"))
      (test-case "git repo namespace"
@@ -84,15 +84,15 @@
                 (check-not-exn (λ () (git_repository_workdir repo))))
      (test-case "git repo odb"
                 (let [(odb (git_repository_odb repo))]
-                  ;(check-not-exn (λ () (git_repository_set_odb repo odb)))
+                  (check-not-exn (λ () (git_repository_set_odb repo odb)))
                   (git_odb_free odb)))
      (test-case "git repo refdb"
                 (let [(refdb (git_repository_refdb repo))]
-                  ;(check-not-exn (λ () (git_repository_set_refdb repo refdb)))
+                  (check-not-exn (λ () (git_repository_set_refdb repo refdb)))
                   (git_refdb_free refdb)))
      (test-case "git repo config"
                 (let [(config (git_repository_config repo))]
-                  ;(check-not-exn (λ () (git_repository_set_config repo config)))
+                  (check-not-exn (λ () (git_repository_set_config repo config)))
                   (git_config_free config)))
      (test-case "git repo config_snapshot" (check-not-exn (λ () (git_config_free (git_repository_config_snapshot repo)))))
      (test-case "git repo state" (check-equal? (git_repository_state repo) 'GIT_REPOSITORY_STATE_NONE))
@@ -101,7 +101,7 @@
                               (normal-case-path (build-path repo-dir ".git\\"))))
      (test-case "git repo index"
                 (let [(index (git_repository_index repo))]
-                  ;(check-not-exn (λ () (git_repository_set_index repo index))) ;??? git_repository_set_index not found
+                  (check-not-exn (λ () (git_repository_set_index repo index))) ;??? git_repository_set_index not found
                   (git_index_free index)))
      (test-case "git repo ident"
                 (let [(name "Brad Busching")
@@ -110,7 +110,7 @@
                   (let-values ([(x y) (git_repository_ident repo)])
                     (begin (check-equal? name x)
                            (check-equal? email y)))))
-     #;(test-case "git repo new"
+     (test-case "git repo new"
                 (check-not-exn (λ () (git_repository_free (git_repository_new)))))
      (git_repository_free repo))
    
@@ -121,6 +121,7 @@
     (git_repository_free (git_repository_init (path->string repo-dir) #t))
     (check-not-exn (λ () (git_repository_free (git_repository_open_bare (path->string repo-dir))))))
 
+   ; This test breaks a lot of stuff for some reason
    #;(let [(repo (git_repository_open (path->string clone-dir)))]
        (test-case "git repo head" (check-not-exn (λ () (git_reference_free (git_repository_head repo)))))
        (test-case "git repo detach head"
@@ -168,10 +169,15 @@
                 (check-false (git_ignore_path_is_ignored repo ".gitignore"))
                 (check-false (git_ignore_path_is_ignored repo "*.rkt")))
      (git_repository_free repo)))
-  #;(test-suite
+  (test-suite
    "strarray"
-   (let [(strarr (make-git_strarray (malloc _char-ptrptr) 0))]
-     (check-not-exn (λ () (git_strarray_free (git_strarray_copy strarr))))))
+   (let [(strarr1 (make-strarray "hello" "world"))
+         (strarr2 (make-strarray))]
+     (check-not-exn (λ () (git_strarray_copy strarr2 strarr1)))
+     (check-eq? (git_strarray-count strarr2) 2)
+     (check-equal? (ptr-ref (git_strarray-strings strarr2) _string 0) "hello")
+     (check-equal? (ptr-ref (git_strarray-strings strarr2) _string 1) "world")
+     (git_strarray_free strarr2)))
   (test-suite
    "config"
    (test-case "new" (check-not-exn (λ () (git_config_free (git_config_new)))))
@@ -200,6 +206,8 @@
                    (check-not-exn (λ () (git_config_parse_path buf "asdf")))
                    (check-equal? (git_buf-ptr buf) "asdf")
                    (git_buf_free buf))))
+   
+   ; These break stuff likely because they require these files to exist on the filesystem
    #;(test-suite
       "find"
       (test-case "global"
@@ -231,6 +239,8 @@
      (test-case "set/get int64"
                 (check-not-exn (λ () (git_config_set_int64 config "core.bigFileThreshold" (* 512 1024))))
                 (check-eq? (git_config_get_int64 config "core.bigFileThreshold") (* 512 1024)))
+
+     ; This one breaks. I think it's because
      #;(test-case "iterator"
                   (check-not-exn (λ ()
                                    (let [(iter (git_config_iterator_new config))]
