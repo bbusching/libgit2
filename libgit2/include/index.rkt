@@ -79,7 +79,7 @@
   (_fun _index _index_entry -> _int))
 
 (define-libgit2/check git_index_add_all
-  (_fun _index _strarray _uint _git_index_matched_path_cb _bytes -> _int))
+  (_fun _index _strarray _git_index_add_option_t _git_index_matched_path_cb _bytes -> _int))
 
 (define-libgit2/check git_index_add_bypath
   (_fun _index _string -> _int))
