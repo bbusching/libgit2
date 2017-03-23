@@ -250,6 +250,21 @@
                   (check-not-exn (λ () (git_transaction_free (git_config_lock config)))))
      (git_config_free config)
      (git_repository_free repo)))
+  (test-suite
+   "index"
+   (clear-repo-dir)
+   (make-directory repo-dir)
+   (let* [(repo (git_repository_init (path->string repo-dir) #f))
+          (index (git_repository_index repo))]
+     (check-not-exn (λ () (git_index_add_all index (make-strarray ".")
+                                             'GIT_INDEX_ADD_DEFAULT
+                                             #f
+                                             #f)))
+     (check-not-exn (λ () (git_index_clear index)))
+     (check-not-exn (λ () (git_index_caps index)))
+     (check-not-exn (λ () (git_index_checksum index)))
+     (git_index_free index)
+     (git_repository_free repo)))
   #;(test-suite
    "reference"
    (clear-repo-dir)
