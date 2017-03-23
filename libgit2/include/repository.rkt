@@ -179,7 +179,7 @@
 (define-libgit2/check git_repository_set_bare
   (_fun _repository -> _int))
 
-(define-libgit2/check git_repository_set_config
+(define-libgit2 git_repository_set_config
   (_fun _repository _config -> _void))
 
 (define-libgit2/check git_repository_set_head
