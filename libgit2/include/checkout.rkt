@@ -56,7 +56,7 @@
 
 (define-cstruct _git_checkout_opts
   ([version _uint]
-   [checkout_strategy _uint]
+   [checkout_strategy _git_checkout_strategy_t]
    [disable_filters _int]
    [dir_mode _uint]
    [file_mode _uint]

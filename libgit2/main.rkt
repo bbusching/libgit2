@@ -1,6 +1,7 @@
 #lang racket
 
-(require "include/annotated_commit.rkt"
+(require ffi/unsafe/custodian
+         "include/annotated_commit.rkt"
          "include/blame.rkt"
          "include/blob.rkt"
          "include/branch.rkt"
@@ -110,3 +111,5 @@
          (all-from-out "include/tree.rkt")
          (all-from-out "include/types.rkt"))
 
+(register-custodian-shutdown #f (λ (arg) (git_libgit2_shutdown)) #:at-exit? #t)
+(git_libgit2_init)

@@ -32,7 +32,12 @@
 (define-libgit2/check git_commit_create_buffer
   (_fun _buf _repository _signature _signature _string _string _tree _size (_cpointer (_cpointer _commit)) -> _int))
 
-(define-libgit2/check git_commit_create_v
+(define (git_commit_create_v id repo update_ref author committer encoding message tree parent_count . parents)
+  (define itypes (append (list _oid _repository _string _signature _signature _string _string _tree _size)
+                         (map (λ (i) _commit) (range (length parents)))))
+  (let ([funct (get-ffi-obj "git_commit_create_v" #f (_cprocedure itypes _int))])
+    (apply funct id repo update_ref author committer encoding message tree parent_count parents)))
+#;(define-libgit2/check git_commit_create_v
   (_fun _oid _repository _string _signature _signature _string _string _tree _size -> _int))
 
 (define-libgit2/check git_commit_create_with_signature

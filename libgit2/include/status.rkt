@@ -28,7 +28,7 @@
               GIT_STATUS_CONFLICTED = #x8000)))
 
 (define _git_status_cb
-  (_fun string _git_status_t _bytes -> _int))
+  (_fun _string _git_status_t _bytes -> _int))
 
 (define _git_status_show_t
   (_enum '(GIT_STATUS_SHOW_INDEX_AND_WORKDIR = 0

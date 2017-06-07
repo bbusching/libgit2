@@ -96,7 +96,7 @@
   (_fun _remote -> _git_remote_autotag_option_t))
 
 (define-libgit2/check git_remote_connect
-  (_fun _remote _git_direction _remote_callbacks _git_proxy_opts-pointer _strarray -> _int))
+  (_fun _remote _git_direction _git_remote_callbacks _git_proxy_opts-pointer _strarray -> _int))
 
 (define-libgit2 git_remote_connected
   (_fun _remote -> _bool))

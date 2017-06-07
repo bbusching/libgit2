@@ -63,7 +63,6 @@
 (define-cpointer-type _reflog_entry)
 (define-cpointer-type _refspec)
 (define-cpointer-type _remote)
-(define-cpointer-type _remote_callbacks)
 (define-cpointer-type _remote_head)
 (define-cpointer-type _repository)
 (define-cpointer-type _revwalk)
