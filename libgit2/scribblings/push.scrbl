@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Push}
+
 @defmodule[libgit2/include/push]
 
 

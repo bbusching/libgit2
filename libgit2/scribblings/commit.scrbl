@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Commit}
+
 @defmodule[libgit2/include/commit]
 
 

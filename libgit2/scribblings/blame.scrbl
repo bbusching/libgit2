@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Blame}
+
 @defmodule[libgit2/include/blame]
 
 

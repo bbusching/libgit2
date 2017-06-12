@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Tree}
+
 @defmodule[libgit2/include/tree]
 
 

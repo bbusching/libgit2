@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Ignore}
+
 @defmodule[libgit2/include/ignore]
 
 

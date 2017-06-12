@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Branch}
+
 @defmodule[libgit2/include/branch]
 
 

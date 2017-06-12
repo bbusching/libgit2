@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Remote}
+
 @defmodule[libgit2/include/remote]
 
 

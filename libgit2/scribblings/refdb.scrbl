@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Refdb}
+
 @defmodule[libgit2/include/refdb]
 
 

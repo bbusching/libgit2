@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Blob}
+
 @defmodule[libgit2/include/blob]
 
 

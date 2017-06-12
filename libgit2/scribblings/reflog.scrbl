@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Reflog}
+
 @defmodule[libgit2/include/reflog]
 
 

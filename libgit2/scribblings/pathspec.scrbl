@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Pathspec}
+
 @defmodule[libgit2/include/pathspec]
 
 

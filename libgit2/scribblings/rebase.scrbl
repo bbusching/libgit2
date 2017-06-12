@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Rebase}
+
 @defmodule[libgit2/include/rebase]
 
 

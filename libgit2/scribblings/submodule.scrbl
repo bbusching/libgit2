@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Submodule}
+
 @defmodule[libgit2/include/submodule]
 
 

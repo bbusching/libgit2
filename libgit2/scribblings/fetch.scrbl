@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Fetch}
+
 @defmodule[libgit2/include/fetch]
 
 

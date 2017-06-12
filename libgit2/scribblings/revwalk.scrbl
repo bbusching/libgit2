@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Revwalk}
+
 @defmodule[libgit2/include/revwalk]
 
 

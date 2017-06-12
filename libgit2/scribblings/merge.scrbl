@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Merge}
+
 @defmodule[libgit2/include/merge]
 
 

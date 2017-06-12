@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Packbuilder}
+
 @defmodule[libgit2/include/packbuilder]
 
 

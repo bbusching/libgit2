@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Proxy}
+
 @defmodule[libgit2/include/proxy]
 
 

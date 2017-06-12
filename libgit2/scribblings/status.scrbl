@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Status}
+
 @defmodule[libgit2/include/status]
 
 

@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Revert}
+
 @defmodule[libgit2/include/revert]
 
 

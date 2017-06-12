@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Object Database}
+
 @defmodule[libgit2/include/odb]
 
 

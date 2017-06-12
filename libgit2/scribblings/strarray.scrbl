@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Strarray}
+
 @defmodule[libgit2/include/strarray]
 
 

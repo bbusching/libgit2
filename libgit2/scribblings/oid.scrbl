@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Oid}
+
 @defmodule[libgit2/include/oid]
 
 

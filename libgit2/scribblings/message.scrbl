@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Message}
+
 @defmodule[libgit2/include/message]
 
 

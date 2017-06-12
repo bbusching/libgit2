@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Cherrypick}
+
 @defmodule[libgit2/include/cherrypick]
 
 

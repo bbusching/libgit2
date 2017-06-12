@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Trace}
+
 @defmodule[libgit2/include/trace]
 
 

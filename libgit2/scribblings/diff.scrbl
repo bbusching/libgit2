@@ -3,6 +3,8 @@
 
 @(require (for-label racket))
 
+@title{Diff}
+
 @defmodule[libgit2/include/diff]
 
 

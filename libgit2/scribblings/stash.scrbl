@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Stash}
+
 @defmodule[libgit2/include/stash]
 
 

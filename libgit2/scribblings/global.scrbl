@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Global}
+
 @defmodule[libgit2/include/global]
 
 

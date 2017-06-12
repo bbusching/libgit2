@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Checkout}
+
 @defmodule[libgit2/include/checkout]
 
 

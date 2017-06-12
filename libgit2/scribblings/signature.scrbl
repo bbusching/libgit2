@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Signature}
+
 @defmodule[libgit2/include/signature]
 
 

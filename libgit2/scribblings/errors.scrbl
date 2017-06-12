@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Errors}
+
 @defmodule[libgit2/include/errors]
 
 

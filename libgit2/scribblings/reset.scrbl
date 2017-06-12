@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Reset}
+
 @defmodule[libgit2/include/reset]
 
 

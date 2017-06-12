@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Annotated Commit}
+
 @defmodule[libgit2/include/annotated_commit]
 
 

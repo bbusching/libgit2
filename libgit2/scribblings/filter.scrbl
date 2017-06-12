@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Filter}
+
 @defmodule[libgit2/include/filter]
 
 

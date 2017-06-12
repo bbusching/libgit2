@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Indexer}
+
 @defmodule[libgit2/include/indexer]
 
 

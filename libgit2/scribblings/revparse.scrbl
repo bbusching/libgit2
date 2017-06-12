@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Revparse}
+
 @defmodule[libgit2/include/revparse]
 
 

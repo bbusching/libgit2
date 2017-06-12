@@ -2,7 +2,9 @@
 
 @(require (for-label racket))
 
-@defmodule[libgit2/include/cherrpick]
+@title{Cherrypick}
+
+@defmodule[libgit2/include/cherrypick]
 
 
 @defproc[(git_cherrypick

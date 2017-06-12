@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Patch}
+
 @defmodule[libgit2/include/patch]
 
 

@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Reference}
+
 @defmodule[libgit2/include/refs]
 
 

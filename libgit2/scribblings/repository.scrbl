@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Repository}
+
 @defmodule[libgit2/include/repository]
 
 

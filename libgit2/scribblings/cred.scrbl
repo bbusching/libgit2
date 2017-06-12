@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Credentials}
+
 @defmodule[libgit2/include/cred]
 
 

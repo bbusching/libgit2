@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Graph}
+
 @defmodule[libgit2/include/graph]
 
 

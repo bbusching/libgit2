@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Buffer}
+
 @defmodule[libgit2/include/buffer]
 
 

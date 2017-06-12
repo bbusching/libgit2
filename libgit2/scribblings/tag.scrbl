@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Tag}
+
 @defmodule[libgit2/include/tag]
 
 

@@ -2,6 +2,8 @@
 
 @(require (for-label racket))
 
+@title{Config}
+
 @defmodule[libgit2/include/config]
 
 
