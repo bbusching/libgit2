@@ -4,7 +4,7 @@
 
 (define deps
   (list "base"
-        ("libgit2-x86_64-linux-natipkg" #:platform "x86_64-linux-natipkg")))
+        '("libgit2-x86_64-linux-natipkg" #:platform "x86_64-linux-natipkg")))
 
 (define build-deps
   (list "rackunit-lib"
