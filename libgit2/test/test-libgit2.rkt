@@ -5,6 +5,7 @@
          rackunit/text-ui
          ffi/unsafe)
 
+;; just use remove-directory* or whatever it's called
 (define rm-rf
   (λ (file)
     (cond [(file-exists? file) (delete-file file)]
