@@ -1,13 +1,17 @@
 #lang info
 
-(define collection 'multi)
+(define collection "libgit2")
+(define pkg-desc "Low-level api bindings to the libgit2 C library")
+
+(define scribblings
+  '(("scribblings/libgit2.scrbl" (multi-page))))
 
 (define deps
-  (list "base"
-        "rackunit-lib"
-        '("libgit2-x86_64-linux-natipkg" #:platform "x86_64-linux-natipkg")))
+  '("base"
+    "rackunit-lib"
+    ["libgit2-x86_64-linux-natipkg" #:platform "x86_64-linux-natipkg"]))
 
 (define build-deps
-  (list "rackunit-lib"
-        "scribble-lib"
-        "racket-doc"))
+  '("rackunit-lib"
+    "scribble-lib"
+    "racket-doc"))

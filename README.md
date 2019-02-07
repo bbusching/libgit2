@@ -1,3 +1,4 @@
-# racket-libgit2
+# `libgit2` Racket bindings
 
-Low-level api bindings to the [libgit2 C library](https://libgit2.org/).
+Low-level API bindings for Racket to the
+[libgit2 C library](https://libgit2.org/).
