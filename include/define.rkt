@@ -12,7 +12,7 @@
   (case (system-type)
     [(windows) (or (ffi-lib win-dll-path #:fail (λ () #f))
                    (ffi-lib "git2" '(#f)))]
-    [(unix) (ffi-lib "libgit2" '("0.26.0" #f))]
+    [(unix) (ffi-lib "libgit2" '("28" #f))]
     [(macosx) (ffi-lib "libgit2" '("28" #f))]))
 
 (define-ffi-definer define-libgit2 libgit2
