@@ -10,6 +10,7 @@
   '("base"
     "rackunit-lib"
     ["libgit2-x86_64-macosx" #:platform "x86_64-macosx"]
+    ["libgit2-x86_64-linux" #:platform "x86_64-linux"]
     ["libgit2-x86_64-linux-natipkg" #:platform "x86_64-linux-natipkg"]))
 
 (define build-deps
