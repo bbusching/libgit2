@@ -5,6 +5,7 @@
          "private/utils.rkt")
 
 (provide libgit2-available?
+         symbols-not-available
          check-git_error_code ;; prefer this to be private
          _git_error_code
          define-libgit2

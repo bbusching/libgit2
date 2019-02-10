@@ -1,11 +1,11 @@
-#lang racket
+#lang racket/base
 
 (require ffi/unsafe
          ffi/unsafe/alloc
          "errors.rkt"
          "define.rkt"
          syntax/parse/define
-         (only-in racket/contract [-> ->c])
+         (rename-in racket/contract/base [-> ->c])
          (for-syntax racket/base))
 
 (provide define-libgit2/check
