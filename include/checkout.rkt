@@ -1,11 +1,10 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt"
          "types.rkt"
          "diff.rkt"
          "strarray.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 

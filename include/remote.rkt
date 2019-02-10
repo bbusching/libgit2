@@ -1,7 +1,6 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt"
          "types.rkt"
          "net.rkt"
          "strarray.rkt"
@@ -9,7 +8,7 @@
          "pack.rkt"
          "proxy.rkt"
          "buffer.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 
@@ -156,7 +155,7 @@
 
 (define-libgit2 git_remote_ls
   (_fun (out : (_ptr o (_cpointer _remote_head))) (size : (_ptr o _size)) _remote -> (v : _int)
-        -> (check-lg2 v (λ () (values out size)) 'git_remote_ls)))
+        -> (check-git_error_code v (λ () (values out size)) 'git_remote_ls)))
 
 (define-libgit2 git_remote_name
   (_fun _remote -> _string))
@@ -191,7 +190,7 @@
 (define-libgit2/check git_remote_set_url
   (_fun _repository _remote _string -> _int))
 
-(define-libgit2/check git_remote_stats
+(define-libgit2 git_remote_stats
   (_fun _remote -> _git_transfer_progress-pointer))
 
 (define-libgit2 git_remote_stop

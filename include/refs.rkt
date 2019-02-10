@@ -2,12 +2,11 @@
 
 (require ffi/unsafe
          ffi/unsafe/alloc
-         "define.rkt"
          "types.rkt"
          "oid.rkt"
          "strarray.rkt"
          "object.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 

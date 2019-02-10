@@ -1,14 +1,15 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt"
-         "utils.rkt")
+         libgit2/private)
+
 (provide (all-defined-out))
 
 (define-cstruct _git_buf
   ([ptr _string]
    [asize _size]
    [size _size]))
+
 (define _buf _git_buf-pointer)
 
 (define-libgit2/dealloc git_buf_free (_fun _buf -> _void))

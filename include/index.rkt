@@ -1,11 +1,10 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt"
          "types.rkt"
          "oid.rkt"
          "strarray.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 
@@ -104,18 +103,18 @@
 
 (define-libgit2 git_index_conflict_get
   (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _index _string -> (v : _int)
-        -> (check-lg2 v (λ () (values ancestor our their)) 'git_index_conflict_get)))
+        -> (check-git_error_code v (λ () (values ancestor our their)) 'git_index_conflict_get)))
 
 (define-libgit2/dealloc git_index_conflict_iterator_free
   (_fun _index_conflict_iterator -> _void))
 
 (define-libgit2/alloc git_index_conflict_iterator_new
-  (_fun _index_conflict_iterator _index -> _bool)
+  (_fun _index_conflict_iterator _index -> _git_error_code)
   git_index_conflict_iterator_free)
 
 (define-libgit2 git_index_conflict_next
   (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _index_conflict_iterator -> (v : _int)
-        -> (check-lg2 v (λ () (values ancestor our their)) 'git_index_conflict_next)))
+        -> (check-git_error_code v (λ () (values ancestor our their)) 'git_index_conflict_next)))
 
 (define-libgit2/check git_index_conflict_remove
   (_fun _index _string -> _int))

@@ -1,7 +1,7 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 (define _git_time_t _int64)

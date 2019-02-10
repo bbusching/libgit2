@@ -1,13 +1,12 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt"
          "types.rkt"
          "oidarray.rkt"
          "checkout.rkt"
          "index.rkt"
          "diff.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 

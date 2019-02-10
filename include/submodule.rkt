@@ -2,14 +2,13 @@
 
 (require ffi/unsafe
          ffi/unsafe/alloc
-         "define.rkt"
          "types.rkt"
          "oid.rkt"
          "remote.rkt"
          "checkout.rkt"
          "buffer.rkt"
          "repository.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 

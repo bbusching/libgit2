@@ -1,7 +1,6 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt"
          "types.rkt"
          "buffer.rkt"
          "config.rkt"
@@ -9,7 +8,7 @@
          "index.rkt"
          "odb.rkt"
          "refdb.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 
@@ -108,11 +107,11 @@
         -> (cond
              [(eq? v 0) #f]
              [(eq? v 1) #t]
-             [else (check-lg2 v v 'git_repository_head_unborn)])))
+             [else (check-git_error_code v v 'git_repository_head_unborn)])))
 
 (define-libgit2 git_repository_ident
   (_fun (name : (_ptr o _string)) (email : (_ptr o _string)) _repository -> (v : _int)
-        -> (check-lg2 v (λ () (values name email)) 'git_repostiory_ident)))
+        -> (check-git_error_code v (λ () (values name email)) 'git_repostiory_ident)))
 
 (define-libgit2/alloc git_repository_index
   (_fun _index _repository -> _int)

@@ -1,9 +1,8 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt"
          "transport.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 

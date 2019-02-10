@@ -1,4 +1,9 @@
-#lang racket
+#lang racket/base
+
+(require (only-in "private.rkt"
+                  libgit2-available?))
+
+(provide libgit2-available?)
 
 (define-syntax-rule (require-provide mod ...)
   (begin (require mod ...) (provide (all-from-out mod) ...)))
@@ -16,7 +21,6 @@
                  "include/cred_helpers.rkt"
                  "include/describe.rkt"
                  "include/diff.rkt"
-                 "include/errors.rkt"
                  "include/filter.rkt"
                  "include/graph.rkt"
                  "include/ignore.rkt"
@@ -47,6 +51,7 @@
                  "include/revparse.rkt"
                  "include/revwalk.rkt"
                  "include/signature.rkt"
+                 "include/stash.rkt"
                  "include/status.rkt"
                  "include/strarray.rkt"
                  "include/submodule.rkt"
@@ -56,19 +61,3 @@
                  "include/transport.rkt"
                  "include/tree.rkt"
                  "include/types.rkt")
-
-#|
-;; These are private:
-'("include/compiled" "include/define.rkt" "include/info.rkt"
-  "include/stash.rkt" "include/utils.rkt")
-|#
-
-;; This should be done elsewhere: (then, "include/global.rkt" will also be private)
-(require "include/global.rkt" ffi/unsafe/custodian)
-(let ()
-  (register-custodian-shutdown #f
-                               (λ (arg) (git_libgit2_shutdown))
-                               (current-custodian) ;; (make-custodian-at-root) ;; ??
-                               #:at-exit? #t)
-  (git_libgit2_init)
-  (void))

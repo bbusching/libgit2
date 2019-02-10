@@ -1,9 +1,8 @@
 #lang racket
 
 (require ffi/unsafe
-         "define.rkt"
          "types.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 (define-libgit2/dealloc git_annotated_commit_free

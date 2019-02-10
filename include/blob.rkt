@@ -2,11 +2,10 @@
 
 (require ffi/unsafe
          ffi/unsafe/alloc
-         "define.rkt"
          "types.rkt"
          "buffer.rkt"
          "repository.rkt"
-         "utils.rkt")
+         libgit2/private)
 (provide (all-defined-out))
 
 (define-libgit2/dealloc git_blob_free
