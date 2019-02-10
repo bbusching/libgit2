@@ -7,21 +7,21 @@
 (define _git_time_t _int64)
 (define _git_off_t _int64)
 
-(define _git_object_t
-  (_enum '(GIT_OBJECT_ANY
-           =                     -2
-           GIT_OBJECT_INVALID =  -1
-           GIT_OBJECT_COMMIT =    1
-           GIT_OBJECT_TREE =      2
-           GIT_OBJECT_BLOB =      3
-           GIT_OBJECT_TAG =       4
-           GIT_OBJECT_OFS_DELTA = 6
-           GIT_OBJECT_REF_DELTA = 7)))
+(define-enum _git_object_t
+  #:base _fixint
+  [GIT_OBJECT_ANY -2]
+  [GIT_OBJECT_INVALID -1]
+  [GIT_OBJECT_COMMIT 1]
+  [GIT_OBJECT_TREE 2]
+  [GIT_OBJECT_BLOB 3]
+  [GIT_OBJECT_TAG 4]
+  [GIT_OBJECT_OFS_DELTA 6]
+  [GIT_OBJECT_REF_DELTA 7])
 
-(define _git_branch_t
-  (_enum '(GIT_BRANCH_LOCAL = 1
-                            GIT_BRANCH_REMOTE
-                            GIT_BRANCH_ALL)))
+(define-enum _git_branch_t
+  [GIT_BRANCH_LOCAL 1]
+  GIT_BRANCH_REMOTE
+  GIT_BRANCH_ALL)
 
 (define-cpointer-type _annotated_commit)
 (define-cpointer-type _commit)
@@ -87,20 +87,19 @@
 (define _signature _git_signature-pointer)
 (define _signature/null _git_signature-pointer/null)
 
-(define _git_ref_t
-  (_enum '(GIT_REF_INVALID
-           GIT_REF_OID
-           GIT_REF_SYMBOLIC
-           GIT_REF_LISTALL)))
+(define-enum _git_reference_t
+  GIT_REFERENCE_INVALID
+  GIT_REFERENCE_DIRECT
+  GIT_REFERENCE_SYMBOLIC
+  GIT_REFERENCE_ALL)
 
-(define _git_filemode_t
-  (_enum '(GIT_FILEMODE_UNREADABLE
-           = 0
-           GIT_FILEMODE_TREE = #o0040000
-           GIT_FILEMODE_BLOB = #o0100644
-           GIT_FILEMODE_BLOB_EXECUTABLE = #o0100755
-           GIT_FILEMODE_LINK = #o0120000
-           GIT_FILEMODE_COMMIT = #o0160000)))
+(define-enum _git_filemode_t
+  [GIT_FILEMODE_UNREADABLE 0]
+  [GIT_FILEMODE_TREE #o0040000]
+  [GIT_FILEMODE_BLOB #o0100644]
+  [GIT_FILEMODE_BLOB_EXECUTABLE #o0100755]
+  [GIT_FILEMODE_LINK #o0120000]
+  [GIT_FILEMODE_COMMIT #o0160000])
 
 (define-cstruct _git_transfer_progress
   ([total_objects _uint]
@@ -117,11 +116,11 @@
 (define _git_transport_message_cb
   (_fun _string _int _bytes -> _int))
 
-(define _git_cert_t
-  (_enum '(GIT_CERT_NONE
-           GIT_CERT_X509
-           GIT_CERT_HOSTKEY_LIBSSH2
-           GIT_CERT_STRARRAY)))
+(define-enum _git_cert_t
+  GIT_CERT_NONE
+  GIT_CERT_X509
+  GIT_CERT_HOSTKEY_LIBSSH2
+  GIT_CERT_STRARRAY)
 
 (define-cstruct _git_cert
   ([cert_type _git_cert_t]))
@@ -130,20 +129,22 @@
 (define _git_transport_certificate_check_cb
   (_fun _cert _int _string _bytes -> _int))
 
-(define _git_submodule_update_t
-  (_enum '(GIT_SUBMODULE_UPDATE_DEFAULT
-           GIT_SUBMODULE_UPDATE_CHECKOUT
-           GIT_SUBMODULE_UPDATE_REBASE
-           GIT_SUBMODULE_UPDATE_MERGE
-           GIT_SUBMODULE_UPDATE_NONE)))
-(define _git_submodule_ignore_t
-  (_enum '(GIT_SUBMODULE_IGNORE_UNSPECIFIED
-           = -1
-           GIT_SUBMODULE_IGNORE_NONE = 1
-           GIT_SUBMODULE_IGNORE_UNTRACKED
-           GIT_SUBMODULE_IGNORE_DIRTY
-           GIT_SUBMODULE_IGNORE_ALL)))
-(define _git_submodule_recurse_t
-  (_enum '(GIT_SUBMODULE_RECURSE_NO
-           GIT_SUBMODULE_RECURSE_YES
-           GIT_SUBMODULE_RECURSE_ONDEMAND)))
+(define-enum _git_submodule_update_t
+  GIT_SUBMODULE_UPDATE_DEFAULT
+  GIT_SUBMODULE_UPDATE_CHECKOUT
+  GIT_SUBMODULE_UPDATE_REBASE
+  GIT_SUBMODULE_UPDATE_MERGE
+  GIT_SUBMODULE_UPDATE_NONE)
+
+(define-enum _git_submodule_ignore_t
+  #:base _fixint
+  [GIT_SUBMODULE_IGNORE_UNSPECIFIED -1]
+  [GIT_SUBMODULE_IGNORE_NONE 1]
+  GIT_SUBMODULE_IGNORE_UNTRACKED
+  GIT_SUBMODULE_IGNORE_DIRTY
+  GIT_SUBMODULE_IGNORE_ALL)
+
+(define-enum _git_submodule_recurse_t
+  GIT_SUBMODULE_RECURSE_NO
+  GIT_SUBMODULE_RECURSE_YES
+  GIT_SUBMODULE_RECURSE_ONDEMAND)

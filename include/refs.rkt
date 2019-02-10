@@ -170,4 +170,4 @@
   (_fun _reference -> _oid))
 
 (define-libgit2 git_reference_type
-  (_fun _reference -> _git_ref_t))
+  (_fun _reference -> _git_reference_t))

@@ -11,6 +11,8 @@
 (provide define-libgit2/check
          define-libgit2/alloc
          define-libgit2/dealloc
+         define-bitmask
+         define-enum
          (contract-out
           [check-git_error_code
            ;; prefer this to be private
@@ -87,3 +89,42 @@ graph.rkt: git_graph_descendant_of
   (define-libgit2 name
     (_fun fun-form ...)
     #:wrap (deallocator)))
+
+(begin-for-syntax
+  (define-syntax-class enum/bitmap-member
+    #:description "member declaration"
+    #:attributes {[let*-clause 1] [parsed 1] [bound-name 1]}
+    (pattern [name:id rhs:expr]
+             #:with (bound-name ...) #'(name)
+             #:with (let*-clause ...) #'([name rhs])
+             #:with (parsed ...) #'('name '= name))
+    (pattern name:id
+             #:with (bound-name ...) #'()
+             #:with (let*-clause ...) #'()
+             #:with (parsed ...) #'('name))))
+
+(define-syntax-parser define-enum
+  [(_ name:id
+      (~alt (~optional (~seq #:unknown unknown:expr))
+            (~optional (~seq #:base base:id)))
+      ...
+      member:enum/bitmap-member ...+)
+   #'(define name
+       (let* ((~@ member.let*-clause ...) ...)
+         (unless (~? base #f)
+           (when (or (~@ (negative? member.bound-name) ...)
+                     ...)
+             (error 'name
+                    "negative values present;\n  should use \"#:base _fixint\"")))
+         (_enum (list (~@ member.parsed ...) ...)
+                (~? base)
+                (~? (~@ #:unknown unknown)))))])
+
+(define-syntax-parser define-bitmask
+  [(_ name:id
+      (~optional (~seq #:base base:expr))
+      member:enum/bitmap-member ...+)
+   #'(define name
+       (let* ((~@ member.let*-clause ...) ...)
+         (_bitmask (list (~@ member.parsed ...) ...)
+                   (~? base))))])

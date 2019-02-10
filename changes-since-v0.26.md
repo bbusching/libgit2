@@ -31,33 +31,6 @@
   out such files is not allowed as this can make a Git implementation write
   outside of the repository and bypass the fsck checks for CVE-2018-11235.
 
-## API Removals
-
-### v0.28
-
-* **FIXED:** The `git_buf_free` API is deprecated; it has been renamed to
-  `git_buf_dispose` for consistency.  The `git_buf_free` API will be
-  retained for backward compatibility for the foreseeable future.
-
-* **FIXED:** The `git_otype` enumeration and its members are deprecated and have
-  been renamed for consistency.  The `GIT_OBJ_` enumeration values are
-  now prefixed with `GIT_OBJECT_`.  The old enumerations and macros
-  will be retained for backward compatibility for the foreseeable future.
-
-* Several index-related APIs have been renamed for consistency.  The
-  `GIT_IDXENTRY_` enumeration values and macros have been renamed to
-  be prefixed with `GIT_INDEX_ENTRY_`.  The `GIT_INDEXCAP` enumeration
-  values are now prefixed with `GIT_INDEX_CAPABILITY_`.  The old
-  enumerations and macros will be retained for backward compatibility
-  for the foreseeable future.
-
-* **FIXED:** The error functions and enumeration values have been renamed for
-  consistency.  The `giterr_` functions and values prefix have been
-  renamed to be prefixed with `git_error_`; similarly, the `GITERR_`
-  constants have been renamed to be prefixed with `GIT_ERROR_`.
-  The old enumerations and macros will be retained for backward
-  compatibility for the foreseeable future.
-
 
 
 
@@ -266,4 +239,34 @@
 
 * Error-handling around index extension loading has been fixed. We were
   previously always misreporting a truncated index (#4858).
+
+
+
+## **FIXED:** API Removals
+
+### v0.28
+
+* **FIXED:** The `git_buf_free` API is deprecated; it has been renamed to
+  `git_buf_dispose` for consistency.  The `git_buf_free` API will be
+  retained for backward compatibility for the foreseeable future.
+
+* **FIXED:** The `git_otype` enumeration and its members are deprecated and have
+  been renamed for consistency.  The `GIT_OBJ_` enumeration values are
+  now prefixed with `GIT_OBJECT_`.  The old enumerations and macros
+  will be retained for backward compatibility for the foreseeable future.
+
+* **FIXED:** Several index-related APIs have been renamed for consistency.  The
+  `GIT_IDXENTRY_` enumeration values and macros have been renamed to
+  be prefixed with `GIT_INDEX_ENTRY_`.  The `GIT_INDEXCAP` enumeration
+  values are now prefixed with `GIT_INDEX_CAPABILITY_`.  The old
+  enumerations and macros will be retained for backward compatibility
+  for the foreseeable future.
+
+* **FIXED:** The error functions and enumeration values have been renamed for
+  consistency.  The `giterr_` functions and values prefix have been
+  renamed to be prefixed with `git_error_`; similarly, the `GITERR_`
+  constants have been renamed to be prefixed with `GIT_ERROR_`.
+  The old enumerations and macros will be retained for backward
+  compatibility for the foreseeable future.
+
 

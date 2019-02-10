@@ -8,6 +8,8 @@
          symbols-not-available
          check-git_error_code ;; prefer this to be private
          _git_error_code
+         define-bitmask
+         define-enum
          define-libgit2
          define-libgit2/check
          define-libgit2/alloc

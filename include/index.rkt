@@ -30,47 +30,57 @@
 (define _index_entry _git_index_entry-pointer)
 (define _index_entry/null _git_index_entry-pointer/null)
 
-(define _git_indxentry_flag_t
-  (_enum '(GIT_IDXENTRY_EXTENDED = #x4000
-           GIT_IDXENTRY_VALID = #x8000)))
+(define-enum _git_index_entry_flag_t
+  [GIT_INDEX_ENTRY_EXTENDED #x4000]
+  [GIT_INDEX_ENTRY_VALID #x8000])
 
-(define _git_idxentry_extended_flag_t
-  (_bitmask '(GIT_IDXENTRY_INTENT_TO_ADD = #x2000
-              GIT_IDXENTRY_SKIP_WORKTREE = #x4000
-              GIT_IDXENTRY_EXTENDED2 = #x8000
-              GIT_IDXENTRY_EXTENDED_FLAGS = #x6000
-              GIT_IDXENTRY_UPDATE = #x0001
-              GIT_IDXENTRY_REMOTE = #x0002
-              GIT_IDXENTRY_UPTODATE = #x0004
-              GIT_IDXENTRY_ADDED = #x0008
-              GIT_IDXENTRY_HASHED = #x0010
-              GIT_IDXENTRY_UNHASHED = #x0020
-              GIT_IDXENTRY_WT_REMOVE = #x0040
-              GIT_IDXENTRY_CONFLICTED = #x0080
-              GIT_IDXENTRY_UNPACKED = #x0100
-              GIT_IDXENTRY_NEW_SKIP_WORKTREE = #x0200)))
+(define-bitmask _git_index_entry_extended_flag_t
+  [GIT_INDEX_ENTRY_INTENT_TO_ADD (arithmetic-shift 1 13)]
+  [GIT_INDEX_ENTRY_SKIP_WORKTREE (arithmetic-shift 1 14)]
+  [GIT_INDEX_ENTRY_EXTENDED_FLAGS (bitwise-ior GIT_INDEX_ENTRY_INTENT_TO_ADD
+                                               GIT_INDEX_ENTRY_SKIP_WORKTREE)]
+  [GIT_INDEX_ENTRY_UPTODATE (arithmetic-shift 1 2)])
+#|
+;; from the deprecated git_idxentry_extended_flag_t enum
+`(GIT_IDXENTRY_INTENT_TO_ADD = #x2000
+  GIT_IDXENTRY_SKIP_WORKTREE = #x4000
+  GIT_IDXENTRY_EXTENDED2 = #x8000
+  GIT_IDXENTRY_EXTENDED_FLAGS = #x6000
+  GIT_IDXENTRY_UPDATE = #x0001
+  GIT_IDXENTRY_REMOTE = #x0002
+  GIT_IDXENTRY_UPTODATE = #x0004
+  GIT_IDXENTRY_ADDED = #x0008
+  GIT_IDXENTRY_HASHED = #x0010
+  GIT_IDXENTRY_UNHASHED = #x0020
+  GIT_IDXENTRY_WT_REMOVE = #x0040
+  GIT_IDXENTRY_CONFLICTED = #x0080
+  GIT_IDXENTRY_UNPACKED = #x0100
+  GIT_IDXENTRY_NEW_SKIP_WORKTREE = #x0200)
+|#
 
-(define _git_indexcap_t
-  (_enum '(GIT_INDEXCAP_IGNORE_CASE = 1
-           GIT_INDEXCAP_NO_FILEMODE = 2
-           GIT_INDEXCAP_NO_SYMLINKS = 4
-           GIT_INDEXCAP_FROM_OWNER = -1)))
+(define-enum _git_index_capability_t
+  #:base _fixint
+  [GIT_INDEX_CAPABILITY_IGNORE_CASE 1]
+  [GIT_INDEX_CAPABILITY_NO_FILEMODE 2]
+  [GIT_INDEX_CAPABILITY_NO_SYMLINKS 4]
+  [GIT_INDEX_CAPABILITY_FROM_OWNER -1])
 
 (define _git_index_matched_path_cb
   (_fun _string _string _bytes -> _int))
 
-(define _git_index_add_option_t
-  (_bitmask '(GIT_INDEX_ADD_DEFAULT = 0
-              GIT_INDEX_ADD_FORCE = 1
-              GIT_INDEX_ADD_DISABLE_PATHSPEC_MATCH = 2
-              GIT_INDEX_ADD_CHECK_PATHSPEC = 4)))
+(define-bitmask _git_index_add_option_t
+  [GIT_INDEX_ADD_DEFAULT 0]
+  [GIT_INDEX_ADD_FORCE 1]
+  [GIT_INDEX_ADD_DISABLE_PATHSPEC_MATCH 2]
+  [GIT_INDEX_ADD_CHECK_PATHSPEC 4])
 
-(define _git_index_stage_t
-  (_enum '(GIT_INDEX_STAGE_ANY = -1
-           GIT_INDEX_STAGE_NORMAL
-           GIT_INDEX_STAGE_ANCESTOR
-           GIT_INDEX_STAGE_OURS
-           GIT_INDEX_STAGE_THEIRS)))
+(define-enum _git_index_stage_t
+  #:base _fixint
+  [GIT_INDEX_STAGE_ANY -1]
+  GIT_INDEX_STAGE_NORMAL
+  GIT_INDEX_STAGE_ANCESTOR
+  GIT_INDEX_STAGE_OURS
+  GIT_INDEX_STAGE_THEIRS)
 
 ; Functions
 
