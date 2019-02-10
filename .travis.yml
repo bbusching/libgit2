@@ -4,7 +4,7 @@ language: c
 
 os:
   - linux
-  - osx
+#  - osx # install-racket.sh doesn't work on mac
 
 env:
   global:
@@ -35,6 +35,8 @@ before_install:
 - export PATH="${RACKET_DIR}/bin:${PATH}" #install-racket.sh can't set for us
 
 install:
+ - racket -e "(system-library-subpath)"
+ - raco pkg install --auto --name libgit2-x86_64-linux
  - raco pkg install --auto --name libgit2
 
 before_script:
