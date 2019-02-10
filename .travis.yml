@@ -36,7 +36,7 @@ before_install:
 
 install:
  - racket -e "(system-library-subpath)"
- - raco pkg install --auto --name libgit2-x86_64-linux
+ - raco pkg install --auto libgit2-x86_64-linux
  - raco pkg install --auto --name libgit2
 
 before_script:
