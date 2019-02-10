@@ -13,7 +13,7 @@
 (define-cstruct _git_odb_expand_id
   ([id _oid]
    [length _ushort]
-   [type _git_otype]))
+   [type _git_object_t]))
 (define _odb_expand_id _git_odb_expand_id-pointer)
 
 ; Functions
@@ -46,10 +46,10 @@
   (_fun _odb_backend _odb _size -> _int))
 
 (define-libgit2/check git_odb_hash
-  (_fun _oid _bytes _size _git_otype -> _int))
+  (_fun _oid _bytes _size _git_object_t -> _int))
 
 (define-libgit2/check git_odb_hashfile
-  (_fun _oid _string _git_otype -> _int))
+  (_fun _oid _string _git_object_t -> _int))
 
 (define-libgit2/alloc git_odb_new
   (_fun _odb -> _int)
@@ -75,7 +75,7 @@
   (_fun _odb_object -> _size))
 
 (define-libgit2 git_odb_object_type
-  (_fun _odb_object -> _git_otype))
+  (_fun _odb_object -> _git_object_t))
 
 (define-libgit2/alloc git_odb_open
   (_fun _odb _string -> _int))
@@ -84,14 +84,14 @@
   (_fun _odb_stream _odb _oid -> _int))
 
 (define-libgit2/alloc git_odb_open_wstream
-  (_fun _odb_stream _odb _git_off_t _git_otype -> _int))
+  (_fun _odb_stream _odb _git_off_t _git_object_t -> _int))
 
 (define-libgit2/alloc git_odb_read
   (_fun _odb_object _odb _oid -> _int)
   git_odb_object_free)
 
 (define-libgit2/check git_odb_read_header
-  (_fun (_cpointer _size) (_cpointer _git_otype) _odb _oid -> _int))
+  (_fun (_cpointer _size) (_cpointer _git_object_t) _odb _oid -> _int))
 
 (define-libgit2/alloc git_odb_read_prefix
   (_fun _odb_object _odb _oid _size -> _int)
@@ -113,7 +113,7 @@
   (_fun _odb_stream _string _size -> _int))
 
 (define-libgit2/check git_odb_write
-  (_fun _oid _odb _bytes _size _git_otype -> _int))
+  (_fun _oid _odb _bytes _size _git_object_t -> _int))
 
 (define-libgit2/alloc git_odb_write_pack
   (_fun _odb_writepack _odb _git_transfer_progress_cb _bytes -> _int))

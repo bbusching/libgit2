@@ -93,7 +93,7 @@
   (_fun _repository -> _string))
 
 (define-libgit2/check git_repository_hashfile
-  (_fun _oid _repository _path _git_otype _string -> _int))
+  (_fun _oid _repository _path _git_object_t _string -> _int))
 
 (define-libgit2/alloc git_repository_head
   (_fun _reference/null _repository -> _int)

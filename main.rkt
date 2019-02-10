@@ -5,6 +5,14 @@
 
 (provide libgit2-available?)
 
+(module+ test
+  (require rackunit
+           (only-in "private.rkt"
+                    symbols-not-available))
+  (check-equal? (symbols-not-available)
+                '()
+                "all symbols should be available"))
+
 (define-syntax-rule (require-provide mod ...)
   (begin (require mod ...) (provide (all-from-out mod) ...)))
 

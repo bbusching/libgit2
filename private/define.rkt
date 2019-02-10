@@ -1,7 +1,6 @@
 #lang racket/base
 
 (require ffi/unsafe
-         ffi/unsafe/custodian
          (rename-in racket/contract/base [-> ->c])
          ffi/unsafe/define)
 
@@ -36,14 +35,10 @@
       ((make-not-available name)))))
 
 (let ()
-  ;; Handle initialization and teardown
+  ;; Handle initialization.
+  ;; "Usually you don’t need to call [git_libgit2_shutdown]
+  ;; as the operating system will take care of reclaiming resources"
   (define-libgit2 git_libgit2_init
     (_fun -> _int))
-  (define-libgit2 git_libgit2_shutdown
-    (_fun -> _int))
-  (register-custodian-shutdown #f
-                               (λ (arg) (git_libgit2_shutdown))
-                               (current-custodian) ;; (make-custodian-at-root) ;; ??
-                               #:at-exit? #t)
   (git_libgit2_init)
   (void))

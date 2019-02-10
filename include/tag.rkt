@@ -81,4 +81,4 @@
   (_fun _tag -> _oid))
 
 (define-libgit2 git_tag_target_type
-  (_fun _tag -> _git_otype))
+  (_fun _tag -> _git_object_t))

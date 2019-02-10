@@ -35,11 +35,11 @@
 
 ### v0.28
 
-* The `git_buf_free` API is deprecated; it has been renamed to
+* **FIXED:** The `git_buf_free` API is deprecated; it has been renamed to
   `git_buf_dispose` for consistency.  The `git_buf_free` API will be
   retained for backward compatibility for the foreseeable future.
 
-* The `git_otype` enumeration and its members are deprecated and have
+* **FIXED:** The `git_otype` enumeration and its members are deprecated and have
   been renamed for consistency.  The `GIT_OBJ_` enumeration values are
   now prefixed with `GIT_OBJECT_`.  The old enumerations and macros
   will be retained for backward compatibility for the foreseeable future.
@@ -51,7 +51,7 @@
   enumerations and macros will be retained for backward compatibility
   for the foreseeable future.
 
-* The error functions and enumeration values have been renamed for
+* **FIXED:** The error functions and enumeration values have been renamed for
   consistency.  The `giterr_` functions and values prefix have been
   renamed to be prefixed with `git_error_`; similarly, the `GITERR_`
   constants have been renamed to be prefixed with `GIT_ERROR_`.

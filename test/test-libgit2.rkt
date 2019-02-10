@@ -1,11 +1,8 @@
 #lang racket
 
 (require libgit2
-         libgit2/private
          rackunit
          ffi/unsafe)
-
-(symbols-not-available)
 
 (define temp-dir
   (make-temporary-file "rkttmp-libgit2-test~a" 'directory))

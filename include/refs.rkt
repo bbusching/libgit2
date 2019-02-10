@@ -127,7 +127,7 @@
   (_fun _reference -> _repository))
 
 (define-libgit2/alloc git_reference_peel
-  (_fun _object _reference _git_otype -> _int)
+  (_fun _object _reference _git_object_t -> _int)
   git_object_free)
 
 (define-libgit2/check git_reference_remove

@@ -79,7 +79,7 @@
   git_object_free)
 
 (define-libgit2 git_tree_entry_type
-  (_fun _tree_entry -> _git_otype))
+  (_fun _tree_entry -> _git_object_t))
 
 (define-libgit2 git_tree_entrycount
   (_fun _tree -> _size))

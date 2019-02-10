@@ -7,22 +7,21 @@
 (define _git_time_t _int64)
 (define _git_off_t _int64)
 
-(define _git_otype
-  (_enum '(GIT_OBJ_ANY = -2
-           GIT_OBJ_BAD
-           GIT_OBJ_EXT1
-           GIT_OBJ_COMMIT
-           GIT_OBJ_TREE
-           GIT_OBJ_BLOB
-           GIT_OBJ_TAG
-           GIT_OBJ__EXT2
-           GIT_OBJ_OFS_DELTA
-           GIT_OBJ_REF_DELTA)))
+(define _git_object_t
+  (_enum '(GIT_OBJECT_ANY
+           =                     -2
+           GIT_OBJECT_INVALID =  -1
+           GIT_OBJECT_COMMIT =    1
+           GIT_OBJECT_TREE =      2
+           GIT_OBJECT_BLOB =      3
+           GIT_OBJECT_TAG =       4
+           GIT_OBJECT_OFS_DELTA = 6
+           GIT_OBJECT_REF_DELTA = 7)))
 
 (define _git_branch_t
   (_enum '(GIT_BRANCH_LOCAL = 1
-           GIT_BRANCH_REMOTE
-           GIT_BRANCH_ALL)))
+                            GIT_BRANCH_REMOTE
+                            GIT_BRANCH_ALL)))
 
 (define-cpointer-type _annotated_commit)
 (define-cpointer-type _commit)
@@ -95,7 +94,8 @@
            GIT_REF_LISTALL)))
 
 (define _git_filemode_t
-  (_enum '(GIT_FILEMODE_UNREADABLE = 0
+  (_enum '(GIT_FILEMODE_UNREADABLE
+           = 0
            GIT_FILEMODE_TREE = #o0040000
            GIT_FILEMODE_BLOB = #o0100644
            GIT_FILEMODE_BLOB_EXECUTABLE = #o0100755
@@ -137,7 +137,8 @@
            GIT_SUBMODULE_UPDATE_MERGE
            GIT_SUBMODULE_UPDATE_NONE)))
 (define _git_submodule_ignore_t
-  (_enum '(GIT_SUBMODULE_IGNORE_UNSPECIFIED = -1
+  (_enum '(GIT_SUBMODULE_IGNORE_UNSPECIFIED
+           = -1
            GIT_SUBMODULE_IGNORE_NONE = 1
            GIT_SUBMODULE_IGNORE_UNTRACKED
            GIT_SUBMODULE_IGNORE_DIRTY
