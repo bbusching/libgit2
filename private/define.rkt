@@ -4,9 +4,14 @@
          (rename-in racket/contract/base [-> ->c])
          ffi/unsafe/define)
 
-(provide libgit2-available?
-         define-libgit2
+(module+ test
+  (require rackunit
+           (submod "..")))
+
+(provide define-libgit2
          (contract-out
+          [libgit2-available?
+           boolean?]
           [symbols-not-available
            (->c (listof symbol?))]
           ))
@@ -15,11 +20,15 @@
   (ffi-lib (case (system-type)
              [(windows) "git2"]
              [else "libgit2"])
-           '("28" #f)
+           '(#f)
            #:fail (λ () #f)))
 
 (define libgit2-available?
   (and libgit2 #t))
+
+(module+ test
+  (check-true libgit2-available?
+              "libgit2 should be available"))
 
 (define symbols-not-available
   (let ([lst null])
@@ -34,7 +43,7 @@
       (symbols-not-available name)
       ((make-not-available name)))))
 
-(let ()
+(when libgit2-available?
   ;; Handle initialization.
   ;; "Usually you don’t need to call [git_libgit2_shutdown]
   ;; as the operating system will take care of reclaiming resources"
