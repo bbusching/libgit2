@@ -53,7 +53,6 @@ TODO:
 @include-section["object.scrbl"]
 @include-section["odb.scrbl"]
 @include-section["oid.scrbl"]
-@include-section["oid_array.scrbl"]
 @include-section["packbuilder.scrbl"]
 @include-section["patch.scrbl"]
 @include-section["pathspec.scrbl"]

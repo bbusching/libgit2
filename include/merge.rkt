@@ -2,7 +2,6 @@
 
 (require ffi/unsafe
          "types.rkt"
-         "oidarray.rkt"
          "checkout.rkt"
          "index.rkt"
          "diff.rkt"
@@ -11,6 +10,17 @@
 
 (provide (all-defined-out))
 
+;; support
+;; only used by git_merge_bases and git_merge_bases_many
+
+(define-cstruct _git_oidarray
+  ([oid _git_oid-pointer]
+   [count _size]))
+
+(define-libgit2/dealloc git_oidarray_free
+  (_fun _git_oidarray-pointer -> _void))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Types
 
@@ -23,28 +33,28 @@
 
 (define GIT_MERGE_FILE_INPUT_VERSION 1)
 
-(define _git_merge_flag_t
-  (_bitmask '(GIT_MERGE_FIND_RENAMES = #x0001
-              GIT_MERGE_FAIL_ON_CONFLICT = #x0002
-              GIT_MERGE_SKIP_REUC = #x0004
-              GIT_MERGE_NO_RECURSIVE = #x0008)))
+(define-bitmask _git_merge_flag_t
+  [GIT_MERGE_FIND_RENAMES = #x0001]
+  [GIT_MERGE_FAIL_ON_CONFLICT = #x0002]
+  [GIT_MERGE_SKIP_REUC = #x0004]
+  [GIT_MERGE_NO_RECURSIVE = #x0008])
 
-(define _git_merge_file_favor_t
-  (_enum '(GIT_MERGE_FILE_FAVOR_NORMAL
-           GIT_MERGE_FILE_FAVOR_OURS
-           GIT_MERGE_FILE_FAVOR_THEIRS
-           GIT_MERGE_FILE_FAVOR_UNION)))
+(define-enum _git_merge_file_favor_t
+  GIT_MERGE_FILE_FAVOR_NORMAL
+  GIT_MERGE_FILE_FAVOR_OURS
+  GIT_MERGE_FILE_FAVOR_THEIRS
+  GIT_MERGE_FILE_FAVOR_UNION)
 
-(define _git_merge_file_flag_t
-  (_bitmask '(GIT_MERGE_FILE_DEFAULT = #x0000
-              GIT_MERGE_FILE_STYLE_MERGE = #x0001
-              GIT_MERGE_FILE_STYLE_DIFF3 = #x0002
-              GIT_MERGE_FILE_SIMPLIFY_ALNUM = #x0004
-              GIT_MERGE_FILE_IGNORE_WHITESPACE = #x0008
-              GIT_MERGE_FILE_IGNORE_WHITESPACE_CHANGE = #x0010
-              GIT_MERGE_FILE_IGNORE_WHITESPACE_EOL = #x0020
-              GIT_MERGE_FILE_DIFF_PATIENCE = #x0040
-              GIT_MERGE_FILE_DIFF_MINIMAL = #x0080)))
+(define-bitmask _git_merge_file_flag_t
+  [GIT_MERGE_FILE_DEFAULT = #x0000]
+  [GIT_MERGE_FILE_STYLE_MERGE = #x0001]
+  [GIT_MERGE_FILE_STYLE_DIFF3 = #x0002]
+  [GIT_MERGE_FILE_SIMPLIFY_ALNUM = #x0004]
+  [GIT_MERGE_FILE_IGNORE_WHITESPACE = #x0008]
+  [GIT_MERGE_FILE_IGNORE_WHITESPACE_CHANGE = #x0010]
+  [GIT_MERGE_FILE_IGNORE_WHITESPACE_EOL = #x0020]
+  [GIT_MERGE_FILE_DIFF_PATIENCE = #x0040]
+  [GIT_MERGE_FILE_DIFF_MINIMAL = #x0080])
 
 (define-cstruct _git_merge_file_opts
   ([version _uint]
@@ -76,17 +86,17 @@
 
 (define GIT_MERGE_OPTS_VERSION 1)
 
-(define _git_merge_analysis_t
-  (_bitmask '(GIT_MERGE_ANALYSIS_NONE = #x0000
-              GIT_MERGE_ANALYSIS_NORMAL = #x0001
-              GIT_MERGE_ANALYSIS_UP_TO_DATE = #x0002
-              GIT_MERGE_ANALYSIS_FASTFORWARD = #x0004
-              GIT_MERGE_ANALYSIS_UNBORN = #x0008)))
+(define-bitmask _git_merge_analysis_t
+  [GIT_MERGE_ANALYSIS_NONE = #x0000]
+  [GIT_MERGE_ANALYSIS_NORMAL = #x0001]
+  [GIT_MERGE_ANALYSIS_UP_TO_DATE = #x0002]
+  [GIT_MERGE_ANALYSIS_FASTFORWARD = #x0004]
+  [GIT_MERGE_ANALYSIS_UNBORN = #x0008])
 
-(define _git_merge_preference_t
-  (_enum '(GIT_MERGE_PREFERENCE_NONE
-           GIT_MERGE_PREFERENCE_NO_FASTFORWARD
-           GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)))
+(define-enum _git_merge_preference_t
+  GIT_MERGE_PREFERENCE_NONE
+  GIT_MERGE_PREFERENCE_NO_FASTFORWARD
+  GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)
 
 ; Functions
 
@@ -106,10 +116,10 @@
   (_fun _git_oid-pointer _repository _size (_cpointer _git_oid-pointer) -> _int))
 
 (define-libgit2/check git_merge_bases
-  (_fun _oidarray _repository _git_oid-pointer _git_oid-pointer -> _int))
+  (_fun _git_oidarray-pointer _repository _git_oid-pointer _git_oid-pointer -> _int))
 
 (define-libgit2/check git_merge_bases_many
-  (_fun _oidarray _repository _size (_cpointer _git_oid-pointer) -> _int))
+  (_fun _git_oidarray-pointer _repository _size (_cpointer _git_oid-pointer) -> _int))
 
 (define-libgit2/alloc git_merge_commits
   (_fun _index _repository _commit _commit _commit _git_merge_opts-pointer -> _int)

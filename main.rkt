@@ -42,7 +42,6 @@
                  "include/odb.rkt"
                  "include/odb_backend.rkt"
                  "include/oid.rkt"
-                 "include/oidarray.rkt"
                  "include/pack.rkt"
                  "include/patch.rkt"
                  "include/pathspec.rkt"
