@@ -2,7 +2,9 @@
 
 (require ffi/unsafe
          "types.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -26,4 +28,4 @@
   git_indexer_free)
 
 (define-libgit2 git_indexer_hash
-  (_fun _indexer -> _oid))
+  (_fun _indexer -> _git_oid-pointer))

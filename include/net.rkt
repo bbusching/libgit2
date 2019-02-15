@@ -2,19 +2,20 @@
 
 (require ffi/unsafe
          "types.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
 (provide (all-defined-out))
 
 
 (define GIT_DEFAULT_PORT 9418)
 
-(define _git_direction
-  (_enum '(GIT_DIRECTION_FETCH
-           GIT_DIRECTION_PUSH)))
+(define-enum _git_direction
+  GIT_DIRECTION_FETCH
+  GIT_DIRECTION_PUSH)
 
 (define-cstruct _git_remote_head
   ([local _int]
-   [oid _oid]
+   [oid _git_oid-pointer]
    [name _string]
    [symref_target _string]))
 

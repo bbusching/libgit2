@@ -8,27 +8,29 @@
          "checkout.rkt"
          "buffer.rkt"
          "repository.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
 ; Types
 
-(define _git_submodule_status_t
-  (_bitmask '(GIT_SUBMODULE_STATUS_IN_HEAD = #x0001
-              GIT_SUBMODULE_STATUS_IN_INDEX = #x0002
-              GIT_SUBMODULE_STATUS_IN_CONFIG = #x0004
-              GIT_SUBMODULE_STATUS_IN_WD = #x0008
-              GIT_SUBMODULE_STATUS_INDEX_ADDED = #x0010
-              GIT_SUBMODULE_STATUS_INDEX_DELETED = #x0020
-              GIT_SUBMODULE_STATUS_INDEX_MODIFIED = #x0040
-              GIT_SUBMODULE_STATUS_WD_UNITIALIZED = #x0080
-              GIT_SUBMODULE_STATUS_WD_ADDED = #x0100
-              GIT_SUBMODULE_STATUS_WD_DELETED = #x0200
-              GIT_SUBMODULE_STATUS_WD_MODIFIED = #x0400
-              GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED = #x0800
-              GIT_SUBMODULE_STATUS_WD_WD_MODIFIED = #x1000
-              GIT_SUBMODULE_STATUS_WD_UNTRACKED = #x2000)))
+(define-bitmask _git_submodule_status_t
+  [GIT_SUBMODULE_STATUS_IN_HEAD = #x0001]
+  [GIT_SUBMODULE_STATUS_IN_INDEX = #x0002]
+  [GIT_SUBMODULE_STATUS_IN_CONFIG = #x0004]
+  [GIT_SUBMODULE_STATUS_IN_WD = #x0008]
+  [GIT_SUBMODULE_STATUS_INDEX_ADDED = #x0010]
+  [GIT_SUBMODULE_STATUS_INDEX_DELETED = #x0020]
+  [GIT_SUBMODULE_STATUS_INDEX_MODIFIED = #x0040]
+  [GIT_SUBMODULE_STATUS_WD_UNITIALIZED = #x0080]
+  [GIT_SUBMODULE_STATUS_WD_ADDED = #x0100]
+  [GIT_SUBMODULE_STATUS_WD_DELETED = #x0200]
+  [GIT_SUBMODULE_STATUS_WD_MODIFIED = #x0400]
+  [GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED = #x0800]
+  [GIT_SUBMODULE_STATUS_WD_WD_MODIFIED = #x1000]
+  [GIT_SUBMODULE_STATUS_WD_UNTRACKED = #x2000])
 
 (define _git_submodule_cb
   (_fun _submodule _string _bytes -> _int))
@@ -65,13 +67,13 @@
   (_fun _submodule -> _void))
 
 (define-libgit2 git_submodule_head_id
-  (_fun _submodule -> _oid))
+  (_fun _submodule -> _git_oid-pointer))
 
 (define-libgit2 git_submodule_ignore
   (_fun _submodule -> _git_submodule_ignore_t))
 
 (define-libgit2 git_submodule_index_id
-  (_fun _submodule -> _oid))
+  (_fun _submodule -> _git_oid-pointer))
 
 (define-libgit2/check git_submodule_init
   (_fun _submodule _bool -> _int))
@@ -140,4 +142,4 @@
   (_fun _submodule -> _string))
 
 (define-libgit2 git_submodule_wd_id
-  (_fun _submodule -> _oid/null))
+  (_fun _submodule -> _git_oid-pointer/null))

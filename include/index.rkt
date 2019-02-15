@@ -4,6 +4,7 @@
          "types.rkt"
          "oid.rkt"
          "strarray.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
 (provide (all-defined-out))
 
@@ -100,7 +101,7 @@
   (_fun _index -> _int))
 
 (define-libgit2 git_index_checksum
-  (_fun _index -> _oid))
+  (_fun _index -> _git_oid-pointer))
 
 (define-libgit2/check git_index_clear
   (_fun _index -> _int))
@@ -204,7 +205,7 @@
   (_fun _index -> _int))
 
 (define-libgit2/check git_index_write_tree
-  (_fun _oid _index -> _int))
+  (_fun _git_oid-pointer _index -> _int))
 
 (define-libgit2/check git_index_write_tree_to
-  (_fun _oid _index _repository -> _int))
+  (_fun _git_oid-pointer _index _repository -> _int))

@@ -6,7 +6,9 @@
          "oid.rkt"
          "strarray.rkt"
          "object.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -17,11 +19,11 @@
 (define _git_reference_foreach_name_cb
   (_fun _string _bytes -> _int))
 
-(define _git_reference_normalize_t
-  (_bitmask '(GIT_REF_FORMAT_NORMAL = 0
-              GIT_REF_FORMAT_ALLOW_ONELEVEL = 1
-              GIT_REF_FORMAT_REFSPEC_PATTERN = 2
-              GIT_REF_FORMAT_REFSPEC_SHORTHAND = 4)))
+(define-bitmask _git_reference_normalize_t
+  [GIT_REF_FORMAT_NORMAL = 0]
+  [GIT_REF_FORMAT_ALLOW_ONELEVEL = 1]
+  [GIT_REF_FORMAT_REFSPEC_PATTERN = 2]
+  [GIT_REF_FORMAT_REFSPEC_SHORTHAND = 4])
 
 ; Functions
 
@@ -29,7 +31,7 @@
   (_fun _reference -> _void))
 
 (define-libgit2 git_reference__alloc
-  (_fun _string _oid _oid -> _reference/null)
+  (_fun _string _git_oid-pointer _git_oid-pointer -> _reference/null)
   #:wrap (allocator git_reference_free))
 
 (define-libgit2 git_reference__alloc_symbolic
@@ -40,11 +42,11 @@
   (_fun _reference _reference -> _int))
 
 (define-libgit2/alloc git_reference_create
-  (_fun _reference _repository _string _oid _bool _string -> _int)
+  (_fun _reference _repository _string _git_oid-pointer _bool _string -> _int)
   git_reference_free)
 
 (define-libgit2/alloc git_reference_create_matching
-  (_fun _reference _repository _string _oid _bool _oid _string -> _int)
+  (_fun _reference _repository _string _git_oid-pointer _bool _git_oid-pointer _string -> _int)
   git_reference_free)
 
 (define-libgit2/check git_reference_delete
@@ -110,7 +112,7 @@
   (_fun _reference -> _string))
 
 (define-libgit2/check git_reference_name_to_id
-  (_fun _oid _repository _string -> _int))
+  (_fun _git_oid-pointer _repository _string -> _int))
 
 (define-libgit2/alloc git_reference_next
   (_fun _reference _reference_iterator -> _int)
@@ -142,7 +144,7 @@
   git_reference_free)
 
 (define-libgit2/alloc git_reference_set_target
-  (_fun _reference _reference _oid _string -> _int)
+  (_fun _reference _reference _git_oid-pointer _string -> _int)
   git_reference_free)
 
 (define-libgit2 git_reference_shorthand
@@ -164,10 +166,10 @@
   (_fun _reference -> _string))
 
 (define-libgit2 git_reference_target
-  (_fun _reference -> _oid))
+  (_fun _reference -> _git_oid-pointer))
 
 (define-libgit2 git_reference_target_peel
-  (_fun _reference -> _oid))
+  (_fun _reference -> _git_oid-pointer))
 
 (define-libgit2 git_reference_type
   (_fun _reference -> _git_reference_t))

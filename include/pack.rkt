@@ -3,6 +3,7 @@
 (require ffi/unsafe
          "types.rkt"
          "buffer.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
 (provide (all-defined-out))
 
@@ -28,19 +29,19 @@
   (_fun _packbuilder -> _void))
 
 (define-libgit2 git_packbuilder_hash
-  (_fun _packbuilder -> _oid))
+  (_fun _packbuilder -> _git_oid-pointer))
 
 (define-libgit2/check git_packbuilder_insert
-  (_fun _packbuilder _oid _string -> _int))
+  (_fun _packbuilder _git_oid-pointer _string -> _int))
 
 (define-libgit2/check git_packbuilder_insert_commit
-  (_fun _packbuilder _oid -> _int))
+  (_fun _packbuilder _git_oid-pointer -> _int))
 
 (define-libgit2/check git_packbuilder_insert_recur
-  (_fun _packbuilder _oid _string -> _int))
+  (_fun _packbuilder _git_oid-pointer _string -> _int))
 
 (define-libgit2/check git_packbuilder_insert_tree
-  (_fun _packbuilder _oid -> _int))
+  (_fun _packbuilder _git_oid-pointer -> _int))
 
 (define-libgit2/check git_packbuilder_insert_walk
   (_fun _packbuilder _revwalk -> _int))

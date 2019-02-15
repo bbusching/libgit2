@@ -2,6 +2,7 @@
 
 (require ffi/unsafe
          libgit2/private)
+
 (provide (all-defined-out))
 
 (define _git_time_t _int64)
@@ -27,7 +28,7 @@
 (define-cpointer-type _commit)
 (define-cpointer-type _config)
 (define-cpointer-type _config_backend)
-(define-cpointer-type _blame)
+(define-cpointer-type _git_blame)
 (define-cpointer-type _blob)
 (define-cpointer-type _diff)
 (define-cpointer-type _index)
@@ -36,14 +37,6 @@
 (define-cpointer-type _note)
 (define-cpointer-type _object)
 
-(define GIT_OID_RAWSZ 20)
-(define GIT_OID_HEXSZ (* GIT_OID_RAWSZ 2))
-(define GIT_OID_MINPREFIXLEN 4)
-
-(define-cstruct _git_oid
-  ([id (_array _uint8 GIT_OID_RAWSZ)]))
-(define _oid _git_oid-pointer)
-(define _oid/null _git_oid-pointer/null)
 
 (define-cpointer-type _odb)
 (define-cpointer-type _odb_backend)

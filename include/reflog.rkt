@@ -2,12 +2,14 @@
 
 (require ffi/unsafe
          "types.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
 (define-libgit2/check git_reflog_append
-  (_fun _reflog _oid _signature _string -> _int))
+  (_fun _reflog _git_oid-pointer _signature _string -> _int))
 
 (define-libgit2/check git_reflog_delete
   (_fun _repository _string -> _int))
@@ -22,10 +24,10 @@
   (_fun _reflog_entry -> _signature))
 
 (define-libgit2 git_reflog_entry_id_new
-  (_fun _reflog_entry -> _oid))
+  (_fun _reflog_entry -> _git_oid-pointer))
 
 (define-libgit2 git_reflog_entry_id_old
-  (_fun _reflog_entry -> _oid))
+  (_fun _reflog_entry -> _git_oid-pointer))
 
 (define-libgit2 git_reflog_entry_message
   (_fun _reflog_entry -> _string))

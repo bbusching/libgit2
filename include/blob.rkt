@@ -5,26 +5,28 @@
          "types.rkt"
          "buffer.rkt"
          "repository.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 (define-libgit2/dealloc git_blob_free
   (_fun _blob -> _void))
 
 (define-libgit2/check git_blob_create_frombuffer
-  (_fun _oid _repository _bytes _size -> _int))
+  (_fun _git_oid-pointer _repository _bytes _size -> _int))
 
 (define-libgit2/check git_blob_create_fromdisk
-  (_fun _oid _repository _string -> _int))
+  (_fun _git_oid-pointer _repository _string -> _int))
 
 (define-libgit2/alloc git_blob_create_fromstream
   (_fun _writestream _repository _string -> _int))
 
 (define-libgit2/check git_blob_create_fromstream_commit
-  (_fun _oid _writestream -> _int))
+  (_fun _git_oid-pointer _writestream -> _int))
 
 (define-libgit2/check git_blob_create_fromworkdir
-  (_fun _oid _repository _string -> _int))
+  (_fun _git_oid-pointer _repository _string -> _int))
 
 (define-libgit2/alloc git_blob_dup
   (_fun _blob _blob -> _int)
@@ -36,17 +38,17 @@
 
 
 (define-libgit2 git_blob_id
-  (_fun _blob -> _oid))
+  (_fun _blob -> _git_oid-pointer))
 
 (define-libgit2 git_blob_is_binary
   (_fun _blob -> _bool))
 
 (define-libgit2/alloc git_blob_lookup
-  (_fun _blob _repository _oid -> _int)
+  (_fun _blob _repository _git_oid-pointer -> _int)
   git_blob_free)
 
 (define-libgit2/alloc git_blob_lookup_prefix
-  (_fun _blob _repository _oid _size -> _int)
+  (_fun _blob _repository _git_oid-pointer _size -> _int)
   git_blob_free)
 
 (define-libgit2 git_blob_owner

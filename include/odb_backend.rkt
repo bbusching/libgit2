@@ -2,7 +2,9 @@
 
 (require ffi/unsafe
          "types.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -21,7 +23,7 @@
    [received_bytes _git_off_t]
    [read (_fun _git_odb_stream-pointer _string _size -> _int)]
    [write (_fun _git_odb_stream-pointer _string _size -> _int)]
-   [finalize_write (_fun _git_odb_stream-pointer _oid -> _int)]
+   [finalize_write (_fun _git_odb_stream-pointer _git_oid-pointer -> _int)]
    [free (_fun _git_odb_stream-pointer -> _void)]))
 
 (define-cstruct _git_odb_writepack

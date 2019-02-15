@@ -1,15 +1,17 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
+;; only used by git_merge_bases and git_merge_bases_many
 
 ; Types
 
 (define-cstruct _git_oidarray
-  ([oid _oid]
+  ([oid _git_oid-pointer]
    [count _size]))
 (define _oidarray _git_oidarray-pointer)
 

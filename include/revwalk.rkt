@@ -2,6 +2,7 @@
 
 (require ffi/unsafe
          "types.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
 (provide (all-defined-out))
 
@@ -15,7 +16,7 @@
               GIT_SORT_REVERSE = 4)))
 
 (define _git_revwalk_hide_cb
-  (_fun _oid _bytes -> _int))
+  (_fun _git_oid-pointer _bytes -> _int))
 
 ; Functions
 
@@ -26,7 +27,7 @@
   (_fun _revwalk -> _void))
 
 (define-libgit2/check git_revwalk_hide
-  (_fun _revwalk _oid -> _int))
+  (_fun _revwalk _git_oid-pointer -> _int))
 
 (define-libgit2/check git_revwalk_hide_glob
   (_fun _revwalk _string -> _int))
@@ -42,10 +43,10 @@
   git_revwalk_free)
 
 (define-libgit2/check git_revwalk_next
-  (_fun _oid _revwalk -> _int))
+  (_fun _git_oid-pointer _revwalk -> _int))
 
 (define-libgit2/check git_revwalk_push
-  (_fun _revwalk _oid -> _int))
+  (_fun _revwalk _git_oid-pointer -> _int))
 
 (define-libgit2/check git_revwalk_push_glob
   (_fun _revwalk _string -> _int))

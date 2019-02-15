@@ -8,7 +8,9 @@
          "pack.rkt"
          "proxy.rkt"
          "buffer.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -25,8 +27,8 @@
 (define-cstruct _git_push_update
   ([src_name _string]
    [dst_name _string]
-   [src _oid]
-   [dst _oid]))
+   [src _git_oid-pointer]
+   [dst _git_oid-pointer]))
 (define _push_update _git_push_update-pointer)
 
 (define _git_push_negotiation
@@ -39,7 +41,7 @@
    [credentials _git_cred_acquire_cb]
    [certificate_check _git_transport_certificate_check_cb]
    [transfer_progress _git_transfer_progress_cb]
-   [update_tips (_fun _string _oid _oid _bytes -> _int)]
+   [update_tips (_fun _string _git_oid-pointer _git_oid-pointer _bytes -> _int)]
    [pack_progress _git_packbuilder_progress]
    [push_transfer_progress _git_push_transfer_progress]
    [push_update_reference (_fun _string _string _bytes -> _int)]

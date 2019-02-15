@@ -37,6 +37,7 @@ graph.rkt: git_graph_ahead_behind
 Handles things other than success/error:
 repository.rkt: git_repository_head_unborn
 graph.rkt: git_graph_descendant_of
+oid.rkt: git_oid_shorten_add
 |#
 
 (define (check-git_error_code code retval who)
@@ -70,7 +71,14 @@ graph.rkt: git_graph_descendant_of
    #'(define-libgit2 name
        (_fun fun-form ...
              -> [code : _git_error_code]
-             -> (check-git_error_code code void 'name)))])
+             -> (check-git_error_code code void 'name)))]
+  [(_ name:id (_fun fun-form ... -> _git_error_code -> rslt:expr))
+   #'(define-libgit2 name
+       (_fun fun-form ...
+             -> [code : _git_error_code]
+             -> (begin (check-git_error_code code void 'name)
+                       rslt)))])
+  
 
 (define-syntax-parser define-libgit2/alloc
   #:literals {_fun -> _int _git_error_code}
@@ -94,7 +102,8 @@ graph.rkt: git_graph_descendant_of
   (define-syntax-class enum/bitmap-member
     #:description "member declaration"
     #:attributes {[let*-clause 1] [parsed 1] [bound-name 1]}
-    (pattern [name:id rhs:expr]
+    #:datum-literals {=}
+    (pattern [name:id (~optional =) rhs:expr]
              #:with (bound-name ...) #'(name)
              #:with (let*-clause ...) #'([name rhs])
              #:with (parsed ...) #'('name '= name))

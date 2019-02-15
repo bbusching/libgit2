@@ -8,32 +8,34 @@
          "index.rkt"
          "odb.rkt"
          "refdb.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
 ; Types
 
-(define _git_repository_open_flag_t
-  (_bitmask '(GIT_REPOSITORY_OPEN_NO_SEARCH = 0
-              GIT_REPOSITORY_OPEN_CROSS_FS = 2
-              GIT_REPOSITORY_OPEN_BARE = 4
-              GIT_REPOSITORY_OPEN_NO_DOTGIT = 8
-              GIT_REPOSITORY_OPEN_FROM_ENV = 16)))
+(define-bitmask _git_repository_open_flag_t
+  [GIT_REPOSITORY_OPEN_NO_SEARCH = 0]
+  [GIT_REPOSITORY_OPEN_CROSS_FS = 2]
+  [GIT_REPOSITORY_OPEN_BARE = 4]
+  [GIT_REPOSITORY_OPEN_NO_DOTGIT = 8]
+  [GIT_REPOSITORY_OPEN_FROM_ENV = 16])
 
-(define _git_repository_int_flag_t
-  (_bitmask '(GIT_REPOSITORY_INIT_BARE = 1
-              GIT_REPOSITORY_INIT_NO_REINIT = 2
-              GIT_REPOSITORY_INIT_NO_DOTGIT_DIR = 4
-              GIT_REPOSITORY_INIT_MKDIR = 8
-              GIT_REPOSITORY_INIT_MKPATH = 16
-              GIT_REPOSITORY_INIT_EXTERNAL_TEMPLATE = 32
-              GIT_REPOSITORY_INIT_RELATIVE_GITLINK = 64)))
+(define-bitmask _git_repository_int_flag_t
+  [GIT_REPOSITORY_INIT_BARE = 1]
+  [GIT_REPOSITORY_INIT_NO_REINIT = 2]
+  [GIT_REPOSITORY_INIT_NO_DOTGIT_DIR = 4]
+  [GIT_REPOSITORY_INIT_MKDIR = 8]
+  [GIT_REPOSITORY_INIT_MKPATH = 16]
+  [GIT_REPOSITORY_INIT_EXTERNAL_TEMPLATE = 32]
+  [GIT_REPOSITORY_INIT_RELATIVE_GITLINK = 64])
 
-(define _git_repository_init_mode_t
-  (_enum '(GIT_REPOSITORY_INIT_SHARED_UMASK = 0
-           GIT_REPOSITORY_INIT_SHARED_GROUP = #o0002775
-           GIT_REPOSITORY_INIT_SHARED_ALL = #o0002777)))
+(define-enum _git_repository_init_mode_t
+  [GIT_REPOSITORY_INIT_SHARED_UMASK = 0]
+  [GIT_REPOSITORY_INIT_SHARED_GROUP = #o0002775]
+  [GIT_REPOSITORY_INIT_SHARED_ALL = #o0002777])
 
 (define-cstruct _git_repository_init_opts
   ([version _uint]
@@ -48,10 +50,10 @@
 (define GIT_REPOSITORY_INIT_OPTS_VERSION 1)
 
 (define _git_repository_fetchhead_foreach_cb
-  (_fun _string _string _oid _uint _bytes -> _int))
+  (_fun _string _string _git_oid-pointer _uint _bytes -> _int))
 
 (define _git_repository_mergehead_foreach_cb
-  (_fun _oid _bytes -> _int))
+  (_fun _git_oid-pointer _bytes -> _int))
 
 (define _git_repository_state_t
   (_enum '(GIT_REPOSITORY_STATE_NONE
@@ -93,7 +95,7 @@
   (_fun _repository -> _string))
 
 (define-libgit2/check git_repository_hashfile
-  (_fun _oid _repository _path _git_object_t _string -> _int))
+  (_fun _git_oid-pointer _repository _path _git_object_t _string -> _int))
 
 (define-libgit2/alloc git_repository_head
   (_fun _reference/null _repository -> _int)
@@ -185,7 +187,7 @@
   (_fun _repository _string -> _int))
 
 (define-libgit2/check git_repository_set_head_detached
-  (_fun _repository _oid -> _int))
+  (_fun _repository _git_oid-pointer -> _int))
 
 (define-libgit2/check git_repository_set_head_detached_from_annotated
   (_fun _repository _annotated_commit -> _int))

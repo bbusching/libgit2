@@ -24,6 +24,7 @@
   (check-not-exn
    (λ ()
      (git_repository_free
+      ;; will this pass on the pkg build server ???
       (git_clone "https://github.com/bbusching/libgit2.git"
                  (path->string (build-path temp-dir "libgit2-clone"))
                  #f)))))

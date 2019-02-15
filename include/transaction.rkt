@@ -2,7 +2,9 @@
 
 (require ffi/unsafe
          "types.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -29,4 +31,4 @@
   (_fun _transaction _string _string _signature _string -> _int))
 
 (define-libgit2/check git_transaction_set_target
-  (_fun _transaction _string _oid _signature _string -> _int))
+  (_fun _transaction _string _git_oid-pointer _signature _string -> _int))

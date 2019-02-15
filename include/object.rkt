@@ -3,6 +3,7 @@
 (require ffi/unsafe
          "types.rkt"
          "buffer.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
 (provide (all-defined-out))
 
@@ -18,10 +19,10 @@
   git_object_free)
 
 (define-libgit2 git_object_id
-  (_fun _object -> _oid))
+  (_fun _object -> _git_oid-pointer))
 
 (define-libgit2/alloc git_object_lookup
-  (_fun _object _repository _oid _git_object_t -> _int)
+  (_fun _object _repository _git_oid-pointer _git_object_t -> _int)
   git_object_free)
 
 (define-libgit2/alloc git_object_lookup_bypath
@@ -29,7 +30,7 @@
   git_object_free)
 
 (define-libgit2/alloc git_object_lookup_prefix
-  (_fun _object _repository _oid _size _git_object_t -> _int)
+  (_fun _object _repository _git_oid-pointer _size _git_object_t -> _int)
   git_object_free)
 
 (define-libgit2 git_object_owner

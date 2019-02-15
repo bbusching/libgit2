@@ -2,16 +2,17 @@
 
 (require ffi/unsafe
          "types.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
 (provide (all-defined-out))
 
 ; Types
 
 (define _git_odb_foreach_cb
-  (_fun _oid _bytes -> _int))
+  (_fun _git_oid-pointer _bytes -> _int))
 
 (define-cstruct _git_odb_expand_id
-  ([id _oid]
+  ([id _git_oid-pointer]
    [length _ushort]
    [type _git_object_t]))
 (define _odb_expand_id _git_odb_expand_id-pointer)
@@ -28,10 +29,10 @@
   (_fun _odb _string -> _int))
 
 (define-libgit2 git_odb_exists
-  (_fun _odb _oid -> _bool))
+  (_fun _odb _git_oid-pointer -> _bool))
 
 (define-libgit2 git_odb_exists_prefix
-  (_fun _oid _odb _oid _size -> _bool))
+  (_fun _git_oid-pointer _odb _git_oid-pointer _size -> _bool))
 
 (define-libgit2/check git_odb_expand_ids
   (_fun _odb _odb_expand_id _size -> _int))
@@ -46,10 +47,10 @@
   (_fun _odb_backend _odb _size -> _int))
 
 (define-libgit2/check git_odb_hash
-  (_fun _oid _bytes _size _git_object_t -> _int))
+  (_fun _git_oid-pointer _bytes _size _git_object_t -> _int))
 
 (define-libgit2/check git_odb_hashfile
-  (_fun _oid _string _git_object_t -> _int))
+  (_fun _git_oid-pointer _string _git_object_t -> _int))
 
 (define-libgit2/alloc git_odb_new
   (_fun _odb -> _int)
@@ -69,7 +70,7 @@
   git_odb_object_free)
 
 (define-libgit2 git_odb_object_id
-  (_fun _odb_object -> _oid))
+  (_fun _odb_object -> _git_oid-pointer))
 
 (define-libgit2 git_odb_object_size
   (_fun _odb_object -> _size))
@@ -81,27 +82,27 @@
   (_fun _odb _string -> _int))
 
 (define-libgit2/alloc git_odb_open_rstream
-  (_fun _odb_stream _odb _oid -> _int))
+  (_fun _odb_stream _odb _git_oid-pointer -> _int))
 
 (define-libgit2/alloc git_odb_open_wstream
   (_fun _odb_stream _odb _git_off_t _git_object_t -> _int))
 
 (define-libgit2/alloc git_odb_read
-  (_fun _odb_object _odb _oid -> _int)
+  (_fun _odb_object _odb _git_oid-pointer -> _int)
   git_odb_object_free)
 
 (define-libgit2/check git_odb_read_header
-  (_fun (_cpointer _size) (_cpointer _git_object_t) _odb _oid -> _int))
+  (_fun (_cpointer _size) (_cpointer _git_object_t) _odb _git_oid-pointer -> _int))
 
 (define-libgit2/alloc git_odb_read_prefix
-  (_fun _odb_object _odb _oid _size -> _int)
+  (_fun _odb_object _odb _git_oid-pointer _size -> _int)
   git_odb_object_free)
 
 (define-libgit2/check git_odb_refresh
   (_fun _odb -> _int))
 
 (define-libgit2/check git_odb_stream_finalize_write
-  (_fun _oid _odb_stream -> _int))
+  (_fun _git_oid-pointer _odb_stream -> _int))
 
 (define-libgit2 git_odb_stream_free
   (_fun _odb_stream -> _void))
@@ -113,7 +114,7 @@
   (_fun _odb_stream _string _size -> _int))
 
 (define-libgit2/check git_odb_write
-  (_fun _oid _odb _bytes _size _git_object_t -> _int))
+  (_fun _git_oid-pointer _odb _bytes _size _git_object_t -> _int))
 
 (define-libgit2/alloc git_odb_write_pack
   (_fun _odb_writepack _odb _git_transfer_progress_cb _bytes -> _int))

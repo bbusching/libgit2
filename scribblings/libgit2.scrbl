@@ -4,7 +4,7 @@
 
 @author[(author+email "Brad Busching" "bradley.busching@gmail.com")]
 
-@(require (for-label (except-in racket object? blame?) libgit2))
+@(require "doc.rkt")
 
 @defmodule[libgit2]
 

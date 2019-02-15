@@ -6,7 +6,9 @@
          "merge.rkt"
          "checkout.rkt"
          "index.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -41,7 +43,7 @@
   (_fun _rebase -> _int))
 
 (define-libgit2/check git_rebase_commit
-  (_fun _oid _rebase _signature/null _signature _string _string -> _int))
+  (_fun _git_oid-pointer _rebase _signature/null _signature _string _string -> _int))
 
 (define-libgit2/check git_rebase_finish
   (_fun _rebase _signature -> _int))

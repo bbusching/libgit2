@@ -3,7 +3,9 @@
 (require ffi/unsafe
          "types.rkt"
          "object.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -25,7 +27,7 @@
 
 (define-cstruct _git_tree_update
   ([action _git_tree_update_t]
-   [id _oid]
+   [id _git_oid-pointer]
    [filemode _git_filemode_t]
    [path _string]))
 
@@ -35,14 +37,14 @@
   (_fun _tree -> _void))
 
 (define-libgit2/check git_tree_create_updated
-  (_fun _oid _repository _tree _size _git_tree_update-pointer -> _int))
+  (_fun _git_oid-pointer _repository _tree _size _git_tree_update-pointer -> _int))
 
 (define-libgit2/alloc git_tree_dup
   (_fun _tree _tree -> _int)
   git_tree_free)
 
 (define-libgit2 git_tree_entry_byid
-  (_fun _tree _oid -> _tree_entry))
+  (_fun _tree _git_oid-pointer -> _tree_entry))
 
 (define-libgit2 git_tree_entry_byindex
   (_fun _tree _size -> _tree_entry))
@@ -69,7 +71,7 @@
   (_fun _tree_entry -> _void))
 
 (define-libgit2 git_tree_entry_id
-  (_fun _tree_entry -> _oid))
+  (_fun _tree_entry -> _git_oid-pointer))
 
 (define-libgit2 git_tree_entry_name
   (_fun _tree_entry -> _string))
@@ -85,14 +87,14 @@
   (_fun _tree -> _size))
 
 (define-libgit2 git_tree_id
-  (_fun _tree -> _oid))
+  (_fun _tree -> _git_oid-pointer))
 
 (define-libgit2/alloc git_tree_lookup
-  (_fun _tree _repository _oid -> _int)
+  (_fun _tree _repository _git_oid-pointer -> _int)
   git_tree_free)
 
 (define-libgit2/alloc git_tree_lookup_prefix
-  (_fun _tree _repository _oid _size -> _int)
+  (_fun _tree _repository _git_oid-pointer _size -> _int)
   git_tree_free)
 
 (define-libgit2 git_tree_owner
@@ -118,7 +120,7 @@
   (_fun _treebuilder _string -> _tree_entry/null))
 
 (define-libgit2/alloc git_treebuilder_insert
-  (_fun _tree_entry _treebuilder _string _oid _git_filemode_t -> _int)
+  (_fun _tree_entry _treebuilder _string _git_oid-pointer _git_filemode_t -> _int)
   git_tree_entry_free)
 
 (define-libgit2/alloc git_treebuilder_new
@@ -129,4 +131,4 @@
   (_fun _treebuilder _string -> _int))
 
 (define-libgit2/check git_treebuilder_write
-  (_fun _oid _treebuilder -> _int))
+  (_fun _git_oid-pointer _treebuilder -> _int))

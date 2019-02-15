@@ -6,7 +6,9 @@
          "checkout.rkt"
          "index.rkt"
          "diff.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -95,19 +97,19 @@
   (_fun (_cpointer _git_merge_analysis_t) (_cpointer _git_merge_preference_t) _repository (_cpointer _annotated_commit) _size -> _int))
 
 (define-libgit2/check git_merge_base
-  (_fun _oid _repository _oid _oid -> _int))
+  (_fun _git_oid-pointer _repository _git_oid-pointer _git_oid-pointer -> _int))
 
 (define-libgit2/check git_merge_base_many
-  (_fun _oid _repository _size (_cpointer _oid) -> _int))
+  (_fun _git_oid-pointer _repository _size (_cpointer _git_oid-pointer) -> _int))
 
 (define-libgit2/check git_merge_base_octopus
-  (_fun _oid _repository _size (_cpointer _oid) -> _int))
+  (_fun _git_oid-pointer _repository _size (_cpointer _git_oid-pointer) -> _int))
 
 (define-libgit2/check git_merge_bases
-  (_fun _oidarray _repository _oid _oid -> _int))
+  (_fun _oidarray _repository _git_oid-pointer _git_oid-pointer -> _int))
 
 (define-libgit2/check git_merge_bases_many
-  (_fun _oidarray _repository _size (_cpointer _oid) -> _int))
+  (_fun _oidarray _repository _size (_cpointer _git_oid-pointer) -> _int))
 
 (define-libgit2/alloc git_merge_commits
   (_fun _index _repository _commit _commit _commit _git_merge_opts-pointer -> _int)

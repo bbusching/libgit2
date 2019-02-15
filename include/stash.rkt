@@ -3,31 +3,33 @@
 (require ffi/unsafe
          "types.rkt"
          "checkout.rkt"
+         (submod "oid.rkt" private)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
 ; Types
 
-(define _git_stash_flags
-  (_bitmask '(GIT_STASH_DEFAULT = 0
-              GIT_STASH_KEEP_INDEX = 1
-              GIT_STASH_INCLUDE_UNTRACKED = 2
-              GIT_STASH_INCLUDE_IGNORED = 4)))
+(define-bitmask _git_stash_flags
+  [GIT_STASH_DEFAULT = 0]
+  [GIT_STASH_KEEP_INDEX = 1]
+  [GIT_STASH_INCLUDE_UNTRACKED = 2]
+  [GIT_STASH_INCLUDE_IGNORED = 4])
 
-(define _git_stash_apply_flags
-  (_bitmask '(GIT_STASH_APPLY_DEFAULT = 0
-              GIT_STASH_APPLY_REINSTATE_INDEX = 1)))
+(define-bitmask _git_stash_apply_flags
+  [GIT_STASH_APPLY_DEFAULT = 0]
+  [GIT_STASH_APPLY_REINSTATE_INDEX = 1])
 
-(define _git_stash_apply_progress_t
-  (_enum '(GIT_STASH_APPLY_PROGRESS_NONE
-           GIT_STASH_APPLY_PROGRESS_LOADING_STASH
-           GIT_STASH_APPLY_PROGRESS_ANALYZE_INDEX
-           GIT_STASH_APPLY_PROGRESS_ANALYZE_MODIFIED
-           GIT_STASH_APPLY_PROGRESS_ANALYZE_UNTRACKED
-           GIT_STASH_APPLY_PROGRESS_CHECKOUT_UNTRACKED
-           GIT_STASH_APPLY_PROGRESS_CHECKOUT_MODIFIED
-           GIT_STASH_APPLY_PROGRESS_DONE)))
+(define-enum _git_stash_apply_progress_t
+  GIT_STASH_APPLY_PROGRESS_NONE
+  GIT_STASH_APPLY_PROGRESS_LOADING_STASH
+  GIT_STASH_APPLY_PROGRESS_ANALYZE_INDEX
+  GIT_STASH_APPLY_PROGRESS_ANALYZE_MODIFIED
+  GIT_STASH_APPLY_PROGRESS_ANALYZE_UNTRACKED
+  GIT_STASH_APPLY_PROGRESS_CHECKOUT_UNTRACKED
+  GIT_STASH_APPLY_PROGRESS_CHECKOUT_MODIFIED
+  GIT_STASH_APPLY_PROGRESS_DONE)
 
 (define _git_stash_apply_progress_cb
   (_fun _git_stash_apply_progress_t _bytes -> _int))
@@ -42,7 +44,7 @@
 (define GIT_STASH_APPLY_OPTS_VERSION 1)
 
 (define _git_stash_cb
-  (_fun _size _string _oid _bytes -> _int))
+  (_fun _size _string _git_oid-pointer _bytes -> _int))
 
 ; Functions
 
@@ -62,4 +64,4 @@
   (_fun _repository _size _git_stash_apply_opts-pointer -> _int))
 
 (define-libgit2/check git_stash_save
-  (_fun _oid _repository _signature _string _uint32 -> _int))
+  (_fun _git_oid-pointer _repository _signature _string _uint32 -> _int))
