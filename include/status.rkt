@@ -1,12 +1,14 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "diff.rkt"
          "strarray.rkt"
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_status_list)
          libgit2/private)
-(provide (all-defined-out))
 
+(provide (all-defined-out))
 
 ; Types
 
@@ -73,29 +75,29 @@
 ; Functions
 
 (define-libgit2 git_status_byindex
-  (_fun _status_list _size -> _git_status_entry-pointer/null))
+  (_fun _git_status_list _size -> _git_status_entry-pointer/null))
 
 (define-libgit2/alloc git_status_file
-  (_fun _uint _repository _string -> _int))
+  (_fun _uint _git_repository _string -> _int))
 
 (define-libgit2/check git_status_foreach
-  (_fun _repository _git_status_cb _bytes -> _int))
+  (_fun _git_repository _git_status_cb _bytes -> _int))
 
 (define-libgit2/check git_status_foreach_ext
-  (_fun _repository _git_status_opts-pointer _git_status_cb _bytes -> _int))
+  (_fun _git_repository _git_status_opts-pointer _git_status_cb _bytes -> _int))
 
 (define-libgit2/check git_status_init_options
   (_fun _git_status_opts-pointer _uint -> _int))
 
 (define-libgit2 git_status_list_entrycount
-  (_fun _status_list -> _size))
+  (_fun _git_status_list -> _size))
 
 (define-libgit2/dealloc git_status_list_free
-  (_fun _status_list -> _void))
+  (_fun _git_status_list -> _void))
 
 (define-libgit2/alloc git_status_list_new
-  (_fun _status_list _repository _git_status_opts-pointer -> _int)
+  (_fun _git_status_list _git_repository _git_status_opts-pointer -> _int)
   git_status_list_free)
 
 (define-libgit2/alloc git_status_should_ignore
-  (_fun _bool _repository _string -> _int))
+  (_fun _bool _git_repository _string -> _int))

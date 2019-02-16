@@ -1,9 +1,11 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "transport.rkt"
+         (only-in "types.rkt"
+                  _git_transport_certificate_check_cb)
          libgit2/private)
+
 (provide (all-defined-out))
 
 ; Types

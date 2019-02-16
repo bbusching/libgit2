@@ -1,9 +1,13 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_blame
+                  _git_signature-pointer)
          libgit2/private)
+
 (provide (all-defined-out))
 
 ; Types
@@ -31,11 +35,11 @@
   ([lines_in_hunk _size]
    [final_commit_id _git_oid-pointer]
    [final_start_line_number _size]
-   [final_signature _signature]
+   [final_signature _git_signature-pointer]
    [orig_commit_id _git_oid-pointer]
    [orig_path _string]
    [orig_sart_line_number _size]
-   [orig_signature _signature]
+   [orig_signature _git_signature-pointer]
    [boundary _ubyte]))
 
 ; Functions
@@ -48,7 +52,7 @@
   git_blame_free)
 
 (define-libgit2/alloc git_blame_file
-  (_fun _git_blame _repository _string _git_blame_opts-pointer/null -> _int)
+  (_fun _git_blame _git_repository _string _git_blame_opts-pointer/null -> _int)
   git_blame_free)
 
 (define-libgit2 git_blame_get_hunk_byindex

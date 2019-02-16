@@ -1,13 +1,16 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "merge.rkt"
          "checkout.rkt"
          "index.rkt"
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_commit
+                  _git_index)
          libgit2/private)
-(provide (all-defined-out))
 
+(provide (all-defined-out))
 
 ; Types
 
@@ -20,10 +23,10 @@
 ; Functions
 
 (define-libgit2/check git_cherrypick
-  (_fun _repository _commit _git_cherrypick_opts-pointer/null -> _int))
+  (_fun _git_repository _git_commit _git_cherrypick_opts-pointer/null -> _int))
 
 (define-libgit2/alloc git_cherrypick_commit
-  (_fun _index _repository _commit _commit _uint _git_merge_opts-pointer/null -> _int)
+  (_fun _git_index _git_repository _git_commit _git_commit _uint _git_merge_opts-pointer/null -> _int)
   git_index_free)
 
 (define-libgit2/check git_cherrypick_init_options

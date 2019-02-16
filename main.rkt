@@ -16,7 +16,8 @@
 (define-syntax-rule (require-provide mod ...)
   (begin (require mod ...) (provide (all-from-out mod) ...)))
 
-(require-provide "include/annotated_commit.rkt"
+(require-provide "include/types.rkt"
+                 "include/annotated_commit.rkt"
                  "include/blame.rkt"
                  "include/blob.rkt"
                  "include/branch.rkt"
@@ -66,5 +67,4 @@
                  "include/trace.rkt"
                  "include/transaction.rkt"
                  "include/transport.rkt"
-                 "include/tree.rkt"
-                 "include/types.rkt")
+                 "include/tree.rkt")

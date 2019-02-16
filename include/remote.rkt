@@ -1,18 +1,27 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
-         "net.rkt"
+         (only-in "net.rkt"
+                  _git_direction
+                  _git_remote_head-pointer)
          "strarray.rkt"
          "transport.rkt"
          "pack.rkt"
          "proxy.rkt"
          "buffer.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_transport_message_cb
+                  _git_transport_certificate_check_cb
+                  _git_transfer_progress
+                  _git_transfer_progress-pointer
+                  _git_transfer_progress_cb
+                  _git_remote
+                  _git_refspec)
          libgit2/private)
 
 (provide (all-defined-out))
-
 
 ; Types
 
@@ -85,62 +94,62 @@
 ; Functions
 
 (define-libgit2/dealloc git_remote_free
-  (_fun _remote -> _void))
+  (_fun _git_remote -> _void))
 
 (define-libgit2/check git_remote_add_fetch
-  (_fun _repository _remote _string -> _int))
+  (_fun _git_repository _git_remote _string -> _int))
 
 (define-libgit2/check git_remote_add_push
-  (_fun _repository _remote _string -> _int))
+  (_fun _git_repository _git_remote _string -> _int))
 
 (define-libgit2 git_remote_autotag
-  (_fun _remote -> _git_remote_autotag_option_t))
+  (_fun _git_remote -> _git_remote_autotag_option_t))
 
 (define-libgit2/check git_remote_connect
-  (_fun _remote _git_direction _git_remote_callbacks _git_proxy_opts-pointer _strarray -> _int))
+  (_fun _git_remote _git_direction _git_remote_callbacks _git_proxy_opts-pointer _strarray -> _int))
 
 (define-libgit2 git_remote_connected
-  (_fun _remote -> _bool))
+  (_fun _git_remote -> _bool))
 
 (define-libgit2/alloc git_remote_create
-  (_fun _remote _repository _string _string -> _int)
+  (_fun _git_remote _git_repository _string _string -> _int)
   git_remote_free)
 
 (define-libgit2/alloc git_remote_create_anonymous
-  (_fun _remote _repository _string -> _int)
+  (_fun _git_remote _git_repository _string -> _int)
   git_remote_free)
 
 (define-libgit2/alloc git_remote_create_with_fetchspec
-  (_fun _remote _repository _string _string _string -> _int)
+  (_fun _git_remote _git_repository _string _string _string -> _int)
   git_remote_free)
 
 (define-libgit2/check git_remote_default_branch
-  (_fun _buf _remote -> _int))
+  (_fun _buf _git_remote -> _int))
 
 (define-libgit2/check git_remote_delete
-  (_fun _repository _string -> _int))
+  (_fun _git_repository _string -> _int))
 
 (define-libgit2 git_remote_disconnect
-  (_fun _remote -> _void))
+  (_fun _git_remote -> _void))
 
 (define-libgit2/check git_remote_download
-  (_fun _remote _strarray _git_fetch_opts-pointer/null -> _int))
+  (_fun _git_remote _strarray _git_fetch_opts-pointer/null -> _int))
 
 (define-libgit2/alloc git_remote_dup
-  (_fun _remote _remote -> _int)
+  (_fun _git_remote _git_remote -> _int)
   git_remote_free)
 
 (define-libgit2/check git_remote_fetch
-  (_fun _remote _strarray/null _git_fetch_opts-pointer/null _string -> _int))
+  (_fun _git_remote _strarray/null _git_fetch_opts-pointer/null _string -> _int))
 
 (define-libgit2/check git_remote_get_fetch_refspecs
-  (_fun _strarray _remote -> _int))
+  (_fun _strarray _git_remote -> _int))
 
 (define-libgit2/check git_remote_get_push_refspecs
-  (_fun _strarray _remote -> _int))
+  (_fun _strarray _git_remote -> _int))
 
 (define-libgit2 git_remote_get_refspec
-  (_fun _remote _size -> _refspec))
+  (_fun _git_remote _size -> _git_refspec))
 
 (define-libgit2/check git_remote_init_callbacks
   (_fun _git_remote_callbacks-pointer _uint -> _int))
@@ -149,63 +158,63 @@
   (_fun _string -> _bool))
 
 (define-libgit2/check git_remote_list
-  (_fun _strarray _repository -> _int))
+  (_fun _strarray _git_repository -> _int))
 
 (define-libgit2/alloc git_remote_lookup
-  (_fun _remote _repository _string -> _int)
+  (_fun _git_remote _git_repository _string -> _int)
   git_remote_free)
 
 (define-libgit2 git_remote_ls
-  (_fun (out : (_ptr o (_cpointer _remote_head))) (size : (_ptr o _size)) _remote -> (v : _int)
+  (_fun (out : (_ptr o (_cpointer _git_remote_head-pointer))) (size : (_ptr o _size)) _git_remote -> (v : _int)
         -> (check-git_error_code v (λ () (values out size)) 'git_remote_ls)))
 
 (define-libgit2 git_remote_name
-  (_fun _remote -> _string))
+  (_fun _git_remote -> _string))
 
 (define-libgit2 git_remote_owner
-  (_fun _remote -> _repository))
+  (_fun _git_remote -> _git_repository))
 
 (define-libgit2/check git_remote_prune
-  (_fun _remote _git_remote_callbacks-pointer/null -> _int))
+  (_fun _git_remote _git_remote_callbacks-pointer/null -> _int))
 
 (define-libgit2 git_remote_prune_refs
-  (_fun _remote -> _int))
+  (_fun _git_remote -> _int))
 
 (define-libgit2/check git_remote_push
-  (_fun _remote _strarray _git_push_opts-pointer -> _int))
+  (_fun _git_remote _strarray _git_push_opts-pointer -> _int))
 
 (define-libgit2 git_remote_pushurl
-  (_fun _remote -> _string))
+  (_fun _git_remote -> _string))
 
 (define-libgit2 git_remote_refspec_count
-  (_fun _remote -> _size))
+  (_fun _git_remote -> _size))
 
 (define-libgit2/check git_remote_rename
-  (_fun _strarray _repository _string _string -> _int))
+  (_fun _strarray _git_repository _string _string -> _int))
 
 (define-libgit2/check git_remote_set_autotag
-  (_fun _repository _string _git_remote_autotag_option_t -> _int))
+  (_fun _git_repository _string _git_remote_autotag_option_t -> _int))
 
 (define-libgit2/check git_remote_set_pushurl
-  (_fun _repository _remote _string -> _int))
+  (_fun _git_repository _git_remote _string -> _int))
 
 (define-libgit2/check git_remote_set_url
-  (_fun _repository _remote _string -> _int))
+  (_fun _git_repository _git_remote _string -> _int))
 
 (define-libgit2 git_remote_stats
-  (_fun _remote -> _git_transfer_progress-pointer))
+  (_fun _git_remote -> _git_transfer_progress-pointer))
 
 (define-libgit2 git_remote_stop
-  (_fun _remote -> _void))
+  (_fun _git_remote -> _void))
 
 (define-libgit2/check git_remote_update_tips
-  (_fun _remote _git_remote_callbacks-pointer _int _git_remote_autotag_option_t _string -> _int))
+  (_fun _git_remote _git_remote_callbacks-pointer _int _git_remote_autotag_option_t _string -> _int))
 
 (define-libgit2/check git_remote_upload
-  (_fun _remote _strarray _git_push_opts-pointer  -> _int))
+  (_fun _git_remote _strarray _git_push_opts-pointer  -> _int))
 
 (define-libgit2 git_remote_url
-  (_fun _remote -> _string))
+  (_fun _git_remote -> _string))
 
 (define-libgit2/check git_fetch_init_options
   (_fun _git_fetch_opts-pointer _uint -> _int))

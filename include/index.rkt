@@ -1,13 +1,17 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "oid.rkt"
          "strarray.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_index
+                  _git_index_conflict_iterator
+                  _git_tree)
          libgit2/private)
-(provide (all-defined-out))
 
+(provide (all-defined-out))
 
 ; Types
 
@@ -86,49 +90,49 @@
 ; Functions
 
 (define-libgit2/check git_index_add
-  (_fun _index _index_entry -> _int))
+  (_fun _git_index _index_entry -> _int))
 
 (define-libgit2/check git_index_add_all
-  (_fun _index _strarray _git_index_add_option_t _git_index_matched_path_cb _bytes -> _int))
+  (_fun _git_index _strarray _git_index_add_option_t _git_index_matched_path_cb _bytes -> _int))
 
 (define-libgit2/check git_index_add_bypath
-  (_fun _index _string -> _int))
+  (_fun _git_index _string -> _int))
 
 (define-libgit2/check git_index_add_frombuffer
-  (_fun _index _index_entry _bytes _size -> _int))
+  (_fun _git_index _index_entry _bytes _size -> _int))
 
 (define-libgit2 git_index_caps
-  (_fun _index -> _int))
+  (_fun _git_index -> _int))
 
 (define-libgit2 git_index_checksum
-  (_fun _index -> _git_oid-pointer))
+  (_fun _git_index -> _git_oid-pointer))
 
 (define-libgit2/check git_index_clear
-  (_fun _index -> _int))
+  (_fun _git_index -> _int))
 
 (define-libgit2/check git_index_conflict_add
-  (_fun _index _index_entry _index_entry _index_entry -> _int))
+  (_fun _git_index _index_entry _index_entry _index_entry -> _int))
 
 (define-libgit2/check git_index_conflict_cleanup
-  (_fun _index -> _int))
+  (_fun _git_index -> _int))
 
 (define-libgit2 git_index_conflict_get
-  (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _index _string -> (v : _int)
+  (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _git_index _string -> (v : _int)
         -> (check-git_error_code v (λ () (values ancestor our their)) 'git_index_conflict_get)))
 
 (define-libgit2/dealloc git_index_conflict_iterator_free
-  (_fun _index_conflict_iterator -> _void))
+  (_fun _git_index_conflict_iterator -> _void))
 
 (define-libgit2/alloc git_index_conflict_iterator_new
-  (_fun _index_conflict_iterator _index -> _git_error_code)
+  (_fun _git_index_conflict_iterator _git_index -> _git_error_code)
   git_index_conflict_iterator_free)
 
 (define-libgit2 git_index_conflict_next
-  (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _index_conflict_iterator -> (v : _int)
+  (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _git_index_conflict_iterator -> (v : _int)
         -> (check-git_error_code v (λ () (values ancestor our their)) 'git_index_conflict_next)))
 
 (define-libgit2/check git_index_conflict_remove
-  (_fun _index _string -> _int))
+  (_fun _git_index _string -> _int))
 
 (define-libgit2 git_index_entry_is_conflict
   (_fun _index_entry -> _bool))
@@ -137,75 +141,75 @@
   (_fun _index_entry -> _int))
 
 (define-libgit2 git_index_entrycount
-  (_fun _index -> _size))
+  (_fun _git_index -> _size))
 
 (define-libgit2/alloc git_index_find
-  (_fun _size _index _string -> _int))
+  (_fun _size _git_index _string -> _int))
 
 (define-libgit2/alloc git_index_find_prefix
-  (_fun _size _index _string -> _int))
+  (_fun _size _git_index _string -> _int))
 
 (define-libgit2/dealloc git_index_free
-  (_fun _index -> _void))
+  (_fun _git_index -> _void))
 
 (define-libgit2 git_index_get_byindex
-  (_fun _index _size -> _index_entry/null))
+  (_fun _git_index _size -> _index_entry/null))
 
 (define-libgit2 git_index_get_bypath
-  (_fun _index _string _int -> _index_entry/null))
+  (_fun _git_index _string _int -> _index_entry/null))
 
 (define-libgit2 git_index_has_conflicts
-  (_fun _index -> _bool))
+  (_fun _git_index -> _bool))
 
 (define-libgit2/alloc git_index_new
-  (_fun _index -> _int)
+  (_fun _git_index -> _int)
   git_index_free)
 
 (define-libgit2/alloc git_index_open
-  (_fun _index _string -> _int)
+  (_fun _git_index _string -> _int)
   git_index_free)
 
 (define-libgit2 git_index_owner
-  (_fun _index -> _repository))
+  (_fun _git_index -> _git_repository))
 
 (define-libgit2 git_index_path
-  (_fun _index -> _string))
+  (_fun _git_index -> _string))
 
 (define-libgit2/check git_index_read
-  (_fun _index _bool -> _int))
+  (_fun _git_index _bool -> _int))
 
 (define-libgit2/check git_index_read_tree
-  (_fun _index _tree -> _int))
+  (_fun _git_index _git_tree -> _int))
 
 (define-libgit2/check git_index_remove
-  (_fun _index _string _int -> _int))
+  (_fun _git_index _string _int -> _int))
 
 (define-libgit2/check git_index_remove_all
-  (_fun _index _strarray _git_index_matched_path_cb _bytes -> _int))
+  (_fun _git_index _strarray _git_index_matched_path_cb _bytes -> _int))
 
 (define-libgit2/check git_index_remove_bypath
-  (_fun _index _string -> _int))
+  (_fun _git_index _string -> _int))
 
 (define-libgit2/check git_index_remove_directory
-  (_fun _index _string _int -> _int))
+  (_fun _git_index _string _int -> _int))
 
 (define-libgit2/check git_index_set_caps
-  (_fun _index _int -> _int))
+  (_fun _git_index _int -> _int))
 
 (define-libgit2 git_index_version
-  (_fun _index -> _uint))
+  (_fun _git_index -> _uint))
 
 (define-libgit2/check git_index_set_version
-  (_fun _index _uint -> _int))
+  (_fun _git_index _uint -> _int))
 
 (define-libgit2/check git_index_update_all
-  (_fun _index _strarray _git_index_matched_path_cb _bytes -> _int))
+  (_fun _git_index _strarray _git_index_matched_path_cb _bytes -> _int))
 
 (define-libgit2/check git_index_write
-  (_fun _index -> _int))
+  (_fun _git_index -> _int))
 
 (define-libgit2/check git_index_write_tree
-  (_fun _git_oid-pointer _index -> _int))
+  (_fun _git_oid-pointer _git_index -> _int))
 
 (define-libgit2/check git_index_write_tree_to
-  (_fun _git_oid-pointer _index _repository -> _int))
+  (_fun _git_oid-pointer _git_index _git_repository -> _int))

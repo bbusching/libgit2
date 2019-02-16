@@ -1,12 +1,16 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "buffer.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_transfer_progress_cb
+                  _git_packbuilder
+                  _git_revwalk)
          libgit2/private)
-(provide (all-defined-out))
 
+(provide (all-defined-out))
 
 ; Types
 
@@ -23,47 +27,47 @@
 ; Functions
 
 (define-libgit2/check git_packbuilder_foreach
-  (_fun _packbuilder _git_packbuilder_foreach_cb _bytes -> _int))
+  (_fun _git_packbuilder _git_packbuilder_foreach_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_packbuilder_free
-  (_fun _packbuilder -> _void))
+  (_fun _git_packbuilder -> _void))
 
 (define-libgit2 git_packbuilder_hash
-  (_fun _packbuilder -> _git_oid-pointer))
+  (_fun _git_packbuilder -> _git_oid-pointer))
 
 (define-libgit2/check git_packbuilder_insert
-  (_fun _packbuilder _git_oid-pointer _string -> _int))
+  (_fun _git_packbuilder _git_oid-pointer _string -> _int))
 
 (define-libgit2/check git_packbuilder_insert_commit
-  (_fun _packbuilder _git_oid-pointer -> _int))
+  (_fun _git_packbuilder _git_oid-pointer -> _int))
 
 (define-libgit2/check git_packbuilder_insert_recur
-  (_fun _packbuilder _git_oid-pointer _string -> _int))
+  (_fun _git_packbuilder _git_oid-pointer _string -> _int))
 
 (define-libgit2/check git_packbuilder_insert_tree
-  (_fun _packbuilder _git_oid-pointer -> _int))
+  (_fun _git_packbuilder _git_oid-pointer -> _int))
 
 (define-libgit2/check git_packbuilder_insert_walk
-  (_fun _packbuilder _revwalk -> _int))
+  (_fun _git_packbuilder _git_revwalk -> _int))
 
 (define-libgit2/alloc git_packbuilder_new
-  (_fun _packbuilder _repository -> _int)
+  (_fun _git_packbuilder _git_repository -> _int)
   git_packbuilder_free)
 
 (define-libgit2 git_packbuilder_object_count
-  (_fun _packbuilder -> _size))
+  (_fun _git_packbuilder -> _size))
 
 (define-libgit2/check git_packbuilder_set_callbacks
-  (_fun _packbuilder _git_packbuilder_progress _bytes -> _int))
+  (_fun _git_packbuilder _git_packbuilder_progress _bytes -> _int))
 
 (define-libgit2 git_packbuilder_set_threads
-  (_fun _packbuilder _uint -> _uint))
+  (_fun _git_packbuilder _uint -> _uint))
 
 (define-libgit2/check git_packbuilder_write
-  (_fun _packbuilder _string _uint _git_transfer_progress_cb _bytes -> _int))
+  (_fun _git_packbuilder _string _uint _git_transfer_progress_cb _bytes -> _int))
 
 (define-libgit2 git_packbuilder_written
-  (_fun _packbuilder -> _size))
+  (_fun _git_packbuilder -> _size))
 
 (define-libgit2/check git_packbuilder_write_buf
-  (_fun _buf _packbuilder -> _int))
+  (_fun _buf _git_packbuilder -> _int))

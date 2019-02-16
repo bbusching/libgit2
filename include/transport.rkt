@@ -1,27 +1,31 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
+         (only-in "types.rkt"
+                  _git_transport
+                  _git_remote
+                  _git_cert)
          libgit2/private)
+
 (provide (all-defined-out))
 
 ; Types
 
 (define _git_transport_cb
-  (_fun (_cpointer _transport) _remote _bytes -> _int))
+  (_fun (_cpointer _git_transport) _git_remote _bytes -> _int))
 
 (define _git_cert_ssh_t
   (_bitmask '(GIT_CERT_SSH_MD5 = #x0001
               GIT_CERT_SSH_SHA1 = #x0002)))
 
 (define-cstruct _git_cert_hostkey
-  ([parent _cert]
+  ([parent _git_cert]
    [type _git_cert_ssh_t]
    [hash_md5 (_array _uint8 16)]
    [hash_sha1 (_array _uint8 20)]))
 
 (define-cstruct _git_cert_x509
-  ([parent _cert]
+  ([parent _git_cert]
    [data _bytes]
    [len _size]))
 

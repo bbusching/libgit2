@@ -1,28 +1,55 @@
 #lang scribble/manual
 
-@title{Libgit2: Bindings for the libgit2 git library}
-
+@title{Libgit2: Bindings for the libgit2 Git Library}
 @author[(author+email "Brad Busching" "bradley.busching@gmail.com")]
+@defmodule[libgit2]
 
 @(require "doc.rkt")
 
-@defmodule[libgit2]
+This package provides Racket bindings to
+@hyperlink["https://libgit2.org"]{libgit2},
+a portable, pure C implementation of the Git
+core methods provided as a re-entrant linkable library.
+The Racket bindings are fairly low-level and closely
+follow the libgit2 C API: the goal is to provide a foundation
+for higher-level Git applications or libraries.
+Racket identifiers containing underscores directly correspond to
+the @hyperlink["https://libgit2.org/libgit2/"]{C-level functions, types, @etc}
+with the same names.
+Many functions have different signatures, however,
+as this library protects Racket programmers from C-level details
+like memory management and checking error codes.
 
-libgit2 is a portable, pure C implementation of the Git
-core methods provided as a re-entrant linkable library with a solid API,
-allowing you to write native speed custom Git applications in any language
-which supports C bindings.
+@nested[#:style 'inset]{
+ @bold{Status of this library:}
+ The Racket interface to libgit2 is not yet stable:
+ @bold{backwards-incompatible changes are planned}.
+ This package already has extensive coverage of the libgit2 C API,
+ but the signatures of some functions should be changed,
+ either to handle memory management automatically
+ or to use more correct @tech[#:doc '(lib "scribblings/foreign/foreign.scrbl")]{C types}
+ at the FFI leve (e.g. @racket[_path] instead of @racket[_string]).
+ Additionally, this package was initially developed
+ against libgit2 v0.26.0: it has mostly been updated to support
+ libgit2 v0.28.0---all API removals have been dealt with, for example---but
+ some additions and modifications remain to be addressed.
 
-The @racketmodname[libgit2] Racket bindings begaas a senior project
+ Hopefully these details can be addressed and this package
+ stabalized to coordinate with libgit2 v1.0.0, which is
+ @hyperlink["https://github.com/libgit2/libgit2/issues/4960"]{
+  forthcoming around late March 2019}.
+ You can contribute to the development effort
+ @hyperlink["https://github.com/bbusching/libgit2/"]{on Github.}
+}
+
+In addition to the Racket interface, the native libgit2 library
+is distributed via platform-specific dependencies in the
+Racket package system, currently for x86_64 GNU/Linux,
+Windows, and Mac OS.
+
+The libgit2 Racket bindings began as a senior project
 at California Polytechnic State University, San Luis Obispo
 under the guidance of John Clements (clements[at]brinckerhoff.org)
-
-@;{
-TODO:
-  - note git_libgit2_init and git_libgit2_shutdown are handled automatically
-  - don't shadow object? or blame?
-  - note that error handling is built in
-}
 
 @;--------------------------------------------
 
@@ -52,7 +79,7 @@ TODO:
 @include-section["note.scrbl"]
 @include-section["object.scrbl"]
 @include-section["odb.scrbl"]
-@include-section["oid.scrbl"]
+@include-section["oid.scrbl"] @; updated
 @include-section["packbuilder.scrbl"]
 @include-section["patch.scrbl"]
 @include-section["pathspec.scrbl"]

@@ -23,9 +23,8 @@
 
 ; misc
 
-(define make-strarray
-    (λ strs
-      (let [(strs-ptr (malloc _string (length strs)))]
-        (for ([i (range (length strs))])
-          (ptr-set! strs-ptr _string i (list-ref strs i)))
-        (make-git_strarray (cast strs-ptr _pointer _char-ptrptr) (length strs)))))
+(define (make-strarray . strs)
+  (let ([strs-ptr (malloc _string (length strs))])
+    (for ([i (range (length strs))])
+      (ptr-set! strs-ptr _string i (list-ref strs i)))
+    (make-git_strarray (cast strs-ptr _pointer _char-ptrptr) (length strs))))

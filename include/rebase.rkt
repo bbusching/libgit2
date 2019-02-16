@@ -1,16 +1,21 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "oid.rkt"
          "merge.rkt"
          "checkout.rkt"
          "index.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_rebase
+                  _git_signature-pointer
+                  _git_signature-pointer/null
+                  _git_annotated_commit/null
+                  _git_index)
          libgit2/private)
 
 (provide (all-defined-out))
-
 
 ; Types
 
@@ -40,40 +45,40 @@
 ; Functions
 
 (define-libgit2/check git_rebase_abort
-  (_fun _rebase -> _int))
+  (_fun _git_rebase -> _int))
 
 (define-libgit2/check git_rebase_commit
-  (_fun _git_oid-pointer _rebase _signature/null _signature _string _string -> _int))
+  (_fun _git_oid-pointer _git_rebase _git_signature-pointer/null _git_signature-pointer _string _string -> _int))
 
 (define-libgit2/check git_rebase_finish
-  (_fun _rebase _signature -> _int))
+  (_fun _git_rebase _git_signature-pointer -> _int))
 
 (define-libgit2/dealloc git_rebase_free
-  (_fun _rebase -> _void))
+  (_fun _git_rebase -> _void))
 
 (define-libgit2/alloc git_rebase_init
-  (_fun _rebase _repository _annotated_commit/null _annotated_commit/null  _annotated_commit/null _git_rebase_opts-pointer/null -> _int)
+  (_fun _git_rebase _git_repository _git_annotated_commit/null _git_annotated_commit/null  _git_annotated_commit/null _git_rebase_opts-pointer/null -> _int)
   git_rebase_free)
 
 (define-libgit2/check git_rebase_init_options
   (_fun _git_rebase_opts-pointer _uint -> _int))
 
 (define-libgit2/alloc git_rebase_inmemory_index
-  (_fun _index _rebase -> _int)
+  (_fun _git_index _git_rebase -> _int)
   git_index_free)
 
 (define-libgit2/alloc git_rebase_next
-  (_fun _git_rebase_operation-pointer _rebase -> _int))
+  (_fun _git_rebase_operation-pointer _git_rebase -> _int))
 
 (define-libgit2/alloc git_rebase_open
-  (_fun _rebase _repository _git_rebase_opts-pointer -> _int)
+  (_fun _git_rebase _git_repository _git_rebase_opts-pointer -> _int)
   git_rebase_free)
 
 (define-libgit2 git_rebase_operation_byindex
-  (_fun _rebase _size -> _git_rebase_operation-pointer))
+  (_fun _git_rebase _size -> _git_rebase_operation-pointer))
 
 (define-libgit2 git_rebase_operation_current
-  (_fun _rebase -> _size))
+  (_fun _git_rebase -> _size))
 
 (define-libgit2 git_rebase_operation_entrycount
-  (_fun _rebase -> _size))
+  (_fun _git_rebase -> _size))

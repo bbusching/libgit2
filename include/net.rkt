@@ -1,11 +1,10 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          (submod "oid.rkt" private)
          libgit2/private)
-(provide (all-defined-out))
 
+(provide (all-defined-out))
 
 (define GIT_DEFAULT_PORT 9418)
 
@@ -20,4 +19,4 @@
    [symref_target _string]))
 
 (define _git_headlist_cb
-  (_fun _remote_head _bytes -> _int))
+  (_fun _git_remote_head-pointer _bytes -> _int))

@@ -1,13 +1,14 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "checkout.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_signature-pointer)
          libgit2/private)
 
 (provide (all-defined-out))
-
 
 ; Types
 
@@ -49,19 +50,19 @@
 ; Functions
 
 (define-libgit2/check git_stash_apply
-  (_fun _repository _size _git_stash_apply_opts-pointer -> _int))
+  (_fun _git_repository _size _git_stash_apply_opts-pointer -> _int))
 
 (define-libgit2/check git_stash_apply_init_options
   (_fun _git_stash_apply_opts-pointer _uint -> _int))
 
 (define-libgit2/check git_stash_drop
-  (_fun _repository _size -> _int))
+  (_fun _git_repository _size -> _int))
 
 (define-libgit2/check git_stash_foreach
-  (_fun _repository _git_stash_cb _bytes -> _int))
+  (_fun _git_repository _git_stash_cb _bytes -> _int))
 
 (define-libgit2/check git_stash_pop
-  (_fun _repository _size _git_stash_apply_opts-pointer -> _int))
+  (_fun _git_repository _size _git_stash_apply_opts-pointer -> _int))
 
 (define-libgit2/check git_stash_save
-  (_fun _git_oid-pointer _repository _signature _string _uint32 -> _int))
+  (_fun _git_oid-pointer _git_repository _git_signature-pointer _string _uint32 -> _int))

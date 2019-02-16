@@ -1,12 +1,14 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_transfer_progress-pointer
+                  _git_transfer_progress_cb
+                  _git_odb)
          libgit2/private)
 
 (provide (all-defined-out))
-
 
 ; Types
 
@@ -24,7 +26,7 @@
   (_fun _indexer -> _void))
 
 (define-libgit2/alloc git_indexer_new
-  (_fun _indexer _string _uint _odb _git_transfer_progress_cb _bytes -> _int)
+  (_fun _indexer _string _uint _git_odb _git_transfer_progress_cb _bytes -> _int)
   git_indexer_free)
 
 (define-libgit2 git_indexer_hash

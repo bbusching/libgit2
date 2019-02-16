@@ -1,26 +1,28 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "checkout.rkt"
          "remote.rkt"
          "repository.rkt"
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_remote)
          libgit2/private)
-(provide (all-defined-out))
 
+(provide (all-defined-out))
 
 ; Types
 
-(define _git_clone_local_t
-  (_enum '(GIT_CLONE_LOCAL_AUTO
-           GIT_CLONE_LOCAL
-           GIT_CLONE_NO_LOCAL
-           GIT_CLONE_LOCAL_NO_LINKS)))
+(define-enum _git_clone_local_t
+  GIT_CLONE_LOCAL_AUTO
+  GIT_CLONE_LOCAL
+  GIT_CLONE_NO_LOCAL
+  GIT_CLONE_LOCAL_NO_LINKS)
 
 (define _git_remote_create_cb
-  (_fun (_cpointer _remote) _repository _string _string _bytes -> _int))
+  (_fun (_cpointer _git_remote) _git_repository _string _string _bytes -> _int))
 (define _git_repository_create_cb
-  (_fun (_cpointer _repository) _string _int _bytes -> _int))
+  (_fun (_cpointer _git_repository) _string _int _bytes -> _int))
 
 (define-cstruct _git_clone_opts
   ([version _uint]
@@ -39,7 +41,7 @@
 ; Functions
 
 (define-libgit2/alloc git_clone
-  (_fun _repository _string _string _git_clone_opts-pointer/null -> _int)
+  (_fun _git_repository _string _string _git_clone_opts-pointer/null -> _int)
   git_repository_free)
 
 (define-libgit2/check git_clone_init_options

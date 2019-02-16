@@ -1,11 +1,16 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "checkout.rkt"
          "index.rkt"
          "diff.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_annotated_commit
+                  _git_commit
+                  _git_index
+                  _git_tree)
          libgit2/private)
 
 (provide (all-defined-out))
@@ -101,35 +106,35 @@
 ; Functions
 
 (define-libgit2/check git_merge
-  (_fun _repository (_cpointer _annotated_commit) _size _git_merge_opts-pointer _git_checkout_opts-pointer -> _int))
+  (_fun _git_repository (_cpointer _git_annotated_commit) _size _git_merge_opts-pointer _git_checkout_opts-pointer -> _int))
 
 (define-libgit2/check git_merge_analysis
-  (_fun (_cpointer _git_merge_analysis_t) (_cpointer _git_merge_preference_t) _repository (_cpointer _annotated_commit) _size -> _int))
+  (_fun (_cpointer _git_merge_analysis_t) (_cpointer _git_merge_preference_t) _git_repository (_cpointer _git_annotated_commit) _size -> _int))
 
 (define-libgit2/check git_merge_base
-  (_fun _git_oid-pointer _repository _git_oid-pointer _git_oid-pointer -> _int))
+  (_fun _git_oid-pointer _git_repository _git_oid-pointer _git_oid-pointer -> _int))
 
 (define-libgit2/check git_merge_base_many
-  (_fun _git_oid-pointer _repository _size (_cpointer _git_oid-pointer) -> _int))
+  (_fun _git_oid-pointer _git_repository _size (_cpointer _git_oid-pointer) -> _int))
 
 (define-libgit2/check git_merge_base_octopus
-  (_fun _git_oid-pointer _repository _size (_cpointer _git_oid-pointer) -> _int))
+  (_fun _git_oid-pointer _git_repository _size (_cpointer _git_oid-pointer) -> _int))
 
 (define-libgit2/check git_merge_bases
-  (_fun _git_oidarray-pointer _repository _git_oid-pointer _git_oid-pointer -> _int))
+  (_fun _git_oidarray-pointer _git_repository _git_oid-pointer _git_oid-pointer -> _int))
 
 (define-libgit2/check git_merge_bases_many
-  (_fun _git_oidarray-pointer _repository _size (_cpointer _git_oid-pointer) -> _int))
+  (_fun _git_oidarray-pointer _git_repository _size (_cpointer _git_oid-pointer) -> _int))
 
 (define-libgit2/alloc git_merge_commits
-  (_fun _index _repository _commit _commit _commit _git_merge_opts-pointer -> _int)
+  (_fun _git_index _git_repository _git_commit _git_commit _git_commit _git_merge_opts-pointer -> _int)
   git_index_free)
 
 (define-libgit2/check git_merge_file
   (_fun _git_merge_file_result-pointer _git_merge_file_input-pointer _git_merge_file_input-pointer _git_merge_file_input-pointer _git_merge_file_opts-pointer -> _int))
 
 (define-libgit2/check git_merge_file_from_index
-  (_fun _git_merge_file_result-pointer _repository _index_entry _index_entry _index_entry _git_merge_file_opts-pointer -> _int))
+  (_fun _git_merge_file_result-pointer _git_repository _index_entry _index_entry _index_entry _git_merge_file_opts-pointer -> _int))
 
 (define-libgit2/check git_merge_file_init_input
   (_fun _git_merge_file_input-pointer _uint -> _int))
@@ -144,5 +149,5 @@
   (_fun _git_merge_opts-pointer _uint -> _int))
 
 (define-libgit2/alloc git_merge_trees
-  (_fun _index _repository _tree _tree _tree _git_merge_opts-pointer -> _int)
+  (_fun _git_index _git_repository _git_tree _git_tree _git_tree _git_merge_opts-pointer -> _int)
   git_index_free)

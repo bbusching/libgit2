@@ -1,12 +1,16 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "strarray.rkt"
          "checkout.rkt"
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_object
+                  _git_object/null
+                  _git_annotated_commit)
          libgit2/private)
-(provide (all-defined-out))
 
+(provide (all-defined-out))
 
 ; Types
 
@@ -18,10 +22,10 @@
 ; Functions
 
 (define-libgit2/check git_reset
-  (_fun _repository _object _git_reset_t _git_checkout_opts-pointer -> _int))
+  (_fun _git_repository _git_object _git_reset_t _git_checkout_opts-pointer -> _int))
 
 (define-libgit2/check git_reset_default
-  (_fun _repository _object/null _strarray -> _int))
+  (_fun _git_repository _git_object/null _strarray -> _int))
 
 (define-libgit2/check git_reset_from_annotated
-  (_fun _repository _annotated_commit _git_reset_t _git_checkout_opts-pointer -> _int))
+  (_fun _git_repository _git_annotated_commit _git_reset_t _git_checkout_opts-pointer -> _int))

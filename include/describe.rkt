@@ -1,9 +1,12 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          "buffer.rkt"
+         (only-in "types.rkt"
+                  _git_object
+                  _git_repository)
          libgit2/private)
+
 (provide (all-defined-out))
 
 
@@ -42,14 +45,14 @@
   (_fun _describe_result -> _void))
 
 (define-libgit2/alloc git_describe_commit
-  (_fun _describe_result _object _git_describe_opts-pointer/null -> _int)
+  (_fun _describe_result _git_object _git_describe_opts-pointer/null -> _int)
   git_describe_result_free)
 
 (define-libgit2/check git_describe_format
   (_fun _buf _describe_result _git_describe_format_opts-pointer/null -> _int))
 
 (define-libgit2/alloc git_describe_workdir
-  (_fun _describe_result _repository _git_describe_opts-pointer/null -> _int)
+  (_fun _describe_result _git_repository _git_describe_opts-pointer/null -> _int)
   git_describe_result_free)
 
 (define-libgit2/check git_describe_init_options

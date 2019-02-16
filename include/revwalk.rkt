@@ -1,12 +1,13 @@
 #lang racket
 
 (require ffi/unsafe
-         "types.rkt"
          (submod "oid.rkt" private)
+         (only-in "types.rkt"
+                  _git_repository
+                  _git_revwalk)
          libgit2/private)
+
 (provide (all-defined-out))
-
-
 ; Types
 
 (define _git_sort_t
@@ -21,53 +22,53 @@
 ; Functions
 
 (define-libgit2/check git_revwalk_add_hide_cb
-  (_fun _revwalk _git_revwalk_hide_cb _bytes -> _int))
+  (_fun _git_revwalk _git_revwalk_hide_cb _bytes -> _int))
 
 (define-libgit2/dealloc git_revwalk_free
-  (_fun _revwalk -> _void))
+  (_fun _git_revwalk -> _void))
 
 (define-libgit2/check git_revwalk_hide
-  (_fun _revwalk _git_oid-pointer -> _int))
+  (_fun _git_revwalk _git_oid-pointer -> _int))
 
 (define-libgit2/check git_revwalk_hide_glob
-  (_fun _revwalk _string -> _int))
+  (_fun _git_revwalk _string -> _int))
 
 (define-libgit2/check git_revwalk_hide_head
-  (_fun _revwalk -> _int))
+  (_fun _git_revwalk -> _int))
 
 (define-libgit2/check git_revwalk_hide_ref
-  (_fun _revwalk _string -> _int))
+  (_fun _git_revwalk _string -> _int))
 
 (define-libgit2/alloc git_revwalk_new
-  (_fun _revwalk _repository -> _int)
+  (_fun _git_revwalk _git_repository -> _int)
   git_revwalk_free)
 
 (define-libgit2/check git_revwalk_next
-  (_fun _git_oid-pointer _revwalk -> _int))
+  (_fun _git_oid-pointer _git_revwalk -> _int))
 
 (define-libgit2/check git_revwalk_push
-  (_fun _revwalk _git_oid-pointer -> _int))
+  (_fun _git_revwalk _git_oid-pointer -> _int))
 
 (define-libgit2/check git_revwalk_push_glob
-  (_fun _revwalk _string -> _int))
+  (_fun _git_revwalk _string -> _int))
 
 (define-libgit2/check git_revwalk_push_head
-  (_fun _revwalk -> _int))
+  (_fun _git_revwalk -> _int))
 
 (define-libgit2/check git_revwalk_push_range
-  (_fun _revwalk _string -> _int))
+  (_fun _git_revwalk _string -> _int))
 
 (define-libgit2/check git_revwalk_push_ref
-  (_fun _revwalk _string -> _int))
+  (_fun _git_revwalk _string -> _int))
 
 (define-libgit2 git_revwalk_repository
-  (_fun _revwalk -> _repository))
+  (_fun _git_revwalk -> _git_repository))
 
 (define-libgit2 git_revwalk_reset
-  (_fun _revwalk -> _void))
+  (_fun _git_revwalk -> _void))
 
 (define-libgit2 git_revwalk_simplify_first_parent
-  (_fun _revwalk -> _void))
+  (_fun _git_revwalk -> _void))
 
 (define-libgit2 git_revwalk_sorting
-  (_fun _revwalk _git_sort_t -> _void))
+  (_fun _git_revwalk _git_sort_t -> _void))
