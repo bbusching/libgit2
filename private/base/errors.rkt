@@ -1,59 +1,45 @@
 #lang racket/base
 
 (require ffi/unsafe
+         ffi/unsafe/atomic
          "prim.rkt"
          "define.rkt")
 
-(provide _git_error_code
-         (contract-out
-          [check-git_error_code
-           (->* [symbol? (or/c exact-integer? symbol?)]
-                [(or/c #f (->c (or/c symbol? exact-nonnegative-integer?) any))
-                 #:handle (listof symbol?)
-                 #:allow-positive? any/c]
-                any)]
-          ))
+(provide _git_error_code ;; legacy only
+         _git_error_code/check
+         _git_error_code/check/int)
 
-(struct exn:fail:libgit2 exn:fail:contract (who code error)
+(struct exn:fail:libgit2:foreign exn:fail:contract (who code error)
   #:transparent)
 
-(define (check-git_error_code who code [maybe-on-nonnegative #f]
-                              #:handle [handle-syms null]
-                              #:allow-positive? [allow-positive? #f])
-  (cond
-    [(or (eq? 0 code) (eq? 'GIT_OK code))
-     (when maybe-on-nonnegative
-       (maybe-on-nonnegative 0))]
-    [(and maybe-on-nonnegative
-          allow-positive?
-          (exact-nonnegative-integer? code))
-     (maybe-on-nonnegative code)]
-    [(memq code handle-syms)
-     (void)]
-    [else
-     (let ([code (if (symbol? code)
-                     code
-                     (cast code _fixint _git_error_code))])
-       (define err/null (git_error_last))
-       (git_error_clear)
-       (define e-klass (and err/null (git_error-klass err/null)))
-       (define e-msg (and err/null (git_error-message err/null)))
-       (define message
-         (format "~a: ~a\n  error code: ~e\n  error class: ~e"
-                 who
-                 (or e-msg
-                     (string-append "an error occurred;\n"
-                                    " the foreign function returned an error code,\n"
-                                    " but git_error_last returned a null pointer"))
-                 code
-                 e-klass))
-       (raise
-        (exn:fail:libgit2
-         message
-         (current-continuation-marks)
-         who
-         code
-         (and err/null (cons e-klass e-msg)))))]))
+(define (raise-libgit2-foreign-error who code)
+  (define (make+raise)
+    (let ([code (if (symbol? code)
+                    code
+                    (cast code _fixint _git_error_code))])
+      (define err/null (git_error_last))
+      (git_error_clear)
+      (define e-klass (and err/null (git_error-klass err/null)))
+      (define e-msg (and err/null (git_error-message err/null)))
+      (define message
+        (format "~a: ~a\n  error code: ~e\n  error class: ~e"
+                who
+                (or e-msg
+                    (string-append "an error occurred;\n"
+                                   " the foreign function returned an error code,\n"
+                                   " but git_error_last returned a null pointer"))
+                code
+                e-klass))
+      (raise
+       (exn:fail:libgit2:foreign
+        message
+        (current-continuation-marks)
+        who
+        code
+        (and err/null (cons e-klass e-msg))))))
+  (if (in-atomic-mode?)
+      (call-as-nonatomic make+raise)
+      (make+raise)))
 
 #|
 According to the docs, git_error_set_str
@@ -70,9 +56,21 @@ but it's worth investigating further.
 
 ;; Types
 
-(define-enum _git_error_code
-  #:unknown values
-  #:base _fixint
+(define-syntax-parser define-git_error_code
+  #:datum-literals {=}
+  [(_ [_git_error_code:id git_error_code-id:id]
+      [code:id = val:exact-integer] ...+)
+   #'(begin
+       (define-enum _git_error_code
+         #:unknown values
+         #:base _fixint
+         [code = val] ...)
+       (begin-for-syntax
+         (define-syntax-class git_error_code-id
+           #:description "_git_error_code identifier"
+           (pattern (~or* (~datum code) ...)))))])
+
+(define-git_error_code [_git_error_code git_error_code-id]
   [GIT_OK = 0]
   [GIT_ERROR = -1]
   [GIT_ENOTFOUND = -3]
@@ -147,7 +145,70 @@ but it's worth investigating further.
   (_fun -> (_or-null _git_error-pointer)))
 (define-libgit2 git_error_clear
   (_fun -> _void))
+#|
+;; not currently used
 (define-libgit2 git_error_set_str
   (_fun _int _string -> _void))
 (define-libgit2 git_error_set_oom
   (_fun -> _void))
+|#
+
+(define ((check-git_error_code/symbol who #:handle [handle-syms null]) code)
+  (cond
+    [(memq code handle-syms)
+     code]
+    [(eq? 'GIT_OK code)
+     (void)]
+    [else
+     (raise-libgit2-foreign-error who code)]))
+
+(define (make:_git_error_code/check who #:handle [handle-syms null])
+  (make-ctype
+   _git_error_code
+   #f
+   (check-git_error_code/symbol who #:handle handle-syms)))
+
+(define-syntax-parser _git_error_code/check
+  #:literals {quote}
+  [(_ (~optional (~seq #:handle (~and handle '(:git_error_code-id ...)))))
+   #:fail-unless (libgit2-local-who)
+   "only allowed inside a define-libgit2 form"
+   (syntax-local-lift-expression
+    #`(make:_git_error_code/check '#,(libgit2-local-who)
+                                  (~? (~@ #:handle handle))))])
+
+
+(define ((check-git_error_code/int who
+                                   #:handle [handle-ints null]
+                                   #:handle-positive? [handle-positive? #f])
+         code)
+  (cond
+    [(and handle-positive?
+          (exact-positive-integer? code))
+     code]
+    [(memv code handle-ints)
+     code]
+    [(= 0 code)
+     (void)]
+    [else
+     (raise-libgit2-foreign-error who code)]))
+
+(define (make:_git_error_code/check/int who
+                                        #:handle [handle-ints null]
+                                        #:handle-positive? [handle-positive? #f])
+  (make-ctype
+   _fixint
+   #f
+   (check-git_error_code/int who #:handle handle-ints #:handle-positive? handle-positive?)))
+
+(define-syntax-parser _git_error_code/check/int
+  [(_ (~alt (~optional (~seq #:handle (~and handle '(:exact-integer ...))))
+            (~optional (~seq #:handle-positive? handle-positive?:boolean)))
+      ...)
+   #:fail-unless (libgit2-local-who)
+   "only allowed inside a define-libgit2 form"
+   (syntax-local-lift-expression
+    #`(make:_git_error_code/check/int
+       '#,(libgit2-local-who)
+       (~? (~@ #:handle handle))
+       (~? (~@ #:handle-positive? handle-positive?))))])

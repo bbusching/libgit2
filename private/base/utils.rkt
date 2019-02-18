@@ -13,7 +13,7 @@
                      syntax/parse/lib/function-header))
 
 (provide (protect-out _path/guard
-                      define-libgit2/check
+                      define-libgit2/check ;; legacy only
                       define-libgit2/alloc
                       define-libgit2/dealloc))
 
@@ -136,52 +136,32 @@
 
 
 (define-syntax-parser define-libgit2/check
+  ;; legacy only
   #:literal-sets [fun-litset]
-  #:literals {_int _git_error_code}
+  #:literals {_int}
   [(_ name:id (_fun options:fun-options
                     (~opt-seq wrap-args:formals ::)
                     arg:type-spec ...
-                    -> (~or* _int _git_error_code)
+                    -> _int
                     (~optional (~seq -> rslt:fun-expr))))
    #'(define-libgit2 name
        (_fun options.parsed ...
              (~? (~@ wrap-args ::))
              arg ...
-             -> [code : _git_error_code]
-             -> (begin (check-git_error_code 'name code)
-                       (~? rslt))))]
-  [(_ name:id
-      (~alt (~optional (~seq #:handle (~and handle-ids (:id ...))))
-            (~optional (~and allow-positive #:allow-positive)))
-      ...
-      (_fun options:fun-options
-            (~opt-seq wrap-args:formals ::)
-            arg:type-spec ...
-            -> [code:id (~datum :) _git_error_code]
-            -> rslt:expr))
-   #:with (code*) (generate-temporaries #'(code))
-   #'(define-libgit2 name
-       (_fun options.parsed ...
-             (~? (~@ wrap-args ::))
-             arg ...
-             -> [code* : _git_error_code]
-             -> (check-git_error_code
-                 'name
-                 code*
-                 #:handle (~? 'handle-ids null)
-                 #:allow-positive? (~? 'allow-positive #f)
-                 (λ (code) rslt))))])
+             -> [code : (_git_error_code/check)]
+             (~? (~@ -> rslt))))])
   
 
 (define-syntax-parser define-libgit2/alloc
   #:literal-sets [fun-litset]
-  #:literals {_int _git_error_code}
+  #:literals {_int _git_error_code/check}
   [(_ name:id
       (_fun options:fun-options
             (~opt-seq raw-wrap-args:formals ::)
             _out-type:fun-id
             arg:type-spec ...
-            -> (~or* _int _git_error_code))
+            -> (~or* _int ;; legacy only
+                     (_git_error_code/check)))
       (~optional dealloc_fun:id))
    #:do [(define use-wrapper? (attribute raw-wrap-args))]
    #:with tmp-name (if use-wrapper?
@@ -195,26 +175,33 @@
              (~? (~@ wrap-args ::))
              [out : (_ptr o _out-type)]
              arg ...
-             -> [code : _git_error_code]
-             -> (begin (check-git_error_code 'name code)
-                       out))
+             -> (_git_error_code/check)
+             -> out)
        (~? (~@ #:wrap (allocator dealloc_fun))))
-   (cond
-     [use-wrapper?
-      ;; workaround for https://github.com/racket/racket/issues/2484
-      #`(begin base-def
-               (define name
-                 (λ raw-wrap-args
-                   (tmp-name . wrap-args))))]
-     [else
-      #'base-def])])
+   (syntax-property
+    (cond
+      [use-wrapper?
+       ;; workaround for https://github.com/racket/racket/issues/2484
+       #`(begin base-def
+                (define name
+                  (λ raw-wrap-args
+                    (tmp-name . wrap-args))))]
+      [else
+       #'base-def])
+    'mouse-over-tooltips
+    (vector #'_out-type
+            (sub1 (syntax-position #'_out-type))
+            (sub1 (+ (syntax-position #'_out-type)
+                     (syntax-span #'_out-type)))
+            (format "output: ~s"
+                    `(_ptr o ,(syntax->datum #'_out-type)))))])
   
 (define-syntax-parser define-libgit2/dealloc
   #:literal-sets [fun-litset]
   [(_ name:fun-id
       (_fun options:fun-options
             (~opt-seq wrap-args:formals ::)
-            arg:type-spec ...
+            arg:type-spec ...+
             -> ffi-rslt:type-spec
             (~opt-seq -> output:fun-expr)))
    #'(define-libgit2 name

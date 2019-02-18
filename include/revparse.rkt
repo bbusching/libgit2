@@ -30,12 +30,12 @@
 (define-libgit2/check git_revparse
   (_fun _git_revspec-pointer _git_repository _string -> _int))
 
-(define-libgit2/check git_revparse_ext
+(define-libgit2 git_revparse_ext
   (_fun [object_out : (_ptr o _git_object)]
         [reference_out : (_ptr o _git_reference)]
         _git_repository
         _string
-        -> [v : _git_error_code]
+        -> [v : (_git_error_code/check)]
         -> (values ((allocator git_object_free) object_out)
                    ((allocator git_reference_free) reference_out))))
 

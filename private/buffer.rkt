@@ -74,21 +74,21 @@
         (check-eqv? asize 0 "asize")))))
    
     
-(define-libgit2/dealloc git_buf_dispose
+(define-libgit2 git_buf_dispose
   (_fun _git_buf-pointer -> _void))
 
-(define-libgit2/check git_buf_set
+(define-libgit2 git_buf_set
   (_fun _git_buf-pointer
         [bs : _bytes]
         [_size = (bytes-length bs)]
-        -> _git_error_code))
+        -> (_git_error_code/check)))
 
 
 #|
 ;; these are not currently used
 
-(define-libgit2/check git_buf_grow
-  (_fun _git_buf-pointer _size -> _git_error_code))
+(define-libgit2 git_buf_grow
+  (_fun _git_buf-pointer _size -> (_git_error_code/check)))
 
 (define-libgit2 git_buf_is_binary
   (_fun _git_buf-pointer -> _bool))

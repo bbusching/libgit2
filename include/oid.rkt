@@ -121,10 +121,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constructors
 
-(define-libgit2/check git_oid_fromstr
+(define-libgit2 git_oid_fromstr
   (_fun [oid : (_ptr o _git_oid)]
         _git-oid-string
-        -> _git_error_code
+        -> (_git_error_code/check)
         -> oid))
 
 (module+ test
@@ -564,12 +564,13 @@
                 (check-pred git_oid_shorten?
                             (git_oid_shorten_new 6))))))
 
-(define-libgit2/check git_oid_shorten_add
-  #:allow-positive
+(define-libgit2 git_oid_shorten_add
   ;; n.b. adding the same string multiple times
   ;; produces unhelpful results
   (_fun _git_oid_shorten _git-oid-string
-        -> [ret : _git_error_code]
+        -> [ret : (_git_error_code/check/int
+                   #:handle '(0)
+                   #:handle-positive? #t)]
         -> ret))
 
 (module+ test

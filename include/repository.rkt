@@ -76,11 +76,11 @@
 ;; not here: git_repository_open_from_worktree
 
 (define-libgit2/alloc git_repository_open
-  (_fun _git_repository (_path/guard) -> _git_error_code)
+  (_fun _git_repository (_path/guard) -> (_git_error_code/check))
   git_repository_free)
 
 (define-libgit2/alloc git_repository_wrap_odb
-  (_fun _git_repository _git_odb -> _git_error_code)
+  (_fun _git_repository _git_odb -> (_git_error_code/check))
   git_repository_free)
 
 
@@ -93,8 +93,7 @@
            (simple-form-path pth)))
         GIT_PATH_LIST_SEPARATOR)))
 
-(define-libgit2/check git_repository_discover
-  #:handle [GIT_ENOTFOUND]
+(define-libgit2 git_repository_discover
   (_fun (start-path #:across-fs? [across-fs #f]
                     #:ceiling-dirs [ceiling-dirs null])
         ::
@@ -102,7 +101,7 @@
         [(_path/guard) = start-path]
         [_bool = across-fs]
         [_bytes/nul-terminated = (join-ceiling-dirs ceiling-dirs)]
-        -> [code : _git_error_code]
+        -> [code : (_git_error_code/check #:handle '(GIT_ENOTFOUND))]
         -> (and bs
                 (not (eq? code 'GIT_ENOTFOUND))
                 (bytes->path bs))))
@@ -121,11 +120,11 @@
         [(_path/guard) = start-path] ;; null ok if GIT_REPOSITORY_OPEN_FROM_ENV
         [_git_repository_open_flag_t = flags]
         [_bytes/nul-terminated = (join-ceiling-dirs ceiling-dirs)]
-        -> _git_error_code)
+        -> (_git_error_code/check))
   git_repository_free)
 
 (define-libgit2/alloc git_repository_open_bare
-  (_fun _git_repository (_path/guard) -> _git_error_code)
+  (_fun _git_repository (_path/guard) -> (_git_error_code/check))
   git_repository_free)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -202,49 +201,51 @@
 ; Functions
 
 (define-libgit2/alloc git_repository_config
-  (_fun _git_config _git_repository -> _int)
+  (_fun _git_config _git_repository -> (_git_error_code/check))
   git_config_free)
 
 (define-libgit2/alloc git_repository_config_snapshot
-  (_fun _git_config _git_repository -> _int)
+  (_fun _git_config _git_repository -> (_git_error_code/check))
   git_config_free)
 
-(define-libgit2/check git_repository_detach_head
-  (_fun _git_repository -> _int))
+(define-libgit2 git_repository_detach_head
+  (_fun _git_repository -> (_git_error_code/check)))
 
-(define-libgit2/check git_repository_fetchhead_foreach
-  (_fun _git_repository _git_repository_fetchhead_foreach_cb _bytes -> _int))
+(define-libgit2 git_repository_fetchhead_foreach
+  (_fun _git_repository _git_repository_fetchhead_foreach_cb _bytes
+        -> (_git_error_code/check)))
 
 (define-libgit2 git_repository_get_namespace
   (_fun _git_repository -> _string))
 
-(define-libgit2/check git_repository_hashfile
-  (_fun _git_oid-pointer _git_repository _path _git_object_t _string -> _int))
+(define-libgit2 git_repository_hashfile
+  (_fun _git_oid-pointer _git_repository _path _git_object_t _string
+        -> (_git_error_code/check)))
 
 (define-libgit2/alloc git_repository_head
-  (_fun _git_reference/null _git_repository -> _int)
+  (_fun _git_reference/null _git_repository -> (_git_error_code/check))
   git_reference_free)
 
 (define-libgit2 git_repository_head_detached
   (_fun _git_repository -> _bool))
 
-(define-libgit2/check git_repository_head_unborn
-  #:allow-positive
+(define-libgit2 git_repository_head_unborn
   (_fun _git_repository
-        -> [v : _git_error_code]
+        -> [v : (_git_error_code/check/int
+                 #:handle '(0 1))]
         -> (case v
              [(0) #f]
              [(1) #t])))
 
-(define-libgit2/check git_repository_ident
+(define-libgit2 git_repository_ident
   (_fun [name : (_ptr o _string)]
         [email : (_ptr o _string)]
         _git_repository
-        -> [v : _git_error_code]
+        -> [v : (_git_error_code/check)]
         -> (values name email)))
 
 (define-libgit2/alloc git_repository_index
-  (_fun _git_index _git_repository -> _int)
+  (_fun _git_index _git_repository -> (_git_error_code/check))
   git_index_free)
 
 
@@ -252,8 +253,9 @@
 (define-libgit2/alloc git_repository_init_ext
   (_fun _git_repository _string _git_repository_init_opts-pointer -> _int))
 
-(define-libgit2/check git_repository_init_init_options
-  (_fun _git_repository_init_opts-pointer _uint -> _int))
+(define-libgit2 git_repository_init_init_options
+  (_fun _git_repository_init_opts-pointer _uint
+        -> (_git_error_code/check)))
 
 (define-libgit2 git_repository_is_bare
   (_fun _git_repository -> _bool))
@@ -264,21 +266,24 @@
 (define-libgit2 git_repository_is_shallow
   (_fun _git_repository -> _bool))
 
-(define-libgit2/check git_repository_mergehead_foreach
-  (_fun _git_repository _git_repository_mergehead_foreach_cb _bytes -> _int))
+(define-libgit2 git_repository_mergehead_foreach
+  (_fun _git_repository _git_repository_mergehead_foreach_cb _bytes
+        -> (_git_error_code/check)))
 
-(define-libgit2/check git_repository_message
-  (_fun (_git_buf/bytes-or-null) _git_repository -> _int))
+(define-libgit2 git_repository_message
+  (_fun (_git_buf/bytes-or-null) _git_repository
+        -> (_git_error_code/check)))
 
-(define-libgit2/check git_repository_message_remove
-  (_fun _git_repository -> _int))
+(define-libgit2 git_repository_message_remove
+  (_fun _git_repository
+        -> (_git_error_code/check)))
 
 (define-libgit2/alloc git_repository_new
-  (_fun _git_repository -> _int)
+  (_fun _git_repository -> (_git_error_code/check))
   git_repository_free)
 
 (define-libgit2/alloc git_repository_odb
-  (_fun _git_odb _git_repository -> _int)
+  (_fun _git_odb _git_repository -> (_git_error_code/check))
   git_odb_free)
 
 
@@ -287,35 +292,35 @@
   (_fun _git_repository -> _string))
 
 (define-libgit2/alloc git_repository_refdb
-  (_fun _git_refdb _git_repository -> _int)
+  (_fun _git_refdb _git_repository -> (_git_error_code/check))
   git_refdb_free)
 
-(define-libgit2/check git_repository_reinit_filesystem
-  (_fun _git_repository _int -> _int))
+(define-libgit2 git_repository_reinit_filesystem
+  (_fun _git_repository _int -> (_git_error_code/check)))
 
-(define-libgit2/check git_repository_set_bare
-  (_fun _git_repository -> _int))
+(define-libgit2 git_repository_set_bare
+  (_fun _git_repository -> (_git_error_code/check)))
 
 (define-libgit2 git_repository_set_config
   (_fun _git_repository _git_config -> _void))
 
-(define-libgit2/check git_repository_set_head
-  (_fun _git_repository _string -> _int))
+(define-libgit2 git_repository_set_head
+  (_fun _git_repository _string -> (_git_error_code/check)))
 
-(define-libgit2/check git_repository_set_head_detached
-  (_fun _git_repository _git_oid-pointer -> _int))
+(define-libgit2 git_repository_set_head_detached
+  (_fun _git_repository _git_oid-pointer -> (_git_error_code/check)))
 
-(define-libgit2/check git_repository_set_head_detached_from_annotated
-  (_fun _git_repository _git_annotated_commit -> _int))
+(define-libgit2 git_repository_set_head_detached_from_annotated
+  (_fun _git_repository _git_annotated_commit -> (_git_error_code/check)))
 
-(define-libgit2/check git_repository_set_ident
-  (_fun _git_repository _string _string -> _int))
+(define-libgit2 git_repository_set_ident
+  (_fun _git_repository _string _string -> (_git_error_code/check)))
 
 (define-libgit2 git_repository_set_index
   (_fun _git_repository _git_index -> _void))
 
-(define-libgit2/check git_repository_set_namespace
-  (_fun _git_repository _string -> _int))
+(define-libgit2 git_repository_set_namespace
+  (_fun _git_repository _string -> (_git_error_code/check)))
 
 (define-libgit2 git_repository_set_odb
   (_fun _git_repository _git_odb -> _void))
@@ -323,14 +328,14 @@
 (define-libgit2 git_repository_set_refdb
   (_fun _git_repository _git_refdb -> _void))
 
-(define-libgit2/check git_repository_set_workdir
-  (_fun _git_repository _string _bool -> _int))
+(define-libgit2 git_repository_set_workdir
+  (_fun _git_repository _string _bool -> (_git_error_code/check)))
 
 (define-libgit2 git_repository_state
   (_fun _git_repository -> _git_repository_state_t))
 
-(define-libgit2/check git_repository_state_cleanup
-  (_fun _git_repository -> _int))
+(define-libgit2 git_repository_state_cleanup
+  (_fun _git_repository -> (_git_error_code/check)))
 
 (define-libgit2 git_repository_workdir
   (_fun _git_repository -> _string))

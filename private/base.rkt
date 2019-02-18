@@ -8,7 +8,9 @@
 (provide (all-from-out "base/prim.rkt")
          libgit2-available?
          symbols-not-available
-         _git_error_code
+         _git_error_code ;; legacy only
+         _git_error_code/check
+         _git_error_code/check/int
          define-libgit2
          define-libgit2/check
          define-libgit2/alloc

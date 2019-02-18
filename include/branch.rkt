@@ -51,11 +51,11 @@
   (_fun _string _git_reference -> _int)
   free)
 
-(define-libgit2/check git_branch_next
+(define-libgit2 git_branch_next
   (_fun [ref : (_ptr o _git_reference)]
         [type : (_ptr o _git_branch_t)]
         _branch_iter
-        -> [v : _git_error_code]
+        -> [v : (_git_error_code/check)]
         -> (values ((allocator git_reference_free) ref) type)))
 
 (define-libgit2/check git_branch_set_upstream
