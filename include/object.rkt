@@ -1,7 +1,6 @@
 #lang racket
 
 (require ffi/unsafe
-         "buffer.rkt"
          (submod "oid.rkt" private)
          (only-in "types.rkt"
                   _git_object
@@ -45,7 +44,7 @@
   git_object_free)
 
 (define-libgit2/check git_object_short_id
-  (_fun _buf _git_object -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_object -> _int))
 
 (define-libgit2 git_object_string2type
   (_fun _string -> _git_object_t))

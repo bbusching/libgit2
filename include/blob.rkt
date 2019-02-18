@@ -2,9 +2,9 @@
 
 (require ffi/unsafe
          ffi/unsafe/alloc
-         "buffer.rkt"
          "repository.rkt"
          (submod "oid.rkt" private)
+         (submod "repository.rkt" free) ;; TODO avoid this
          (only-in "types.rkt"
                   _git_repository
                   _git_off_t
@@ -37,7 +37,7 @@
   git_blob_free)
 
 (define-libgit2/check git_blob_filtered_content
-  (_fun _buf _git_blob _string _bool -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_blob _string _bool -> _int))
 
 
 

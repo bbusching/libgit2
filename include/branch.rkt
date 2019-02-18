@@ -2,7 +2,6 @@
 
 (require ffi/unsafe
          ffi/unsafe/alloc
-         "buffer.rkt"
          "refs.rkt"
          (only-in "types.rkt"
                   _git_repository
@@ -52,9 +51,12 @@
   (_fun _string _git_reference -> _int)
   free)
 
-(define-libgit2 git_branch_next
-  (_fun (ref : (_ptr o _git_reference)) (type : (_ptr o _git_branch_t)) _branch_iter -> (v : _int)
-        -> (check-git_error_code v (λ () (values ((allocator git_reference_free) ref) type)) 'git_branch_next)))
+(define-libgit2/check git_branch_next
+  (_fun [ref : (_ptr o _git_reference)]
+        [type : (_ptr o _git_branch_t)]
+        _branch_iter
+        -> [v : _git_error_code]
+        -> (values ((allocator git_reference_free) ref) type)))
 
 (define-libgit2/check git_branch_set_upstream
   (_fun _git_reference _string -> _int))
@@ -67,10 +69,10 @@
 ; see https://github.com/libgit2/libgit2/blob/v0.25.1/include/git2/branch.h
 
 (define-libgit2/check git_branch_upstream_name
-  (_fun _buf _git_repository _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_repository _string -> _int))
 
 (define-libgit2/check git_branch_upstream_remote
-  (_fun _buf _git_repository _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_repository _string -> _int))
 
 (define-libgit2/check git_branch_remote_name
-  (_fun _buf _git_repository _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_repository _string -> _int))

@@ -2,10 +2,10 @@
 
 (require ffi/unsafe
          ffi/unsafe/alloc
-         "buffer.rkt"
          "repository.rkt"
          "tree.rkt"
          (submod "oid.rkt" private)
+         (submod "repository.rkt" free) ;; TODO avoid this
          (only-in "types.rkt"
                   _git_repository
                   _git_time_t
@@ -38,7 +38,7 @@
   (_fun _git_oid-pointer _git_repository _string _git_signature-pointer _git_signature-pointer _string _string _git_tree _size (_cpointer (_cpointer _git_commit)) -> _int))
 
 (define-libgit2/check git_commit_create_buffer
-  (_fun _buf _git_repository _git_signature-pointer _git_signature-pointer _string _string _git_tree _size (_cpointer (_cpointer _git_commit)) -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_repository _git_signature-pointer _git_signature-pointer _string _string _git_tree _size (_cpointer (_cpointer _git_commit)) -> _int))
 
 (define (git_commit_create_v id repo update_ref author committer encoding message tree parent_count . parents)
   (define itypes (append (list _git_oid-pointer _git_repository _string _git_signature-pointer _git_signature-pointer _string _string _git_tree _size)
@@ -56,10 +56,10 @@
   git_commit_free)
 
 (define-libgit2/check git_commit_extract_signature
-  (_fun _buf _buf _git_repository _git_oid-pointer _string -> _int))
+  (_fun (_git_buf/bytes-or-null) (_git_buf/bytes-or-null) _git_repository _git_oid-pointer _string -> _int))
 
 (define-libgit2/check git_commit_header_field
-  (_fun _buf _git_commit _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_commit _string -> _int))
 
 (define-libgit2 git_commit_id
   (_fun _git_commit -> _git_oid-pointer))

@@ -4,6 +4,7 @@
          "checkout.rkt"
          "remote.rkt"
          "repository.rkt"
+         (submod "repository.rkt" free) ;; TODO avoid this
          (only-in "types.rkt"
                   _git_repository
                   _git_remote)

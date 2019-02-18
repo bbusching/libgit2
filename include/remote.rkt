@@ -3,12 +3,11 @@
 (require ffi/unsafe
          (only-in "net.rkt"
                   _git_direction
-                  _git_remote_head-pointer)
+                  _git_remote_head)
          "strarray.rkt"
          "transport.rkt"
          "pack.rkt"
          "proxy.rkt"
-         "buffer.rkt"
          (submod "oid.rkt" private)
          (only-in "types.rkt"
                   _git_repository
@@ -124,7 +123,7 @@
   git_remote_free)
 
 (define-libgit2/check git_remote_default_branch
-  (_fun _buf _git_remote -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_remote -> _int))
 
 (define-libgit2/check git_remote_delete
   (_fun _git_repository _string -> _int))
@@ -165,8 +164,11 @@
   git_remote_free)
 
 (define-libgit2 git_remote_ls
-  (_fun (out : (_ptr o (_cpointer _git_remote_head-pointer))) (size : (_ptr o _size)) _git_remote -> (v : _int)
-        -> (check-git_error_code v (λ () (values out size)) 'git_remote_ls)))
+  (_fun [out : (_ptr o _git_remote_head)]
+        [size : (_ptr o _size)]
+        _git_error_code
+        -> [v : _int]
+        -> (values out size)))
 
 (define-libgit2 git_remote_name
   (_fun _git_remote -> _string))

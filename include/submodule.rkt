@@ -4,9 +4,9 @@
          ffi/unsafe/alloc
          "remote.rkt"
          "checkout.rkt"
-         "buffer.rkt"
          "repository.rkt"
          (submod "oid.rkt" private)
+         (submod "repository.rkt" free) ;; TODO avoid this
          (only-in "types.rkt"
                   _git_repository
                   _git_submodule
@@ -109,7 +109,7 @@
   (_fun _git_repository _git_submodule _bool -> _int))
 
 (define-libgit2/check git_submodule_resolve_url
-  (_fun _buf _git_repository _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_repository _string -> _int))
 
 (define-libgit2/check git_submodule_set_branch
   (_fun _git_repository _string _string -> _int))

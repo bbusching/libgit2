@@ -12,6 +12,7 @@
          _git_off_t
          _git_object_t
          _git_odb
+         git_odb?
          _git_odb_backend
          _git_odb_object
          _git_refdb

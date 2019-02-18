@@ -1,6 +1,7 @@
 #lang racket/base
 
 (require (only-in "private.rkt"
+                  require-provide
                   libgit2-available?))
 
 (provide libgit2-available?)
@@ -13,15 +14,11 @@
                 '()
                 "all symbols should be available"))
 
-(define-syntax-rule (require-provide mod ...)
-  (begin (require mod ...) (provide (all-from-out mod) ...)))
-
 (require-provide "include/types.rkt"
                  "include/annotated_commit.rkt"
                  "include/blame.rkt"
                  "include/blob.rkt"
                  "include/branch.rkt"
-                 "include/buffer.rkt"
                  "include/checkout.rkt"
                  "include/cherrypick.rkt"
                  "include/clone.rkt"

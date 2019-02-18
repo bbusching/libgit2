@@ -2,7 +2,6 @@
 
 (require ffi/unsafe
          "strarray.rkt"
-         "buffer.rkt"
          (submod "oid.rkt" private)
          (only-in "types.rkt"
                   _git_repository
@@ -263,7 +262,7 @@
   (_fun _bytes _size _string _bytes _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb _bytes -> _int))
 
 (define-libgit2/check git_diff_commit_as_email
-  (_fun _buf _git_repository _git_commit _size _size _git_diff_format_email_flags_t _git_diff_opts-pointer/null -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_repository _git_commit _size _size _git_diff_format_email_flags_t _git_diff_opts-pointer/null -> _int))
 
 (define-libgit2/check git_diff_find_init_options
   (_fun _git_diff_find_options-pointer _uint -> _int))
@@ -275,7 +274,7 @@
   (_fun _git_diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb _bytes -> _int))
 
 (define-libgit2/check git_diff_format_email
-  (_fun _buf _git_diff _git_diff_format_email_opts-pointer/null -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_diff _git_diff_format_email_opts-pointer/null -> _int))
 
 (define-libgit2/check git_diff_format_email_init_options
   (_fun _git_diff_format_email_opts-pointer _uint -> _int))
@@ -327,13 +326,13 @@
   (_fun _diff_stats -> _size))
 
 (define-libgit2/check git_diff_stats_to_buf
-  (_fun _buf _diff_stats _git_diff_stats_format_t _size -> _int))
+  (_fun (_git_buf/bytes-or-null) _diff_stats _git_diff_stats_format_t _size -> _int))
 
 (define-libgit2 git_diff_status_char
   (_fun _git_delta_t -> _uint8))
 
 (define-libgit2/check git_diff_to_buf
-  (_fun _buf _git_diff _git_diff_format_t -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_diff _git_diff_format_t -> _int))
 
 (define-libgit2/alloc git_diff_tree_to_index
   (_fun _git_diff _git_repository _git_tree _git_index _git_diff_opts-pointer -> _int)

@@ -564,14 +564,13 @@
                 (check-pred git_oid_shorten?
                             (git_oid_shorten_new 6))))))
 
-(define-libgit2 git_oid_shorten_add
+(define-libgit2/check git_oid_shorten_add
+  #:allow-positive
   ;; n.b. adding the same string multiple times
   ;; produces unhelpful results
   (_fun _git_oid_shorten _git-oid-string
-        -> [ret : _int]
-        -> (if (negative? ret)
-               (check-git_error_code ret (λ () (error 'git_oid_shorten_add "shouldn't get here")) 'git_oid_shorten_add)
-               ret)))
+        -> [ret : _git_error_code]
+        -> ret))
 
 (module+ test
   (describe

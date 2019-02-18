@@ -1,7 +1,6 @@
 #lang racket
 
 (require ffi/unsafe
-         "buffer.rkt"
          (only-in "types.rkt"
                   _git_repository
                   _git_time_t
@@ -22,7 +21,7 @@
   git_signature_free)
 
 (define-libgit2/alloc git_signature_from_buffer
-  (_fun _git_signature-pointer _buf -> _int)
+  (_fun _git_signature-pointer (_git_buf/bytes-or-null) -> _int)
   git_signature_free)
 
 (define-libgit2/alloc git_signature_new

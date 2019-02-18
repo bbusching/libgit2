@@ -1,7 +1,6 @@
 #lang racket
 
 (require ffi/unsafe
-         "buffer.rkt"
          (only-in "types.rkt"
                   _git_object
                   _git_repository)
@@ -49,7 +48,7 @@
   git_describe_result_free)
 
 (define-libgit2/check git_describe_format
-  (_fun _buf _describe_result _git_describe_format_opts-pointer/null -> _int))
+  (_fun (_git_buf/bytes-or-null) _describe_result _git_describe_format_opts-pointer/null -> _int))
 
 (define-libgit2/alloc git_describe_workdir
   (_fun _describe_result _git_repository _git_describe_opts-pointer/null -> _int)

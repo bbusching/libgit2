@@ -2,7 +2,6 @@
 
 (require ffi/unsafe
          "diff.rkt"
-         "buffer.rkt"
          (only-in "types.rkt"
                   _git_patch
                   _git_blob/null
@@ -33,16 +32,24 @@
 (define-libgit2 git_patch_get_delta
   (_fun _git_patch -> _git_diff_delta-pointer))
 
-(define-libgit2 git_patch_get_hunk
-  (_fun (out : (_ptr o _git_diff_hunk-pointer)) (lines : (_ptr o _size)) _git_patch _size -> (v : _int)
-        -> (check-git_error_code v (λ () (values out lines)) 'git_patch_get_hunk)))
+(define-libgit2/check git_patch_get_hunk
+  (_fun [out : (_ptr o _git_diff_hunk)]
+        [lines : (_ptr o _size)]
+        _git_patch
+        _size
+        -> [v : _git_error_code]
+        -> (values out lines)))
 
 (define-libgit2/alloc git_patch_get_line_in_hunk
   (_fun _git_diff_line-pointer _git_patch _size _size -> _int))
 
-(define-libgit2 git_patch_line_stats
-  (_fun (context : (_ptr o _size)) (additions : (_ptr o _size)) (deletions : (_ptr o _size)) _git_patch  -> (v : _int)
-        -> (check-git_error_code v (λ () (values context additions deletions)) 'git_patch_line_stats)))
+(define-libgit2/check git_patch_line_stats
+  (_fun [context : (_ptr o _size)]
+        [additions : (_ptr o _size)]
+        [deletions : (_ptr o _size)]
+        _git_patch
+        -> [v : _git_error_code]
+        -> (values context additions deletions)))
 
 (define-libgit2 git_patch_num_hunks
   (_fun _git_patch -> _size))
@@ -57,4 +64,4 @@
   (_fun _git_patch _int _int _int -> _size))
 
 (define-libgit2/check git_patch_to_buf
-  (_fun _buf _git_patch -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_patch -> _int))

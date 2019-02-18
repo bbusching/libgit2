@@ -116,9 +116,14 @@
 (define-libgit2/check git_index_conflict_cleanup
   (_fun _git_index -> _int))
 
-(define-libgit2 git_index_conflict_get
-  (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _git_index _string -> (v : _int)
-        -> (check-git_error_code v (λ () (values ancestor our their)) 'git_index_conflict_get)))
+(define-libgit2/check git_index_conflict_get
+  (_fun [ancestor : (_ptr o _index_entry)]
+        [our : (_ptr o _index_entry)]
+        [their : (_ptr o _index_entry)]
+        _git_index
+        _string
+        -> [v : _git_error_code]
+        -> (values ancestor our their)))
 
 (define-libgit2/dealloc git_index_conflict_iterator_free
   (_fun _git_index_conflict_iterator -> _void))
@@ -127,9 +132,13 @@
   (_fun _git_index_conflict_iterator _git_index -> _git_error_code)
   git_index_conflict_iterator_free)
 
-(define-libgit2 git_index_conflict_next
-  (_fun (ancestor : (_ptr o _index_entry)) (our : (_ptr o _index_entry)) (their : (_ptr o _index_entry)) _git_index_conflict_iterator -> (v : _int)
-        -> (check-git_error_code v (λ () (values ancestor our their)) 'git_index_conflict_next)))
+(define-libgit2/check git_index_conflict_next
+  (_fun [ancestor : (_ptr o _index_entry)]
+        [our : (_ptr o _index_entry)]
+        [their : (_ptr o _index_entry)]
+        _git_index_conflict_iterator
+        -> [v : _git_error_code]
+        -> (values ancestor our their)))
 
 (define-libgit2/check git_index_conflict_remove
   (_fun _git_index _string -> _int))

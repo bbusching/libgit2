@@ -1,7 +1,6 @@
 #lang racket
 
 (require ffi/unsafe
-         "buffer.rkt"
          (submod "oid.rkt" private)
          (only-in "types.rkt"
                   _git_repository
@@ -70,4 +69,4 @@
   (_fun _git_packbuilder -> _size))
 
 (define-libgit2/check git_packbuilder_write_buf
-  (_fun _buf _git_packbuilder -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_packbuilder -> _int))

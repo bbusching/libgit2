@@ -2,7 +2,6 @@
 
 (require ffi/unsafe
          (only-in "net.rkt" _git_direction)
-         "buffer.rkt"
          (only-in "types.rkt"
                   _git_refspec)
          libgit2/private)
@@ -22,7 +21,7 @@
   (_fun _git_refspec -> _bool))
 
 (define-libgit2/check git_refspec_transform
-  (_fun _buf _git_refspec _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_refspec _string -> _int))
 
 (define-libgit2 git_refspec_src
   (_fun _git_refspec -> _string))
@@ -34,5 +33,5 @@
   (_fun _git_refspec -> _string))
 
 (define-libgit2/check git_refspec_rtransform
-  (_fun _buf _git_refspec _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_refspec _string -> _int))
 

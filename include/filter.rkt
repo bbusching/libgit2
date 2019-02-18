@@ -1,7 +1,6 @@
 #lang racket
 
 (require ffi/unsafe
-         "buffer.rkt"
          (only-in "types.rkt"
                   _git_repository
                   _git_blob
@@ -30,13 +29,13 @@
   (_fun _filter_list -> _void))
 
 (define-libgit2/check git_filter_list_apply_to_blob
-  (_fun _buf _filter_list _git_blob -> _int))
+  (_fun (_git_buf/bytes-or-null) _filter_list _git_blob -> _int))
 
 (define-libgit2/check git_filter_list_apply_to_data
-  (_fun _buf _filter_list _buf -> _int))
+  (_fun (_git_buf/bytes-or-null) _filter_list (_git_buf/bytes-or-null) -> _int))
 
 (define-libgit2/check git_filter_list_apply_to_file
-  (_fun _buf _filter_list _git_repository _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _filter_list _git_repository _string -> _int))
 
 (define-libgit2 git_filter_list_contains
   (_fun _filter_list _string -> _bool))
@@ -56,7 +55,7 @@
   (_fun _filter_list _git_blob _git_writestream -> _int))
 
 (define-libgit2/check git_filter_list_stream_data
-  (_fun _filter_list _buf _git_writestream -> _int))
+  (_fun _filter_list (_git_buf/bytes-or-null) _git_writestream -> _int))
 
 (define-libgit2/check git_filter_list_stream_file
   (_fun _filter_list _git_repository _string _git_writestream -> _int))

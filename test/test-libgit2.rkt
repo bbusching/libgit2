@@ -1,6 +1,7 @@
 #lang racket
 
 (require libgit2
+         (submod libgit2/include/repository free) ;; TODO avoid this
          rackunit
          ffi/unsafe)
 
@@ -45,7 +46,7 @@
  (test-case
   "git repo init"
   (check-not-exn (λ () (git_repository_free
-                        (git_repository_init (path->string repo-dir) #f)))))
+                        (git_repository_init (path->string repo-dir))))))
 
  #|(test-case
     "git repo options"
@@ -109,7 +110,8 @@
   "git repo open bare"
   (clear-repo-dir)
   (make-directory repo-dir)
-  (git_repository_free (git_repository_init (path->string repo-dir) #t))
+  (git_repository_free (git_repository_init (path->string repo-dir)
+                                            #:bare? #t))
   (check-not-exn (λ () (git_repository_free (git_repository_open_bare (path->string repo-dir))))))
 
  ; This test breaks a lot of stuff for some reason
@@ -128,7 +130,7 @@
  "signature"
  (clear-repo-dir)
  (make-directory repo-dir)
- (let [(repo (git_repository_init (path->string repo-dir) #f))]
+ (let [(repo (git_repository_init (path->string repo-dir)))]
    (test-case "default"
               (check-not-exn (λ () (git_signature_free (git_signature_default repo)))))
    (test-case "new"
@@ -143,21 +145,6 @@
      (check-not-exn (λ () (git_signature_free (git_signature_dup sig))))
      (git_signature_free sig))
    (git_repository_free repo)))
-
-
-(test-case
- "buf"
- (let [(buf (make-git_buf #f 0 0))]
-   (check-not-exn (λ () (git_buf_grow buf 10)))
-   (check-not-exn (λ () (git_buf_set buf (bytes 5 66 37 187 0 0 0) 7)))
-   (check-true (git_buf_is_binary buf))
-   (check-true (git_buf_contains_nul buf))
-   #|
-   ;; Why does this fail?
-   ;;  "git_buf_free: implementation not found; "
-   ;; But it should be git_buf_dispose (and maybe kept private) anyway
-   (check-not-exn (λ () (git_buf_free buf)))
-   |#))
 
 
 (test-case
@@ -208,14 +195,17 @@
              (check-eq? (git_config_parse_int64 "1k") 1024)
              (check-eq? (git_config_parse_int64 "1m") 1048576)
              (check-eq? (git_config_parse_int64 "2g") 2147483648))
+  #|
+  ;; This is broken b/c git_buf is now private.
+  ;; It also relies on the assumption that git_buf-ptr
+  ;; could be typed as _string, but it can't, because an explicit
+  ;; part of the point of git_buf is to be able to contain internal nulls.
   (test-case "path"
              (let [(buf (make-git_buf #f 0 0))]
                (check-not-exn (λ () (git_config_parse_path buf "asdf")))
                (check-equal? (git_buf-ptr buf) "asdf")
-               #|
-               ;; see above re git_buf_free failing
-               (git_buf_free buf)
-               |#)))
+               (git_buf_free buf)))
+  |#)
  #|
  ; These break stuff likely because they require these files to exist on the filesystem
  #;(test-case
@@ -272,7 +262,7 @@
  "index"
  (clear-repo-dir)
  (make-directory repo-dir)
- (let* [(repo (git_repository_init (path->string repo-dir) #f))
+ (let* [(repo (git_repository_init (path->string repo-dir)))
         (index (git_repository_index repo))]
    (check-not-exn (λ () (git_index_add_all index (make-strarray ".")
                                            'GIT_INDEX_ADD_DEFAULT

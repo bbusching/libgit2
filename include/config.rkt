@@ -1,7 +1,6 @@
 #lang racket
 
 (require ffi/unsafe
-         "buffer.rkt"
          (only-in "types.rkt"
                   _git_config
                   _git_config_backend
@@ -66,16 +65,16 @@
   (_fun _config_entry -> _void))
 
 (define-libgit2/check git_config_find_global
-  (_fun _buf -> _int))
+  (_fun (_git_buf/bytes-or-null) -> _int))
 
 (define-libgit2/check git_config_find_programdata
-  (_fun _buf -> _int))
+  (_fun (_git_buf/bytes-or-null) -> _int))
 
 (define-libgit2/check git_config_find_system
-  (_fun _buf -> _int))
+  (_fun (_git_buf/bytes-or-null) -> _int))
 
 (define-libgit2/check git_config_find_xdg
-  (_fun _buf -> _int))
+  (_fun (_git_buf/bytes-or-null) -> _int))
 
 (define-libgit2/check git_config_foreach
   (_fun _git_config _git_config_foreach_cb _bytes -> _int))
@@ -106,13 +105,13 @@
   (_fun _git_config _string _string _git_config_foreach_cb _bytes -> _int))
 
 (define-libgit2/check git_config_get_path
-  (_fun _buf _git_config _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_config _string -> _int))
 
 (define-libgit2/alloc git_config_get_string
   (_fun _string _git_config _string -> _int))
 
 (define-libgit2/check git_config_get_string_buf
-  (_fun _buf _git_config _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _git_config _string -> _int))
 
 (define-libgit2/check git_config_init_backend
   (_fun _git_config_backend _uint -> _int))
@@ -172,7 +171,7 @@
   (_fun _int64 _string -> _int))
 
 (define-libgit2/check git_config_parse_path
-  (_fun _buf _string -> _int))
+  (_fun (_git_buf/bytes-or-null) _string -> _int))
 
 (define-libgit2/check git_config_set_bool
   (_fun _git_config _string _bool -> _int))
