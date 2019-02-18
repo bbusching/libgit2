@@ -39,7 +39,7 @@ like memory management and checking error codes.
  @hyperlink["https://github.com/libgit2/libgit2/issues/4960"]{
   forthcoming around late March 2019}.
  You can contribute to the development effort
- @hyperlink["https://github.com/bbusching/libgit2/"]{on Github.}
+ @hyperlink["https://github.com/bbusching/libgit2/"]{on Github}.
 }
 
 In addition to the Racket interface, the native libgit2 library
@@ -49,7 +49,8 @@ Windows, and Mac OS.
 
 The libgit2 Racket bindings began as a senior project
 at California Polytechnic State University, San Luis Obispo
-under the guidance of John Clements (clements[at]brinckerhoff.org)
+under the guidance of John Clements
+(@(hyperlink "mailto:clements@racket-lang.org" "clements@racket-lang.org")).
 
 @;--------------------------------------------
 
