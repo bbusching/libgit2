@@ -2,7 +2,7 @@
 
 @(require (for-label racket))
 
-@title{Index}
+@title[#:tag "libgit2_include_index"]{Index}
 
 @defmodule[libgit2/include/index]
 
