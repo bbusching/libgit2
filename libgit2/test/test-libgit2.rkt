@@ -99,7 +99,7 @@
      (test-case "git repo state" (check-equal? (git_repository_state repo) 'GIT_REPOSITORY_STATE_NONE))
      (test-case "git repo path"
                 (check-equal? (normal-case-path (string->path (git_repository_path repo)))
-                              (normal-case-path (build-path repo-dir ".git\\"))))
+                              (normal-case-path (build-path repo-dir ".git/"))))
      (test-case "git repo index"
                 (let [(index (git_repository_index repo))]
                   (check-not-exn (λ () (git_repository_set_index repo index))) ;??? git_repository_set_index not found
