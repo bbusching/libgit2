@@ -32,11 +32,11 @@
   "libgit2"
   #:before (λ () (git_libgit2_init))
   #:after (λ () (git_libgit2_shutdown))
-  
+
   (test-suite
    "clone"
    (clear-clone-dir)
-   
+
    (test-case
     "git clone"
     (check-not-exn
@@ -57,7 +57,7 @@
    "repository"
    (clear-repo-dir)
    (make-directory repo-dir)
-   
+
    (test-case
     "git repo init"
     (check-not-exn (λ () (git_repository_free
@@ -71,7 +71,7 @@
         (check-not-exn (λ () (git_repository_init_init_options init_opts 1)))
         (check-not-exn (λ () (git_repository_free
                               (git_repository_init_ext (path->string repo-dir) init_opts))))))
-   
+
    (let [(repo (git_repository_open (path->string repo-dir)))]
      (check-false (git_repository_is_bare repo) "is bare")
      (test-case "git repo is_empty" (check-true (git_repository_is_empty repo) "is empty"))
@@ -114,7 +114,7 @@
      (test-case "git repo new"
                 (check-not-exn (λ () (git_repository_free (git_repository_new)))))
      (git_repository_free repo))
-   
+
    (test-case
     "git repo open bare"
     (clear-repo-dir)
@@ -207,7 +207,7 @@
                    (check-not-exn (λ () (git_config_parse_path buf "asdf")))
                    (check-equal? (git_buf-ptr buf) "asdf")
                    (git_buf_free buf))))
-   
+
    ; These break stuff likely because they require these files to exist on the filesystem
    #;(test-suite
       "find"
