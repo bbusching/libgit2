@@ -230,14 +230,15 @@
                                       (git_config_find_xdg buf)
                                       (git_buf_free buf))))))
  |#
- (let* [(repo (git_repository_open (path->string repo-dir)))
-        (config (git_repository_config repo))]
+ (let* ([repo (git_repository_open (path->string repo-dir))]
+        [config (git_repository_config repo)])
    (test-case "open global" (git_config_free (git_config_open_global config)))
-   ;; why does this fail?????
-   ;; git_config_open_level: contract violation
-   ;;   expected: 0
-   ;;   received: "7: no configuration exists for the given level '1'"
-   ;;(test-case "open level" (git_config_free (git_config_open_level config 'GIT_CONFIG_LEVEL_PROGRAM_DATA)))
+   (let ([level (case (system-type 'os)
+                  ((windows) 'GIT_CONFIG_LEVEL_PROGRAM_DATA)
+                  (else 'GIT_CONFIG_LEVEL_GLOBAL))])
+     (with-check-info (['level level])
+       (test-case "open level"
+                  (git_config_free (git_config_open_level config level)))))
    (test-case "set/get bool"
               (check-not-exn (λ () (git_config_set_bool config "core.filemode" #t)))
               (check-true (git_config_get_bool config "core.filemode")))
