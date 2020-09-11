@@ -32,11 +32,11 @@
   "libgit2"
   #:before (λ () (git_libgit2_init))
   #:after (λ () (git_libgit2_shutdown))
-  
+
   (test-suite
    "clone"
    (clear-clone-dir)
-   
+
    (test-case
     "git clone"
     (check-not-exn
@@ -57,7 +57,7 @@
    "repository"
    (clear-repo-dir)
    (make-directory repo-dir)
-   
+
    (test-case
     "git repo init"
     (check-not-exn (λ () (git_repository_free
@@ -71,7 +71,7 @@
         (check-not-exn (λ () (git_repository_init_init_options init_opts 1)))
         (check-not-exn (λ () (git_repository_free
                               (git_repository_init_ext (path->string repo-dir) init_opts))))))
-   
+
    (let [(repo (git_repository_open (path->string repo-dir)))]
      (check-false (git_repository_is_bare repo) "is bare")
      (test-case "git repo is_empty" (check-true (git_repository_is_empty repo) "is empty"))
@@ -99,7 +99,7 @@
      (test-case "git repo state" (check-equal? (git_repository_state repo) 'GIT_REPOSITORY_STATE_NONE))
      (test-case "git repo path"
                 (check-equal? (normal-case-path (string->path (git_repository_path repo)))
-                              (normal-case-path (build-path repo-dir ".git\\"))))
+                              (normal-case-path (build-path repo-dir ".git/"))))
      (test-case "git repo index"
                 (let [(index (git_repository_index repo))]
                   (check-not-exn (λ () (git_repository_set_index repo index))) ;??? git_repository_set_index not found
@@ -114,7 +114,7 @@
      (test-case "git repo new"
                 (check-not-exn (λ () (git_repository_free (git_repository_new)))))
      (git_repository_free repo))
-   
+
    (test-case
     "git repo open bare"
     (clear-repo-dir)
@@ -207,7 +207,7 @@
                    (check-not-exn (λ () (git_config_parse_path buf "asdf")))
                    (check-equal? (git_buf-ptr buf) "asdf")
                    (git_buf_free buf))))
-   
+
    ; These break stuff likely because they require these files to exist on the filesystem
    #;(test-suite
       "find"
@@ -230,7 +230,11 @@
    (let* [(repo (git_repository_open (path->string repo-dir)))
           (config (git_repository_config repo))]
      (test-case "open global" (git_config_free (git_config_open_global config)))
-     (test-case "open level" (git_config_free (git_config_open_level config 'GIT_CONFIG_LEVEL_PROGRAM_DATA)))
+     (let ((level
+            (case (system-type 'os)
+              ((windows) 'GIT_CONFIG_LEVEL_PROGRAM_DATA)
+              (else 'GIT_CONFIG_LEVEL_GLOBAL))))
+       (test-case "open level" (git_config_free (git_config_open_level config level))))
      (test-case "set/get bool"
                 (check-not-exn (λ () (git_config_set_bool config "core.filemode" #t)))
                 (check-true (git_config_get_bool config "core.filemode")))
