@@ -5,6 +5,7 @@
          ffi/unsafe/define
          syntax/parse/define
          racket/stxparam
+         racket/runtime-path
          (for-syntax racket/base))
 
 (module+ test
@@ -20,11 +21,21 @@
            (->c (listof symbol?))]
           ))
 
+;; hopefully, we have provided the native lib
+(define-runtime-path libgit2-so
+  '(so "libgit2" ("1.3" #f)))
+;; as a fallback, try a system-provided version
+(define libgit2-so-versions
+  '("1.3" ;; preferred
+    ;; these probably work
+    "1.3.0" "1"
+    ;; some other plausible versions ... good luck!
+    "1.2" "1.1" "1.0" "0.28" "0.26" #f))
+          ;
+
 (define libgit2
-  (ffi-lib (case (system-type)
-             [(windows) "git2"]
-             [else "libgit2"])
-           '(#f)
+  (ffi-lib libgit2-so
+           libgit2-so-versions
            #:fail (λ () #f)))
 
 (define libgit2-available?
@@ -43,7 +54,7 @@
 (define-ffi-definer define-libgit2 libgit2
   #:default-make-fail
   (λ (name)
-    (λ () 
+    (λ ()
       (symbols-not-available name)
       ((make-not-available name)))))
 
@@ -51,6 +62,7 @@
   ;; Handle initialization.
   ;; "Usually you don’t need to call [git_libgit2_shutdown]
   ;; as the operating system will take care of reclaiming resources"
+  ;; But maybe we should load it with 'place or a custodian ...
   (define-libgit2 git_libgit2_init
     (_fun -> _int))
   (git_libgit2_init)

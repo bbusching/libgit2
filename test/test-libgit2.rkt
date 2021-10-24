@@ -19,7 +19,9 @@
 (test-case
  "clone"
  (clear-clone-dir)
-   
+   #|
+;; This fails without network access.
+;; See libgit2's own test suite for clever workarounds.
  (test-case
   "git clone"
   (check-not-exn
@@ -29,6 +31,7 @@
       (git_clone "https://github.com/bbusching/libgit2.git"
                  (path->string clone-dir)
                  #f)))))
+|#
  #|(test-case
     "git clone options"
     (check-not-exn
