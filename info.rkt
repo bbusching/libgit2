@@ -9,8 +9,8 @@
 
 (define deps
   '("base"
-    "rackunit-lib"
-    "libgit2-native-libs"))
+    ["libgit2-native-libs" #:version "0.0.0.1"]
+    "rackunit-lib"))
 
 (define build-deps
   '("rackunit-lib"

@@ -10,6 +10,7 @@ This package provides Racket bindings to
 @hyperlink["https://libgit2.org"]{libgit2},
 a portable, pure C implementation of the Git
 core methods provided as a re-entrant linkable library.
+
 The Racket bindings are fairly low-level and closely
 follow the libgit2 C API: the goal is to provide a foundation
 for higher-level Git applications or libraries.
@@ -28,22 +29,25 @@ like memory management and checking error codes.
  but the signatures of some functions should be changed,
  either to handle memory management automatically
  or to use more correct @tech[#:doc '(lib "scribblings/foreign/foreign.scrbl")]{C types}
- at the FFI level (e.g. @racket[_path] instead of @racket[_string]).
- Additionally, this package was initially developed
- against libgit2 v0.26.0: it has mostly been updated to support
- libgit2 v0.28.0---all API removals have been dealt with, for example---but
- some additions and modifications remain to be addressed.
+ at the FFI level (e.g@._ @racket[_path] instead of @racket[_string]).
+
+ Additionally, this package was initially developed against
+ libgit2 v0.26.0. It has mostly been updated to support
+ libgit2 v0.28.0---all API removals up to that point have
+ been dealt with, for example---but some additions and
+ modifications remain to be addressed, as do subsequent
+ upstream changes.
 
  Hopefully these details can be addressed and this package
- stabilized around the API of libgit2 v1.3.0.
+ stabilized around the API of libgit2 v1.4 series.
  You can contribute to the development effort
  @hyperlink["https://github.com/bbusching/libgit2/"]{on Github}.
 }
 
-In addition to the Racket interface, the native libgit2 library
-is distributed via platform-specific dependencies in the
-Racket package system, currently for x86_64 GNU/Linux,
-Windows, and Mac OS.
+In addition to the Racket interface, the native libgit2
+library is distributed via platform-specific dependencies in
+the Racket package system, currently for GNU/Linux (x86_64),
+Windows (x86_64 and i386), and Mac OS (x86_64 and Aarch64).
 
 The libgit2 Racket bindings began as a senior project
 at California Polytechnic State University, San Luis Obispo

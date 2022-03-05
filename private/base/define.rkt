@@ -23,15 +23,16 @@
 
 ;; hopefully, we have provided the native lib
 (define-runtime-path libgit2-so
-  '(so "libgit2" ("1.3" #f)))
+  '(so "libgit2" ("1.4" #f)))
 ;; as a fallback, try a system-provided version
 (define libgit2-so-versions
-  '("1.3" ;; preferred
+  '("1.4" ;; preferred
     ;; these probably work
-    "1.3.0" "1"
+    "1.4.2" "1.4.1" "1.4.0"
+    "1.3" "1.3.0"
+    "1"
     ;; some other plausible versions ... good luck!
     "1.2" "1.1" "1.0" "0.28" "0.26" #f))
-          ;
 
 (define libgit2
   (ffi-lib libgit2-so
