@@ -133,15 +133,19 @@
  "signature"
  (clear-repo-dir)
  (make-directory repo-dir)
- (let ([repo (git_repository_init (path->string repo-dir))]
-       [name "Brad Busching"]
-       [email "bradley.busching@gmail.com"])
-   (test-case "git_repository_set_ident for default"
-              (check-not-exn (λ () (git_repository_set_ident repo name email))))
-   (test-case "default"
-              ;; git_signature_default "will return GIT_ENOTFOUND if either the
-              ;; user.name or user.email are not set."
-              (check-not-exn (λ () (git_signature_free (git_signature_default repo)))))
+ (let ([repo (git_repository_init (path->string repo-dir))])
+   (define can-use-git_signature_default?
+     ;; git_signature_default "will return GIT_ENOTFOUND if either the
+     ;; user.name or user.email are not set."
+     (let ([cfg (git_repository_config_snapshot repo)])
+       ;; is there a reason we don't export exn:fail:libgit2:foreign?
+       (with-handlers ([exn:fail:contract? (λ (e) #f)])
+         (and (git_config_get_string cfg "user.name")
+              (git_config_get_string cfg  "user.email")
+              #t))))
+   (when can-use-git_signature_default?
+     (test-case "default"
+                (check-not-exn (λ () (git_signature_free (git_signature_default repo))))))
    (test-case "new"
               (check-not-exn (λ () (git_signature_free (git_signature_new "brad busching"
                                                                           "bradley.busching@gmail.com"
@@ -150,9 +154,10 @@
    (test-case "now"
               (check-not-exn (λ () (git_signature_free (git_signature_now "brad busching"
                                                                           "bradley.busching@gmail.com")))))
-   (let [(sig (git_signature_default repo))]
-     (check-not-exn (λ () (git_signature_free (git_signature_dup sig))))
-     (git_signature_free sig))
+   (when can-use-git_signature_default?
+     (let [(sig (git_signature_default repo))]
+       (check-not-exn (λ () (git_signature_free (git_signature_dup sig))))
+       (git_signature_free sig)))
    (git_repository_free repo)))
 
 
