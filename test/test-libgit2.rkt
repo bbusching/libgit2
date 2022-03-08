@@ -88,7 +88,7 @@
    
    (test-case "git repo path"
               ;; don't compare these as paths:
-              ;;   the actual result may be syntactically different as the expected path,
+              ;;   the actual result may be syntactically different than the expected path,
               ;;   but refer to the same directory
               ;;   (e.g. on Mac the actual result seems to be prefixed with "/private")
               (check-eqv? (file-or-directory-identity (string->path (git_repository_path repo)))
@@ -133,8 +133,14 @@
  "signature"
  (clear-repo-dir)
  (make-directory repo-dir)
- (let [(repo (git_repository_init (path->string repo-dir)))]
+ (let ([repo (git_repository_init (path->string repo-dir))]
+       [name "Brad Busching"]
+       [email "bradley.busching@gmail.com"])
+   (test-case "git_repository_set_ident for default"
+              (check-not-exn (λ () (git_repository_set_ident repo name email))))
    (test-case "default"
+              ;; git_signature_default "will return GIT_ENOTFOUND if either the
+              ;; user.name or user.email are not set."
               (check-not-exn (λ () (git_signature_free (git_signature_default repo)))))
    (test-case "new"
               (check-not-exn (λ () (git_signature_free (git_signature_new "brad busching"
