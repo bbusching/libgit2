@@ -531,10 +531,15 @@
   (describe
    "git_oid_pathfmt"
    (it "produces the correct path"
+       ;; N.B. uses "/" separator regardless of (system-path-convention-type)
+       ;; so comparing the unexploded paths with `check-equal?` is wrong on
+       ;; Windows.
        (check-equal?
-        (git_oid_pathfmt
-         (git_oid_fromstr "9b56475b03f2b7183b900b4b224facbd4ba3f7bf"))
-        (build-path "9b" "56475b03f2b7183b900b4b224facbd4ba3f7bf")))))
+        (explode-path
+         (git_oid_pathfmt
+          (git_oid_fromstr "9b56475b03f2b7183b900b4b224facbd4ba3f7bf")))
+        (explode-path
+         (build-path "9b" "56475b03f2b7183b900b4b224facbd4ba3f7bf"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
