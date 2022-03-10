@@ -1,0 +1,33 @@
+on: [push, pull_request]
+name: CI
+env:
+  RKT_PKG: libgit2
+jobs:
+  build:
+    name: "Build on Racket '${{ matrix.racket-version }}'"
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        racket-version:
+          - "stable"
+          - "current"
+          - "8.3"
+          - "8.2"
+          - "8.1"
+          - "8.0"
+          - "7.2"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install Racket
+        uses: Bogdanp/setup-racket@v1.7
+        with:
+          version: ${{ matrix.racket-version }}
+          architecture: "x64"
+          distribution: "full"
+      - name: Install Package and its Dependencies
+        run: raco pkg install --auto --batch --name $RKT_PKG
+      - name: Run Tests
+        run: raco test -x -p $RKT_PKG
+      - name: Check Package Dependencies
+        run: raco setup --check-pkg-deps --pkgs $RKT_PKG
