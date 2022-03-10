@@ -9,13 +9,9 @@ jobs:
     strategy:
       matrix:
         racket-version:
+          # needs https://github.com/racket/racket/commit/4f43400 (8.4)
           - "stable"
           - "current"
-          - "8.3"
-          - "8.2"
-          - "8.1"
-          - "8.0"
-          - "7.2"
     steps:
       - name: Checkout
         uses: actions/checkout@master
