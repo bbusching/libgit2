@@ -68,5 +68,5 @@
   (_fun _pathspec _uint32 _string -> _int))
 
 (define-libgit2/alloc git_pathspec_new
-  (_fun _pathspec _strarray -> _int )
+  (_fun _pathspec _git_strarray-pointer -> _int )
   git_pathspec_free)

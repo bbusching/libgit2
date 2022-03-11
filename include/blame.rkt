@@ -64,5 +64,5 @@
 (define-libgit2 git_blame_get_hunk_count
   (_fun _git_blame -> _uint32))
 
-(define-libgit2/check git_blame_init_options
+(define-libgit2/check git_blame_options_init
   (_fun _git_blame_opts-pointer _uint -> _int))

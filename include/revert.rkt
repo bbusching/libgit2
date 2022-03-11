@@ -31,5 +31,5 @@
   (_fun _git_index _git_repository _git_commit _git_commit _uint _git_merge_opts-pointer -> _int)
   git_index_free)
 
-(define-libgit2/check git_revert_init_options
+(define-libgit2/check git_revert_options_init
   (_fun _git_revert_opts-pointer _uint -> _int))

@@ -176,17 +176,6 @@
 
 
 (test-case
- "strarray"
- (let [(strarr1 (make-strarray "hello" "world"))
-       (strarr2 (make-strarray))]
-   (check-not-exn (λ () (git_strarray_copy strarr2 strarr1)))
-   (check-eq? (git_strarray-count strarr2) 2)
-   (check-equal? (ptr-ref (git_strarray-strings strarr2) _string 0) "hello")
-   (check-equal? (ptr-ref (git_strarray-strings strarr2) _string 1) "world")
-   (git_strarray_free strarr2)))
-
-
-(test-case
  "config"
  (test-case "new" (check-not-exn (λ () (git_config_free (git_config_new)))))
  (test-case "open default" (check-not-exn (λ () (git_config_free (git_config_open_default)))))
@@ -278,13 +267,13 @@
  (make-directory repo-dir)
  (let* [(repo (git_repository_init (path->string repo-dir)))
         (index (git_repository_index repo))]
-   (check-not-exn (λ () (git_index_add_all index (make-strarray ".")
+   (check-not-exn (λ () (git_index_add_all index
+                                           (make-git_strarray '("."))
                                            'GIT_INDEX_ADD_DEFAULT
                                            #f
                                            #f)))
    (check-not-exn (λ () (git_index_clear index)))
    (check-not-exn (λ () (git_index_caps index)))
-   (check-not-exn (λ () (git_index_checksum index)))
    (git_index_free index)
    (git_repository_free repo)))
 

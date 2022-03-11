@@ -25,7 +25,7 @@
   (_fun _git_repository _git_object _git_reset_t _git_checkout_opts-pointer -> _int))
 
 (define-libgit2/check git_reset_default
-  (_fun _git_repository _git_object/null _strarray -> _int))
+  (_fun _git_repository _git_object/null _git_strarray-pointer -> _int))
 
 (define-libgit2/check git_reset_from_annotated
   (_fun _git_repository _git_annotated_commit _git_reset_t _git_checkout_opts-pointer -> _int))

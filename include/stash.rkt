@@ -52,7 +52,7 @@
 (define-libgit2/check git_stash_apply
   (_fun _git_repository _size _git_stash_apply_opts-pointer -> _int))
 
-(define-libgit2/check git_stash_apply_init_options
+(define-libgit2/check git_stash_apply_options_init
   (_fun _git_stash_apply_opts-pointer _uint -> _int))
 
 (define-libgit2/check git_stash_drop

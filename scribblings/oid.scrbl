@@ -46,14 +46,14 @@
 
 @section{Object ID Comparisons}
 
-@defproc[(git_oid_iszero [id git_oid?])
+@defproc[(git_oid_is_zero [id git_oid?])
          boolean?]{
  Recognizes @tech{object ID} values equivalent to the
  hex string @racket["0000000000000000000000000000000000000000"].
  @examples[
  #:eval (make-libgit2-eval) #:once
- (eval:check (git_oid_iszero (git_oid_fromstr (make-string GIT_OID_HEXSZ #\0))) #t)
- (eval:check (git_oid_iszero
+ (eval:check (git_oid_is_zero (git_oid_fromstr (make-string GIT_OID_HEXSZ #\0))) #t)
+ (eval:check (git_oid_is_zero
               (git_oid_fromstr "555c0bd2b220e74e77a2d4ead659ffad79175dfa"))
              #f)
  ]}

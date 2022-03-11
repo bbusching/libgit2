@@ -22,7 +22,7 @@
                        [git_oid_cpy
                         (->c git_oid?/c git_oid?/c)]
                        ;; Comparison
-                       [git_oid_iszero
+                       [git_oid_is_zero
                         (->c git_oid?/c boolean?)]
                        [git_oid_equal
                         (->c git_oid?/c git_oid?/c boolean?)]
@@ -189,28 +189,28 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Comparison
 
-(define-libgit2 git_oid_iszero
+(define-libgit2 git_oid_is_zero
   (_fun _git_oid-pointer -> _bool))
 
 (module+ test
   (describe
-   "git_oid_iszero"
+   "git_oid_is_zero"
    (context
     "given an all-0 git_oid"
     (it "returns #true"
-        (check-true (git_oid_iszero
+        (check-true (git_oid_is_zero
                      (git_oid_fromstr (make-string GIT_OID_HEXSZ #\0))))))
    (context
     "given a non-0 git_oid"
     (it "returns #false"
-        (check-false (git_oid_iszero
+        (check-false (git_oid_is_zero
                       (git_oid_fromstr
                        "555c0bd2b220e74e77a2d4ead659ffad79175dfa")))))
    (context
     "given a bad argument"
     (it "raises an exception"
         (check-exn exn:fail:contract?
-                   (λ () (git_oid_iszero
+                   (λ () (git_oid_is_zero
                           (make-string GIT_OID_HEXSZ #\0))))))))
    
 (define-libgit2 git_oid_cmp

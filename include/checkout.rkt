@@ -59,6 +59,8 @@
   (_fun _git_checkout_perfdata-pointer _bytes -> _void))
 
 (define-cstruct _git_checkout_opts
+  ;; FIXME: constructor will need a wrapper to
+  ;; retain the paths and other gc-managed fields
   ([version _uint]
    [checkout_strategy _git_checkout_strategy_t]
    [disable_filters _int]
@@ -70,7 +72,7 @@
    [notify_payload _bytes]
    [progress_cb _git_checkout_progress_cb]
    [progress_payload _bytes]
-   [paths _strarray]
+   [paths _git_strarray]
    [baseline _git_tree]
    [baseline_index _git_index]
    [target_directory _string]
@@ -88,7 +90,7 @@
 (define-libgit2/check git_checkout_index
   (_fun _git_repository _git_index/null _git_checkout_opts-pointer/null -> _int))
 
-(define-libgit2/check git_checkout_init_options
+(define-libgit2/check git_checkout_options_init
   (_fun _git_checkout_opts-pointer _uint -> _int))
 
 (define-libgit2/check git_checkout_tree

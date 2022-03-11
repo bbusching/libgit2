@@ -7,9 +7,12 @@
 (define scribblings
   '(("scribblings/libgit2.scrbl" (multi-page))))
 
+(define update-implies
+  '("libgit2-native-libs"))
+
 (define deps
   '("base"
-    ["libgit2-native-libs" #:version "0.0.0.1"]
+    ["libgit2-native-libs" #:version "0.0.0.2"]
     "rackunit-lib"))
 
 (define build-deps

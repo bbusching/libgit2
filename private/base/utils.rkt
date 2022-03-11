@@ -137,6 +137,7 @@
 
 (define-syntax-parser define-libgit2/check
   ;; legacy only
+  #:track-literals
   #:literal-sets [fun-litset]
   #:literals {_int}
   [(_ name:id (_fun options:fun-options
@@ -153,6 +154,7 @@
   
 
 (define-syntax-parser define-libgit2/alloc
+  #:track-literals
   #:literal-sets [fun-litset]
   #:literals {_int _git_error_code/check}
   [(_ name:id
@@ -197,6 +199,7 @@
                     `(_ptr o ,(syntax->datum #'_out-type)))))])
   
 (define-syntax-parser define-libgit2/dealloc
+  #:track-literals
   #:literal-sets [fun-litset]
   [(_ name:fun-id
       (_fun options:fun-options

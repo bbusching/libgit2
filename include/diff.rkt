@@ -94,7 +94,7 @@
   ([version _int]
    [flags _uint32]
    [ignore_submodules _git_submodule_ignore_t]
-   [pathspec _strarray]
+   [pathspec _git_strarray]
    [notify_cb _git_diff_notify_cb]
    [progress_cb _git_diff_progress_cb]
    [payload _bytes]
@@ -228,22 +228,6 @@
   [GIT_DIFF_STATS_NUMBER = 4]
   [GIT_DIFF_STATS_INCLUDE_SUMMARY = 8])
 
-(define-bitmask _git_diff_format_email_flags_t
-  [GIT_DIFF_FORMAT_EMAIL_NONE = 0]
-  [GIT_DIFF_FORMAT_EMAIL_EXCLUDE_SUBJECT_PATCH_MARKER = 1])
-
-(define-cstruct _git_diff_format_email_opts
-  ([version _uint]
-   [flags _git_diff_format_email_flags_t]
-   [patch_no _size]
-   [total_patches _size]
-   [id _git_oid-pointer]
-   [summary _string]
-   [body _string]
-   [author _git_signature-pointer]))
-
-(define GIT_DIFF_FORMAT_EMAIL_OPTS_VERSION 1)
-
 ; Functions
 
 (define-libgit2/dealloc git_diff_free
@@ -261,10 +245,7 @@
 (define-libgit2/check git_diff_buffers
   (_fun _bytes _size _string _bytes _size _string _git_diff_opts-pointer/null _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb _bytes -> _int))
 
-(define-libgit2/check git_diff_commit_as_email
-  (_fun (_git_buf/bytes-or-null) _git_repository _git_commit _size _size _git_diff_format_email_flags_t _git_diff_opts-pointer/null -> _int))
-
-(define-libgit2/check git_diff_find_init_options
+(define-libgit2/check git_diff_find_options_init
   (_fun _git_diff_find_options-pointer _uint -> _int))
 
 (define-libgit2/check git_diff_find_similar
@@ -272,12 +253,6 @@
 
 (define-libgit2/check git_diff_foreach
   (_fun _git_diff _git_diff_file_cb _git_diff_binary_cb _git_diff_hunk_cb _git_diff_line_cb _bytes -> _int))
-
-(define-libgit2/check git_diff_format_email
-  (_fun (_git_buf/bytes-or-null) _git_diff _git_diff_format_email_opts-pointer/null -> _int))
-
-(define-libgit2/check git_diff_format_email_init_options
-  (_fun _git_diff_format_email_opts-pointer _uint -> _int))
 
 (define-libgit2/alloc git_diff_from_buffer
   (_fun _git_diff _string _size -> _int)
@@ -298,7 +273,7 @@
   (_fun _git_diff _git_repository _git_index _git_diff_opts-pointer -> _int)
   git_diff_free)
 
-(define-libgit2 git_diff_init_options
+(define-libgit2 git_diff_options_init
   (_fun _git_diff_opts _uint -> _int))
 
 (define-libgit2 git_diff_is_sorted_icase

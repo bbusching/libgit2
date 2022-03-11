@@ -54,8 +54,8 @@
   (_fun _describe_result _git_repository _git_describe_opts-pointer/null -> _int)
   git_describe_result_free)
 
-(define-libgit2/check git_describe_init_options
+(define-libgit2/check git_describe_options_init
   (_fun _git_describe_opts-pointer _uint -> _int))
 
-(define-libgit2/check git_describe_init_format_options
+(define-libgit2/check git_describe_format_options_init
   (_fun _git_describe_format_opts-pointer _uint -> _int))

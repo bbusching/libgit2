@@ -29,14 +29,13 @@ like memory management and checking error codes.
  but the signatures of some functions should be changed,
  either to handle memory management automatically
  or to use more correct @tech[#:doc '(lib "scribblings/foreign/foreign.scrbl")]{C types}
- at the FFI level (e.g@._ @racket[_path] instead of @racket[_string]).
+ at the FFI level.
 
  Additionally, this package was initially developed against
  libgit2 v0.26.0. It has mostly been updated to support
- libgit2 v0.28.0---all API removals up to that point have
+ libgit2 v1.4.2---all API removals up to that point have
  been dealt with, for example---but some additions and
- modifications remain to be addressed, as do subsequent
- upstream changes.
+ modifications remain to be addressed.
 
  Hopefully these details can be addressed and this package
  stabilized around the API of libgit2 v1.4 series.

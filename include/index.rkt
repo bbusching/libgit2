@@ -93,19 +93,21 @@
   (_fun _git_index _index_entry -> _int))
 
 (define-libgit2/check git_index_add_all
-  (_fun _git_index _strarray _git_index_add_option_t _git_index_matched_path_cb _bytes -> _int))
+  (_fun _git_index
+        _git_strarray-pointer
+        _git_index_add_option_t
+        _git_index_matched_path_cb
+        _bytes
+        -> _int))
 
 (define-libgit2/check git_index_add_bypath
   (_fun _git_index _string -> _int))
 
-(define-libgit2/check git_index_add_frombuffer
+(define-libgit2/check git_index_add_from_buffer
   (_fun _git_index _index_entry _bytes _size -> _int))
 
 (define-libgit2 git_index_caps
   (_fun _git_index -> _int))
-
-(define-libgit2 git_index_checksum
-  (_fun _git_index -> _git_oid-pointer))
 
 (define-libgit2/check git_index_clear
   (_fun _git_index -> _int))
@@ -194,7 +196,11 @@
   (_fun _git_index _string _int -> _int))
 
 (define-libgit2/check git_index_remove_all
-  (_fun _git_index _strarray _git_index_matched_path_cb _bytes -> _int))
+  (_fun _git_index
+        _git_strarray-pointer
+        _git_index_matched_path_cb
+        _bytes
+        -> _int))
 
 (define-libgit2/check git_index_remove_bypath
   (_fun _git_index _string -> _int))
@@ -212,7 +218,11 @@
   (_fun _git_index _uint -> _int))
 
 (define-libgit2/check git_index_update_all
-  (_fun _git_index _strarray _git_index_matched_path_cb _bytes -> _int))
+  (_fun _git_index
+        _git_strarray-pointer
+        _git_index_matched_path_cb
+        _bytes
+        -> _int))
 
 (define-libgit2/check git_index_write
   (_fun _git_index -> _int))

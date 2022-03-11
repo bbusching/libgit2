@@ -31,8 +31,8 @@
 (define-libgit2/dealloc git_packbuilder_free
   (_fun _git_packbuilder -> _void))
 
-(define-libgit2 git_packbuilder_hash
-  (_fun _git_packbuilder -> _git_oid-pointer))
+(define-libgit2 git_packbuilder_name
+  (_fun _git_packbuilder -> _string/utf-8))
 
 (define-libgit2/check git_packbuilder_insert
   (_fun _git_packbuilder _git_oid-pointer _string -> _int))

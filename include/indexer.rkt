@@ -29,5 +29,5 @@
   (_fun _indexer _string _uint _git_odb _git_transfer_progress_cb _bytes -> _int)
   git_indexer_free)
 
-(define-libgit2 git_indexer_hash
-  (_fun _indexer -> _git_oid-pointer))
+(define-libgit2 git_indexer_name
+  (_fun _indexer -> _string/utf-8))

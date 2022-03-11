@@ -60,7 +60,7 @@
   (_fun _git_rebase _git_repository _git_annotated_commit/null _git_annotated_commit/null  _git_annotated_commit/null _git_rebase_opts-pointer/null -> _int)
   git_rebase_free)
 
-(define-libgit2/check git_rebase_init_options
+(define-libgit2/check git_rebase_options_init
   (_fun _git_rebase_opts-pointer _uint -> _int))
 
 (define-libgit2/alloc git_rebase_inmemory_index

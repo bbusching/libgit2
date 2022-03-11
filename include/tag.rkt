@@ -28,9 +28,6 @@
 (define-libgit2/check git_tag_create
   (_fun _git_oid-pointer _git_repository _string _git_object _git_signature-pointer _string _bool -> _int))
 
-(define-libgit2/check git_tag_create_frombuffer
-  (_fun _git_oid-pointer _git_repository _string _bool -> _int))
-
 (define-libgit2/check git_tag_create_lightweight
   (_fun _git_oid-pointer _git_repository _string _git_object _bool -> _int))
 
@@ -50,11 +47,18 @@
 (define-libgit2 git_tag_id
   (_fun _git_tag -> _git_oid-pointer))
 
-(define-libgit2/check git_tag_list
-  (_fun _strarray _git_repository -> _int))
+(define-libgit2 git_tag_list
+  (_fun [lst : (_git_strarray-pointer/alloc)]
+        _git_repository
+        -> (_git_error_code/check)
+        -> lst))
 
-(define-libgit2/check git_tag_list_match
-  (_fun _strarray _string _git_repository -> _int))
+(define-libgit2 git_tag_list_match
+  (_fun [lst : (_git_strarray-pointer/alloc)]
+        _string
+        _git_repository
+        -> (_git_error_code/check)
+        -> lst))
 
 (define-libgit2/alloc git_tag_lookup
   (_fun _git_tag _git_repository _git_oid-pointer -> _int)

@@ -93,8 +93,11 @@
 (define-libgit2 git_reference_is_tag
   (_fun _git_reference -> _bool))
 
-(define-libgit2 git_reference_is_valid_name
-  (_fun _string -> _bool))
+(define-libgit2 git_reference_name_is_valid
+  (_fun [ok? : (_ptr o _bool)]
+        _string
+        -> (_git_error_code/check)
+        -> ok?))
 
 (define-libgit2/dealloc git_reference_iterator_free
   (_fun _git_reference_iterator -> _int))
@@ -107,8 +110,11 @@
   (_fun _git_reference_iterator _git_repository -> _int)
   git_reference_iterator_free)
 
-(define-libgit2/check git_reference_list
-  (_fun _strarray _git_repository -> _int))
+(define-libgit2 git_reference_list
+  (_fun [lst : (_git_strarray-pointer/alloc)]
+        _git_repository
+        -> (_git_error_code/check)
+        -> lst))
 
 (define-libgit2/alloc git_reference_lookup
   (_fun _git_reference _git_repository _string -> _int)

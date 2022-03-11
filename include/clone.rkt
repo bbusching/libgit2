@@ -45,6 +45,6 @@
   (_fun _git_repository _string _string _git_clone_opts-pointer/null -> _int)
   git_repository_free)
 
-(define-libgit2/check git_clone_init_options
+(define-libgit2/check git_clone_options_init
   (_fun _git_clone_opts-pointer _uint -> _int))
 

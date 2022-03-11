@@ -14,9 +14,6 @@
 (define-libgit2/dealloc git_object_free
   (_fun _git_object -> _void))
 
-(define-libgit2 git_object__size
-  (_fun _git_object_t -> _size))
-
 (define-libgit2/alloc git_object_dup
   (_fun _git_object _git_object -> _int)
   git_object_free)

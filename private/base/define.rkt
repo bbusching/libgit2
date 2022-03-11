@@ -47,10 +47,22 @@
               "libgit2 should be available"))
 
 (define symbols-not-available
-  (let ([lst null])
+  (let ([bx (box null)])
     (case-lambda
-      [() lst]
-      [(name) (set! lst (cons name lst))])))
+      [() (unbox bx)]
+      [(name)
+       (let spin ()
+         (define old (unbox bx))
+         (define new
+           (sort (cons name old) symbol<?))
+         (let retry ()
+           (cond
+             [(box-cas! bx old new)]
+             [(eq? old (unbox bx))
+              ;; spurrious failure
+              (retry)]
+             [else
+              (spin)])))])))
 
 (define-ffi-definer define-libgit2 libgit2
   #:default-make-fail

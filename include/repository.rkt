@@ -97,7 +97,7 @@
   (_fun (start-path #:across-fs? [across-fs #f]
                     #:ceiling-dirs [ceiling-dirs null])
         ::
-        [bs : (_git_buf/bytes-or-null) = #f]
+        [bs : (_git_buf/bytes-or-null)]
         [(_path/guard) = start-path]
         [_bool = across-fs]
         [_bytes/nul-terminated = (join-ceiling-dirs ceiling-dirs)]
@@ -253,7 +253,7 @@
 (define-libgit2/alloc git_repository_init_ext
   (_fun _git_repository _string _git_repository_init_opts-pointer -> _int))
 
-(define-libgit2 git_repository_init_init_options
+(define-libgit2 git_repository_init_options_init
   (_fun _git_repository_init_opts-pointer _uint
         -> (_git_error_code/check)))
 

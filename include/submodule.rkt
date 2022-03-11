@@ -135,7 +135,7 @@
 (define-libgit2/check git_submodule_update
   (_fun _git_submodule _bool _git_submodule_update_opts-pointer/null -> _int))
 
-(define-libgit2/check git_submodule_update_init_options
+(define-libgit2/check git_submodule_update_options_init
   (_fun _git_submodule_update_opts-pointer _uint -> _int))
 
 (define-libgit2 git_submodule_update_strategy

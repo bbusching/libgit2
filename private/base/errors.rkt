@@ -169,6 +169,7 @@ but it's worth investigating further.
    (check-git_error_code/symbol who #:handle handle-syms)))
 
 (define-syntax-parser _git_error_code/check
+  #:track-literals
   #:literals {quote}
   [(_ (~optional (~seq #:handle (~and handle '(:git_error_code-id ...)))))
    #:fail-unless (libgit2-local-who)

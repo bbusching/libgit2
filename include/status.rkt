@@ -60,10 +60,12 @@
     GIT_STATUS_OPTS_RECURSE_UNTRACKED_DIRS))
 
 (define-cstruct _git_status_opts
+  ;; FIXME: constructor will need a wrapper to
+  ;; retain the pathspec and other gc-managed fields
   ([version _uint]
    [show _git_status_show_t]
    [flags _uint]
-   [pathspec _strarray]))
+   [pathspec _git_strarray]))
 
 (define GIT_STATUS_OPTS_VERSION 1)
 
@@ -86,7 +88,7 @@
 (define-libgit2/check git_status_foreach_ext
   (_fun _git_repository _git_status_opts-pointer _git_status_cb _bytes -> _int))
 
-(define-libgit2/check git_status_init_options
+(define-libgit2/check git_status_options_init
   (_fun _git_status_opts-pointer _uint -> _int))
 
 (define-libgit2 git_status_list_entrycount

@@ -22,7 +22,7 @@
   ([oid _git_oid-pointer]
    [count _size]))
 
-(define-libgit2/dealloc git_oidarray_free
+(define-libgit2/dealloc git_oidarray_dispose
   (_fun _git_oidarray-pointer -> _void))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -136,16 +136,16 @@
 (define-libgit2/check git_merge_file_from_index
   (_fun _git_merge_file_result-pointer _git_repository _index_entry _index_entry _index_entry _git_merge_file_opts-pointer -> _int))
 
-(define-libgit2/check git_merge_file_init_input
+(define-libgit2/check git_merge_file_input_init
   (_fun _git_merge_file_input-pointer _uint -> _int))
 
-(define-libgit2/check git_merge_file_init_options
+(define-libgit2/check git_merge_file_options_init
   (_fun _git_merge_file_opts-pointer _uint -> _int))
 
 (define-libgit2/dealloc git_merge_file_result_free
   (_fun _git_merge_file_result-pointer -> _void))
 
-(define-libgit2/check git_merge_init_options
+(define-libgit2/check git_merge_options_init
   (_fun _git_merge_opts-pointer _uint -> _int))
 
 (define-libgit2/alloc git_merge_trees
