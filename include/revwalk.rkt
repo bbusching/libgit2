@@ -5,7 +5,7 @@
          (only-in "types.rkt"
                   _git_repository
                   _git_revwalk)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 ; Types

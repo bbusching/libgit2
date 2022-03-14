@@ -2,7 +2,7 @@
 
 (require ffi/unsafe
          ffi/unsafe/alloc
-         libgit2/private
+         "../private/base.rkt"
          (rename-in racket/contract
                     [-> ->c]))
 

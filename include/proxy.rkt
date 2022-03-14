@@ -4,7 +4,7 @@
          "transport.rkt"
          (only-in "types.rkt"
                   _git_transport_certificate_check_cb)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

@@ -1,7 +1,8 @@
 #lang racket
 
 (require ffi/unsafe
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide git_message_prettify)
 

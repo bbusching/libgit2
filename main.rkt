@@ -1,18 +1,20 @@
 #lang racket/base
 
-(require (only-in "private.rkt"
-                  require-provide
+(require (only-in "private/base.rkt"
                   libgit2-available?))
 
 (provide libgit2-available?)
 
 (module+ test
   (require rackunit
-           (only-in "private.rkt"
+           (only-in "private/base.rkt"
                     symbols-not-available))
   (check-equal? (symbols-not-available)
                 '()
                 "all symbols should be available"))
+
+(define-syntax-rule (require-provide mod ...)
+  (begin (require mod ...) (provide (all-from-out mod) ...)))
 
 (require-provide "include/types.rkt"
                  "include/annotated_commit.rkt"

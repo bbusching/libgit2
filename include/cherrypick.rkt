@@ -8,7 +8,7 @@
                   _git_repository
                   _git_commit
                   _git_index)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

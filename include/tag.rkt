@@ -11,7 +11,7 @@
                   _git_signature-pointer
                   _git_signature-pointer/null
                   _git_tag )
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

@@ -13,7 +13,8 @@
                   _git_commit
                   _git_index
                   _git_tree)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

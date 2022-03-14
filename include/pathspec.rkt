@@ -8,7 +8,7 @@
                   _git_diff
                   _git_index
                   _git_tree)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

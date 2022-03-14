@@ -7,7 +7,7 @@
                   _git_transaction
                   _git_reflog
                   _git_signature-pointer)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

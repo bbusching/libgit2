@@ -8,7 +8,7 @@
                   _git_object
                   _git_object/null
                   _git_annotated_commit)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

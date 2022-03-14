@@ -1,7 +1,7 @@
 #lang racket
 
 (require ffi/unsafe
-         libgit2/private)
+         "../private/base.rkt")
 (provide (all-defined-out))
 
 

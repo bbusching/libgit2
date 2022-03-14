@@ -6,7 +6,8 @@
                   _git_object
                   _git_object_t
                   _git_repository)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

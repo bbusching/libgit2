@@ -5,7 +5,8 @@
                   _git_config
                   _git_config_backend
                   _git_transaction)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

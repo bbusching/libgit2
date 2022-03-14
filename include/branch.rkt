@@ -9,7 +9,8 @@
                   _git_commit
                   _git_reference
                   _git_annotated_commit)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

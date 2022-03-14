@@ -4,7 +4,8 @@
          (only-in "types.rkt"
                   _git_object
                   _git_repository)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

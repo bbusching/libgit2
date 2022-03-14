@@ -5,7 +5,8 @@
                   _git_repository
                   _git_blob
                   _git_writestream)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

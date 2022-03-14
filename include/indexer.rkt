@@ -6,7 +6,7 @@
                   _git_transfer_progress-pointer
                   _git_transfer_progress_cb
                   _git_odb)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

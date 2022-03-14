@@ -9,7 +9,7 @@
                   _git_index
                   _git_index_conflict_iterator
                   _git_tree)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

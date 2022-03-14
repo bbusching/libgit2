@@ -13,7 +13,7 @@
                   _git_signature-pointer/null
                   _git_annotated_commit/null
                   _git_index)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

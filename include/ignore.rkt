@@ -3,7 +3,7 @@
 (require ffi/unsafe
          (only-in "types.rkt"
                   _git_repository)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

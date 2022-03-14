@@ -4,7 +4,8 @@
          (only-in "net.rkt" _git_direction)
          (only-in "types.rkt"
                   _git_refspec)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

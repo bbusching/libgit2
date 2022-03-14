@@ -1,9 +1,7 @@
 #lang racket
 
 (require ffi/unsafe
-         ffi/unsafe/alloc
-         libgit2/private
-         (only-in racket/syntax format-symbol)
+         "../private/base.rkt"
          (rename-in racket/contract
                     [-> ->/c]))
 

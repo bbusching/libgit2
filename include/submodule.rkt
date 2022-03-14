@@ -13,7 +13,8 @@
                   _git_submodule_recurse_t
                   _git_submodule_ignore_t
                   _git_submodule_update_t)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

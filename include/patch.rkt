@@ -6,7 +6,8 @@
                   _git_patch
                   _git_blob/null
                   _git_diff)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

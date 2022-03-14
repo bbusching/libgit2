@@ -9,7 +9,7 @@
                   _git_tree
                   _git_index
                   _git_index/null)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

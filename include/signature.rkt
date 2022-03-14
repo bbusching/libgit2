@@ -5,7 +5,8 @@
                   _git_repository
                   _git_time_t
                   _git_signature-pointer)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

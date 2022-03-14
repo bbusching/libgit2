@@ -6,7 +6,7 @@
                   _git_repository
                   _git_annotated_commit
                   _git_reference)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

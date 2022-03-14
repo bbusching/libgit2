@@ -20,7 +20,8 @@
                   _git_index
                   _git_refdb
                   _git_annotated_commit)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide git_repository_open_flag/c
          ;; this is just to keep the build succeeding

@@ -2,7 +2,7 @@
 
 (require ffi/unsafe
          (submod "oid.rkt" private)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

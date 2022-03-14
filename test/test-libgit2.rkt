@@ -1,7 +1,7 @@
 #lang racket
 
-(require libgit2
-         (submod libgit2/include/repository free) ;; TODO avoid this
+(require "../main.rkt"
+         (submod "../include/repository.rkt" free) ;; TODO avoid this
          rackunit
          ffi/unsafe)
 

@@ -5,7 +5,7 @@
                   _git_transport
                   _git_remote
                   _git_cert)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

@@ -1,7 +1,7 @@
 #lang racket
 
 (require ffi/unsafe
-         libgit2/private)
+         "../private/base.rkt")
 
 ;; TODO: refactor away this module;
 ;; keep type definitions with uses

@@ -6,7 +6,7 @@
                   _git_repository
                   _git_blame
                   _git_signature-pointer)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

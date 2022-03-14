@@ -10,7 +10,7 @@
                   _git_off_t
                   _git_blob
                   _git_writestream)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

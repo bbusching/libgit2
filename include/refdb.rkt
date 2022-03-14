@@ -5,7 +5,7 @@
                   _git_repository
                   _git_refdb
                   _git_refdb_backend)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

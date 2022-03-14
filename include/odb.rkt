@@ -12,7 +12,7 @@
                   _git_odb_backend
                   _git_odb_object
                   _git_transfer_progress_cb)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

@@ -18,7 +18,8 @@
                   _git_transfer_progress_cb
                   _git_remote
                   _git_refspec)
-         libgit2/private)
+         "../private/buffer.rkt"
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

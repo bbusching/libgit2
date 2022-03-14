@@ -12,7 +12,7 @@
                   _git_tree_entry
                   _git_tree_entry/null
                   _git_treebuilder)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

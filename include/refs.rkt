@@ -13,7 +13,7 @@
                   _git_reference/null
                   _git_reference_iterator)
          (submod "oid.rkt" private)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 

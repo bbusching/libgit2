@@ -8,7 +8,7 @@
          (only-in "types.rkt"
                   _git_repository
                   _git_remote)
-         libgit2/private)
+         "../private/base.rkt")
 
 (provide (all-defined-out))
 
