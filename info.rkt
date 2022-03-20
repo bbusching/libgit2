@@ -12,7 +12,7 @@
 
 (define deps
   '("base"
-    ["libgit2-native-libs" #:version "0.0.0.2"]
+    ["libgit2-native-libs" #:version "0.0.0.3"]
     "rackunit-lib"))
 
 (define build-deps
