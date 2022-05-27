@@ -17,6 +17,7 @@ jobs:
         racket-version:
           # needs https://github.com/racket/racket/commit/4f43400 (8.4)
           - "stable"
+          - "8.4"
         include:
           - os: ubuntu-20.04
             experimental: true
