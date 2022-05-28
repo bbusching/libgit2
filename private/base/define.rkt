@@ -28,7 +28,7 @@
 (define libgit2-so-versions
   '("1.4" ;; preferred
     ;; these probably work
-    "1.4.2" "1.4.1" "1.4.0"
+    "1.4.3" "1.4.2" "1.4.1" "1.4.0"
     "1.3" "1.3.0"
     "1"
     ;; some other plausible versions ... good luck!
