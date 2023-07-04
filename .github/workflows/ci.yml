@@ -1,0 +1,39 @@
+on: [push, pull_request]
+name: CI
+env:
+  RKT_PKG: libgit2
+jobs:
+  build:
+    name: "Build on '${{ matrix.os }} with Racket '${{ matrix.racket-version }}'"
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        experimental: [ false ]
+        os:
+          - ubuntu-20.04 # glibc 2.31
+          - macos-10.15 # oldest available on GitHub Actions
+          - windows-2019 # likewise
+        racket-version:
+          # needs https://github.com/racket/racket/commit/4f43400 (8.4)
+          - "stable"
+          - "8.4"
+        include:
+          - os: ubuntu-20.04
+            experimental: true
+            racket-version: "current"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install Racket
+        uses: Bogdanp/setup-racket@v1.7
+        with:
+          version: ${{ matrix.racket-version }}
+          architecture: "x64"
+          distribution: "full"
+      - name: Install Package and its Dependencies
+        run: raco pkg install --auto --batch --name ${{ env.RKT_PKG }}
+      - name: Run Tests
+        run: raco test -x -p $RKT_PKG
+      - name: Check Package Dependencies
+        run: raco setup --check-pkg-deps --pkgs ${{ env.RKT_PKG }}
