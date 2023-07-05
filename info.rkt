@@ -5,7 +5,7 @@
 (define pkg-desc "Low-level api bindings to the libgit2 C library")
 
 (define scribblings
-  '(("scribblings/libgit2.scrbl" (multi-page))))
+  '(("scribblings/libgit2.scrbl" (multi-page) ("Git"))))
 
 (define version "0.1")
 
