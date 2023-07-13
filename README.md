@@ -1,4 +1,4 @@
-# `libgit2` Racket bindings
+# Moved to https://github.com/libgit2-racket/libgit2
 
-Low-level API bindings for Racket to the
-[libgit2 C library](https://libgit2.org/).
+Development of `libgit2` Racket bindings continues at
+<https://github.com/libgit2-racket/libgit2>.
